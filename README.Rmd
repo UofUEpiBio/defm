@@ -1,0 +1,64 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# defm
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of defm is to ...
+
+## Installation
+
+You can install the development version of defm like so:
+
+``` r
+# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(defm)
+## basic example code
+
+# Simulating core data
+n   <- 500
+n_y <- 4
+n_x <- 4
+
+set.seed(1231)
+Y <- matrix(as.integer(runif(n * n_y) < .05), ncol = n_y)
+X <- matrix(rnorm(n * n_x), ncol = n_x)
+id <- sort(rep(1:100, 5))
+
+# Creating the model and adding a couple of terms
+d_model <- new_defm(id, Y, X, order = 1)
+
+term_defm_ones(d_model)
+term_defm_fe(d_model, 0)
+
+init_defm(d_model)
+
+print(d_model)
+
+f <- function(p) loglike_defm(d_model, p)
+ans <- optim(c(0,0), f, control = list(fnscale = -1), hessian = TRUE)
+
+ans
+```
+
