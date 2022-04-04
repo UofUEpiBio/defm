@@ -92,3 +92,18 @@ double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
   Rcpp::XPtr< DEFM > ptr(m);
   return ptr->get_model().likelihood_total(par, as_log);
 }
+
+//' @export
+// [[Rcpp::export(rng = false)]]
+IntegerMatrix sim_defm(SEXP m, std::vector< double > par)
+{
+
+  Rcpp::XPtr< DEFM > ptr(m);
+  IntegerMatrix res(ptr->get_n_rows(), ptr->get_n_y());
+
+  std::fill(res.begin(), res.end(), -1);
+
+  ptr->simulate(par, &(res[0u]));
+
+  return res;
+}

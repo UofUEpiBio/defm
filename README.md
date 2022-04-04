@@ -69,3 +69,10 @@ ans
 #> [1,] 4.365575e-05 0.000000e+00
 #> [2,] 0.000000e+00 2.910383e-05
 ```
+
+## Code of Conduct
+
+Please note that the defm project is released with a [Contributor Code
+of
+Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

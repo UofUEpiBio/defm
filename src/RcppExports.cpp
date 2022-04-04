@@ -90,6 +90,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// sim_defm
+IntegerMatrix sim_defm(SEXP m, std::vector< double > par);
+RcppExport SEXP _defm_sim_defm(SEXP mSEXP, SEXP parSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_defm(m, par));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -99,6 +110,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 3},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
+    {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 2},
     {NULL, NULL, 0}
 };
 

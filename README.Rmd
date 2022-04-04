@@ -51,14 +51,29 @@ d_model <- new_defm(id, Y, X, order = 1)
 
 term_defm_ones(d_model)
 term_defm_fe(d_model, 0)
+term_defm_transition(d_model, c(0,4,5))
 
 init_defm(d_model)
 
+simulated_Y <- sim_defm(d_model, c(-.5, .5, 1))
+simulated_Y <- matrix(as.vector(simulated_Y), byrow = TRUE, ncol = n_y)
+
+# Filling the gaps
+locations <- which(simulated_Y == -1)
+simulated_Y[locations] <- Y[locations]
+
+View(cbind(id, simulated_Y))
+
 print(d_model)
 
-f <- function(p) loglike_defm(d_model, p)
-ans <- optim(c(0,0), f, control = list(fnscale = -1), hessian = TRUE)
+f <- function(p, as_log=TRUE) loglike_defm(d_model, p, as_log = as_log)
+ans <- optim(c(0,0,0), f, control = list(fnscale = -1), hessian = TRUE, method = "L-BFGS-B", lower = -10, upper = 10)
 
-ans
+f(ans$par,FALSE)
+
 ```
 
+
+## Code of Conduct
+  
+  Please note that the defm project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

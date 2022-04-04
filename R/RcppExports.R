@@ -37,3 +37,8 @@ loglike_defm <- function(m, par, as_log = TRUE) {
     .Call(`_defm_loglike_defm`, m, par, as_log)
 }
 
+#' @export
+sim_defm <- function(m, par) {
+    .Call(`_defm_sim_defm`, m, par)
+}
+
