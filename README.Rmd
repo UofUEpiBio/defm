@@ -37,39 +37,54 @@ library(defm)
 ## basic example code
 
 # Simulating core data
-n   <- 500
+n   <- 1000
 n_y <- 4
 n_x <- 4
+n_t <- 5
 
 set.seed(1231)
-Y <- matrix(as.integer(runif(n * n_y) < .05), ncol = n_y)
-X <- matrix(rnorm(n * n_x), ncol = n_x)
-id <- sort(rep(1:100, 5))
+Y <- matrix(as.integer(runif(n * n_y * n_t) < .05), ncol = n_y)
+X <- matrix(rnorm(n * n_x * n_t), ncol = n_x)
+id <- sort(rep(1:n, n_t))
 
 # Creating the model and adding a couple of terms
-d_model <- new_defm(id, Y, X, order = 1)
+build_model <- function(id., Y., X., order. = 1, par. = par.) {
+  
+  d_model. <- new_defm(id., Y., X., order = order.)
 
-term_defm_ones(d_model)
-term_defm_fe(d_model, 0)
-term_defm_transition(d_model, c(0,4,5))
+  term_defm_ones(d_model.)
+  term_defm_fe(d_model., 1)
+  term_defm_transition(d_model., c(0,1,3))
+  
+  init_defm(d_model.)
+  
+  d_model.
+  
+}
 
-init_defm(d_model)
+d_model <- build_model(id, Y, X, order = 1, par. = c(-1, -2, 2))
 
-simulated_Y <- sim_defm(d_model, c(-.5, .5, 1))
+simulated_Y <- sim_defm(d_model, c(-1, -2, 2))
 simulated_Y <- matrix(as.vector(simulated_Y), byrow = TRUE, ncol = n_y)
 
 # Filling the gaps
-locations <- which(simulated_Y == -1)
+locations <- which(simulated_Y == -1, arr.ind = TRUE)
 simulated_Y[locations] <- Y[locations]
 
 View(cbind(id, simulated_Y))
 
-print(d_model)
 
-f <- function(p, as_log=TRUE) loglike_defm(d_model, p, as_log = as_log)
-ans <- optim(c(0,0,0), f, control = list(fnscale = -1), hessian = TRUE, method = "L-BFGS-B", lower = -10, upper = 10)
+d_model_sim <- build_model(id, simulated_Y, X, order = 1, par. = c(-1, -2, 2))
+print_stats(d_model_sim, 0)
 
-f(ans$par,FALSE)
+f <- function(p, as_log=TRUE) loglike_defm(d_model_sim, p, as_log = as_log)
+ans <- optim(
+  c(0,0,0), f, control = list(fnscale = -1),
+  hessian = TRUE,
+  method = "L-BFGS-B", lower = -10, upper = 10)
+
+ans
+f(ans$par)
 
 ```
 

@@ -101,6 +101,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// print_stats
+int print_stats(SEXP m, int i);
+RcppExport SEXP _defm_print_stats(SEXP mSEXP, SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(print_stats(m, i));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -111,6 +122,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
     {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 2},
+    {"_defm_print_stats", (DL_FUNC) &_defm_print_stats, 2},
     {NULL, NULL, 0}
 };
 

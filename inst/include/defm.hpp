@@ -1,12 +1,3 @@
-/*//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-  SINGLE HEADER BUILT ON 2022-04-04 15:49:23
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////*/
-
-
 
 #ifndef DEFM_HPP
 #define DEFM_HPP 1
@@ -17,15 +8,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
  Start of -include/barry/models/defm/defm-bones.hpp-
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////*/
-
-
-/*//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-  SINGLE HEADER BUILT ON 2022-04-04 15:49:23
 
 ////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////*/
@@ -111,15 +93,6 @@ public:
 //////////////////////////////////////////////////////////////////////////////*/
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-  SINGLE HEADER BUILT ON 2022-04-04 15:49:23
-
-////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////*/
-
-
 #ifndef DEFM_MEAT_HPP
 #define DEFM_MEAT_HPP 1
 
@@ -129,7 +102,7 @@ public:
     size_t __CONCAT(nobs_,a)  = __CONCAT(end_,i) - __CONCAT(start_,i) + 1u;
 
 #define DEFM_LOOP_ARRAYS(a) \
-    for (size_t a = 0u; a < (nobs_i - (M_order + 1u) + 1u); ++a)
+    for (size_t a = 0u; a < (nobs_i - M_order); ++a)
 
 inline void DEFM::simulate(
     std::vector< double > par,
@@ -138,6 +111,7 @@ inline void DEFM::simulate(
 
     size_t model_num = 0u; 
     size_t n_entry = M_order * Y_ncol;
+    auto idx = model->get_arrays2support();
     for (size_t i = 0u; i < N; ++i)
     {
 
@@ -147,9 +121,9 @@ inline void DEFM::simulate(
         DEFM_LOOP_ARRAYS(proc_n)
         {
 
-            defmcounters::DEFMArray tmp_array = model->sample(model_num++, par);
+            defmcounters::DEFMArray tmp_array = model->sample(idx->at(model_num++), par);
             for (size_t y = 0u; y < Y_ncol; ++y)
-                *(y_out + n_entry++) = tmp_array(0u, y, false);
+                *(y_out + n_entry++) = tmp_array(M_order, y, false);
 
         }
 
@@ -246,27 +220,28 @@ inline void DEFM::init()
         size_t end_i   = start_end[i * 2u + 1u];
         size_t nobs_i  = end_i - start_i + 1u;
 
-        // Creating the observations
-        for (size_t n_proc = 0u; n_proc < (nobs_i - (M_order + 1u) + 1u); ++n_proc)
+        // Creating the observations.
+        // Number of processes : (N rows) - (Process size)
+        for (size_t n_proc = 0u; n_proc < (nobs_i - M_order); ++n_proc)
         {
 
             // Creating the array for process n_proc and setting the data
             defmcounters::DEFMArray array(M_order + 1u, Y_ncol);
             array.set_data(
-                new defmcounters::DEFMData(X, (start_i + n_proc), ID_length, X_ncol),
+                new defmcounters::DEFMData(X, (start_i + n_proc), X_ncol, ID_length),
                 true // Delete the data
             );
 
             // Filling-out the array
             for (size_t k = 0u; k < Y_ncol; ++k)
                 for (size_t o = 0u; o < (M_order + 1u); ++o)
-                    array(o, k) = *(Y + k * ID_length + start_i + n_proc);
+                    array(o, k) = *(Y + k * ID_length + start_i + n_proc * M_order + o);
 
             // Adding the rule
             defmcounters::rules_markov_fixed(model->get_rules(), M_order);
 
             // Adding to the model
-            model_ord.push_back( model->add_array(array) );
+            model_ord.push_back( model->add_array(array, true) );
 
         }
 

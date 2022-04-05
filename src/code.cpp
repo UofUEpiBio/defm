@@ -107,3 +107,14 @@ IntegerMatrix sim_defm(SEXP m, std::vector< double > par)
 
   return res;
 }
+
+
+//' @export
+// [[Rcpp::export(rng = false, invisible = true)]]
+int print_stats(SEXP m, int i = 0)
+{
+  Rcpp::XPtr< DEFM > ptr(m);
+  ptr->get_model().print_stats(static_cast< unsigned int >(i));
+
+  return 0;
+}

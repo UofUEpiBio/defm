@@ -42,3 +42,8 @@ sim_defm <- function(m, par) {
     .Call(`_defm_sim_defm`, m, par)
 }
 
+#' @export
+print_stats <- function(m, i = 0L) {
+    invisible(.Call(`_defm_print_stats`, m, i))
+}
+
