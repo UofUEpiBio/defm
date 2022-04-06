@@ -13,12 +13,18 @@ knitr::opts_chunk$set(
 )
 ```
 
-# defm
+# defm: Fit and simulate discrete binary exponential family models
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of defm is to ...
+Discrete exponential family models (DEFM) have a long tradition with a extensive
+development rooted in exponential random graph models (ERGMs.) Applicable to 
+any form o data that can be represented as binary arrays, DEFMs provide a way
+to model jointly distributed binary variables.
+
+This package, built on top of the C++ library [`barry`](https://github.com/USCbiostats/barry),
+provides a computationally efficient implementation of this family of models.
 
 ## Installation
 
@@ -30,16 +36,20 @@ You can install the development version of defm like so:
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+In this example, we will simulate a dataset that contains 1,000 individuals with
+four different outcomes. The outcomes, which are 0/1 vectors, will be modeled
+as Markov processes of order one, in which future states of this 0/1 vector
+can be predicted as a function of the previous point in time. The following lines
+of simulate the baseline data:
 
 ```{r data-simulation}
 library(defm)
 
 # Simulation parameters
 set.seed(1231)
-n   <- 1000 # Count of individuals
-n_y <- 4    # Number of dependent variables
-n_x <- 4    # Number of independent variables
+n   <- 1000L # Count of individuals
+n_y <- 4L    # Number of dependent variables
+n_x <- 2L    # Number of independent variables
 
 # Simulating how many observations we will have per individuals
 n_reps <- sample(3:10, 1000, replace = TRUE)
