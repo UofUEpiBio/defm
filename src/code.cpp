@@ -108,15 +108,20 @@ int term_defm_fe(SEXP m, int idx = -1, double k = 1.0)
 //' are represented by cells with values equal to 1, for example, the matrix:
 //'
 //' ```  y0 y1 y2
-//' t0:   1  0  0
-//' t1:   1  1  0
+//' t0:   1 NA NA
+//' t1:   1  1 NA
 //' ```
 //'
-//' represents a transition `y0 -> (y1, y2)`.
+//' represents a transition `y0 -> (y1, y2)`. If 0 is a motif of interest, then
+//' the matrix should include 0 to mark zero values.
 //' @export
 //' @rdname defm_terms
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_transition(SEXP m, IntegerMatrix & mat, int covar_idx = -1)
+int term_defm_transition(
+    SEXP m,
+    IntegerMatrix & mat,
+    int covar_idx = -1
+)
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
@@ -129,16 +134,30 @@ int term_defm_transition(SEXP m, IntegerMatrix & mat, int covar_idx = -1)
 
   // Converting coordinates
   std::vector< size_t > coords(0u);
-  size_t loc = 0u;
-  for (int i = 0u; i < mat.nrow(); ++i)
-    for (int j = 0u; j < mat.ncol(); ++j)
+  std::vector< bool > signs(0u);
+  int loc = -1;
+  for (int j = 0u; j < mat.ncol(); ++j)
+    for (int i = 0u; i < mat.nrow(); ++i)
     {
-      if (mat(i, j) == 1u)
-        coords.push_back(loc);
+
       loc++;
+
+      // Only 1 or -1 make something
+      if (mat(i,j) == R_NaInt)
+        continue;
+
+      if ((mat(i,j) != 1) & (mat(i,j) != 0))
+        stop("Valid values for -mat- are NA, 0, or 1");
+
+      coords.push_back(static_cast< size_t >(loc));
+      signs.push_back(
+        mat(i,j) == 1 ? true : false
+      );
+
     }
 
-  defmcounters::counter_transition(ptr->get_model().get_counters(), coords, covar_idx);
+  defmcounters::counter_transition(
+    ptr->get_model().get_counters(), coords, signs, covar_idx);
 
   return 0;
 }

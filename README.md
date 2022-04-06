@@ -23,7 +23,9 @@ You can install the development version of defm like so:
 # FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
 ```
 
-## Example
+# Examples
+
+## Example 1: Four outcomes
 
 In this example, we will simulate a dataset that contains 1,000
 individuals with four different outcomes. The outcomes, which are 0/1
@@ -50,9 +52,23 @@ n_t <- sum(n_reps)
 
 # Simulating the data
 Y <- matrix(as.integer(runif(n_y * n_t) < .1), ncol = n_y)
+colnames(Y) <- paste0("y", 1:n_y - 1)
 X <- matrix(rnorm(n_x * n_t), ncol = n_x)
+colnames(X) <- paste0("x", 1:n_x - 1L)
 id <- rep(1:n, n_reps)
 ```
+
+Here is a brief look at the data structure, remember, we still have not
+actually simulated data **WITH THE MODEL**.
+
+|  id |  y0 |  y1 |  y2 |  y3 |         x0 |         x1 |
+|----:|----:|----:|----:|----:|-----------:|-----------:|
+|   1 |   0 |   0 |   0 |   0 |  1.9565904 |  0.0224265 |
+|   1 |   0 |   0 |   0 |   0 | -1.2255416 | -1.7320384 |
+|   1 |   0 |   0 |   0 |   0 |  0.1668458 | -0.2145377 |
+|   1 |   0 |   1 |   0 |   1 |  2.2339416 | -0.1821917 |
+|   2 |   1 |   0 |   0 |   0 | -1.5118288 | -0.3010826 |
+|   2 |   0 |   1 |   0 |   0 |  0.6656071 |  1.3720245 |
 
 For this example, we will simulate a model with the following features:
 
@@ -78,7 +94,7 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
   term_defm_ones(d_model.)
   term_defm_ones(d_model., 1)
   
-  transition <- matrix(0L, nrow = order. + 1, ncol = ncol(Y.))
+  transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
   
   term_defm_transition(d_model., transition)
@@ -110,7 +126,7 @@ head(cbind(id, simulated_Y))
 #> [3,]  1 0 0 1 0
 #> [4,]  1 1 0 0 0
 #> [5,]  2 0 0 1 0
-#> [6,]  2 0 1 1 0
+#> [6,]  2 1 1 0 1
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -128,14 +144,46 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                    Estimate Std. Error
-#> # of ones         -1.956948 0.02668729
-#> # of ones x attr1  1.981110 0.03013901
-#> Motif 0 4          4.643450 0.14981689
+#> # of ones         -1.936861 0.02668241
+#> # of ones x attr1  1.974452 0.02976233
+#> Motif 0 1 3        4.761756 0.09453799
 #> 
-#> -2 log L: 16029.98
+#> -2 log L: 15471.32
 ```
 
-## Code of Conduct
+## Example 2: A fun model
+
+Let’s try out making some patterns
+
+``` r
+id <- rep(1,100)
+Y <- matrix(0, nrow = 100, ncol = 10)
+Y[1] <- 1
+X <- cbind(1:100)
+
+d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
+
+for (i in (1:9 - 1)) {
+  transition <- matrix(0, nrow = 2, ncol = 10)
+  transition[c(1,4) + 2 * i] <- 1
+  term_defm_transition(d_model, transition)
+}
+
+transition <- matrix(0, nrow = 2, ncol = 10)
+transition[c(20,1)] <- 1
+term_defm_transition(d_model, transition)
+
+term_defm_ones(d_model)
+
+init_defm(d_model)
+
+Y_sim <-sim_defm(d_model, par = c(rep(100, 10), 0))
+image(Y_sim)
+```
+
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
+# Code of Conduct
 
 Please note that the defm project is released with a [Contributor Code
 of

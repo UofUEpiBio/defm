@@ -36,9 +36,10 @@ Model specification for DEFM
 }
 \details{
 In \code{term_defm_transition}, users can specify a particular motif to model. Motifs
-are represented by cells with values equal to 1, for example, the matrix:\if{html}{\out{<div class="sourceCode y0 y1 y2">}}\preformatted{t0:   1  0  0
-t1:   1  1  0
+are represented by cells with values equal to 1, for example, the matrix:\if{html}{\out{<div class="sourceCode y0 y1 y2">}}\preformatted{t0:   1 NA NA
+t1:   1  1 NA
 }\if{html}{\out{</div>}}
 
-represents a transition \verb{y0 -> (y1, y2)}.
+represents a transition \verb{y0 -> (y1, y2)}. If 0 is a motif of interest, then
+the matrix should include 0 to mark zero values.
 }

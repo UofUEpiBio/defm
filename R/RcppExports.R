@@ -58,11 +58,12 @@ term_defm_fe <- function(m, idx = -1L, k = 1.0) {
 #' are represented by cells with values equal to 1, for example, the matrix:
 #'
 #' ```  y0 y1 y2
-#' t0:   1  0  0
-#' t1:   1  1  0
+#' t0:   1 NA NA
+#' t1:   1  1 NA
 #' ```
 #'
-#' represents a transition `y0 -> (y1, y2)`.
+#' represents a transition `y0 -> (y1, y2)`. If 0 is a motif of interest, then
+#' the matrix should include 0 to mark zero values.
 #' @export
 #' @rdname defm_terms
 term_defm_transition <- function(m, mat, covar_idx = -1L) {
