@@ -57,14 +57,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_transition
-int term_defm_transition(SEXP m, std::vector< size_t > coords, int covar_idx);
-RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP coordsSEXP, SEXP covar_idxSEXP) {
+int term_defm_transition(SEXP m, IntegerMatrix& mat, int covar_idx);
+RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP covar_idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< std::vector< size_t > >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix& >::type mat(matSEXP);
     Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, coords, covar_idx));
+    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, covar_idx));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -91,13 +91,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // sim_defm
-IntegerMatrix sim_defm(SEXP m, std::vector< double > par);
-RcppExport SEXP _defm_sim_defm(SEXP mSEXP, SEXP parSEXP) {
+IntegerMatrix sim_defm(SEXP m, std::vector< double > par, bool fill_t0);
+RcppExport SEXP _defm_sim_defm(SEXP mSEXP, SEXP parSEXP, SEXP fill_t0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
-    rcpp_result_gen = Rcpp::wrap(sim_defm(m, par));
+    Rcpp::traits::input_parameter< bool >::type fill_t0(fill_t0SEXP);
+    rcpp_result_gen = Rcpp::wrap(sim_defm(m, par, fill_t0));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -112,6 +113,76 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// nterms_defm
+int nterms_defm(SEXP m);
+RcppExport SEXP _defm_nterms_defm(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(nterms_defm(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// names_defm
+CharacterVector names_defm(SEXP m);
+RcppExport SEXP _defm_names_defm(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(names_defm(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nrow_defm
+int nrow_defm(SEXP m);
+RcppExport SEXP _defm_nrow_defm(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(nrow_defm(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ncol_defm_y
+int ncol_defm_y(SEXP m);
+RcppExport SEXP _defm_ncol_defm_y(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(ncol_defm_y(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ncol_defm_x
+int ncol_defm_x(SEXP m);
+RcppExport SEXP _defm_ncol_defm_x(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(ncol_defm_x(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// nobs_defm
+int nobs_defm(SEXP m);
+RcppExport SEXP _defm_nobs_defm(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(nobs_defm(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// morder_defm
+int morder_defm(SEXP m);
+RcppExport SEXP _defm_morder_defm(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(morder_defm(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -121,8 +192,15 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 3},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
-    {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 2},
+    {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 3},
     {"_defm_print_stats", (DL_FUNC) &_defm_print_stats, 2},
+    {"_defm_nterms_defm", (DL_FUNC) &_defm_nterms_defm, 1},
+    {"_defm_names_defm", (DL_FUNC) &_defm_names_defm, 1},
+    {"_defm_nrow_defm", (DL_FUNC) &_defm_nrow_defm, 1},
+    {"_defm_ncol_defm_y", (DL_FUNC) &_defm_ncol_defm_y, 1},
+    {"_defm_ncol_defm_x", (DL_FUNC) &_defm_ncol_defm_x, 1},
+    {"_defm_nobs_defm", (DL_FUNC) &_defm_nobs_defm, 1},
+    {"_defm_morder_defm", (DL_FUNC) &_defm_morder_defm, 1},
     {NULL, NULL, 0}
 };
 

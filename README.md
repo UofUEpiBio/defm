@@ -22,20 +22,42 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(defm)
-## basic example code
+#> Loading required package: stats4
 
-# Simulating core data
-n   <- 10000
-n_y <- 4
-n_x <- 4
-n_t <- 5
-
+# Simulation parameters
 set.seed(1231)
-Y <- matrix(as.integer(runif(n * n_y * n_t) < .1), ncol = n_y)
-X <- matrix(rnorm(n * n_x * n_t), ncol = n_x)
-# X[,2] <- as.integer(X[,2] > 0)
-id <- sort(rep(1:n, n_t))
+n   <- 1000 # Count of individuals
+n_y <- 4    # Number of dependent variables
+n_x <- 4    # Number of independent variables
 
+# Simulating how many observations we will have per individuals
+n_reps <- sample(3:10, 1000, replace = TRUE)
+
+# Final number of rows in the data
+n_t <- sum(n_reps)
+
+# Simulating the data
+Y <- matrix(as.integer(runif(n_y * n_t) < .1), ncol = n_y)
+X <- matrix(rnorm(n_x * n_t), ncol = n_x)
+id <- rep(1:n, n_reps)
+```
+
+For this example, we will simulate a model with the following features:
+
+-   **Ones**: Baseline density (prevalence of ones).
+-   **Ones x Attr 2**: Same as before, but weighted by one of the
+    covariates. (simil to fixed effect)
+-   **Transition** : And a transition structure, in particular
+    `y0 -> (y0, y1)`, which will be represented as a matrix in the form:
+
+<!-- -->
+
+    1 0 0 0
+    1 1 0 0
+
+Here is the factory function:
+
+``` r
 # Creating the model and adding a couple of terms
 build_model <- function(id., Y., X., order. = 1, par. = par.) {
   
@@ -43,62 +65,62 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
 
   term_defm_ones(d_model.)
   term_defm_ones(d_model., 1)
-  term_defm_transition(d_model., c(0,1,3))
+  
+  transition <- matrix(0L, nrow = order. + 1, ncol = ncol(Y.))
+  transition[c(1,2,4)] <- 1
+  
+  term_defm_transition(d_model., transition)
   
   init_defm(d_model.)
   
   d_model.
   
 }
+```
 
+With this factory function, we will use it to simulate some data with
+the same dimmensions of the original dataset. In this case, the
+parameters used for the simulation will be:
+
+-   **Ones**: -2, i.e., low density,
+-   **Ones x Attr 2**: 2, yet correlated with covariate # 2,
+-   **Transition** : 5, And a high chance of observing the transition
+    `y0 -> (y0, y1)`
+
+``` r
 sim_par <- c(-2, 2, 5)
-
 d_model <- build_model(id, Y, X, order = 1, par. = sim_par)
-
 simulated_Y <- sim_defm(d_model, sim_par)
-simulated_Y <- matrix(as.vector(simulated_Y), byrow = TRUE, ncol = n_y)
+head(cbind(id, simulated_Y))
+#>      id        
+#> [1,]  1 0 0 0 0
+#> [2,]  1 0 0 0 0
+#> [3,]  1 0 0 1 0
+#> [4,]  1 1 0 0 0
+#> [5,]  2 0 0 1 0
+#> [6,]  2 0 1 1 0
+```
 
-# Filling the gaps
-locations <- which(simulated_Y == -1, arr.ind = TRUE)
-simulated_Y[locations] <- Y[locations]
+Now, let’s see if we can recover the parameters using MLE:
 
-View(cbind(id, simulated_Y))
-
-
+``` r
 d_model_sim <- build_model(id, simulated_Y, X, order = 1, par. = sim_par)
-print_stats(d_model_sim, 0)
-print_stats(d_model_sim, 1)
+ans <- defm_mle(d_model_sim)
 
-f <- function(p, as_log=TRUE) loglike_defm(d_model_sim, p, as_log = as_log)
-ans <- optim(
-  c(0,0,0), f, control = list(fnscale = -1),
-  hessian = TRUE,
-  method = "L-BFGS-B", lower = -10, upper = 10)
-
-ans
-#> $par
-#> [1] -2.014700  2.003489  4.990579
+summary(ans)
+#> Maximum likelihood estimation
 #> 
-#> $value
-#> [1] -54330.32
+#> Call:
+#> stats4::mle(minuslogl = minuslog, start = start, method = "L-BFGS-B", 
+#>     nobs = nrow_defm(object), lower = lower, upper = upper)
 #> 
-#> $counts
-#> function gradient 
-#>       14       14 
+#> Coefficients:
+#>                    Estimate Std. Error
+#> # of ones         -1.956948 0.02668729
+#> # of ones x attr1  1.981110 0.03013901
+#> Motif 0 4          4.643450 0.14981689
 #> 
-#> $convergence
-#> [1] 0
-#> 
-#> $message
-#> [1] "CONVERGENCE: REL_REDUCTION_OF_F <= FACTR*EPSMCH"
-#> 
-#> $hessian
-#>            [,1]        [,2]       [,3]
-#> [1,] -19272.963  -8744.1127 -1800.8370
-#> [2,]  -8744.113 -13080.9119   278.2839
-#> [3,]  -1800.837    278.2839 -1002.4297
-f(ans$par)
-#> [1] -54330.32
+#> -2 log L: 16029.98
 ```
 
 ## Code of Conduct
