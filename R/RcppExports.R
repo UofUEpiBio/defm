@@ -159,3 +159,10 @@ morder_defm <- function(m) {
     .Call(`_defm_morder_defm`, m)
 }
 
+#' Get sufficient statistics counts
+#' @param m An object of class [DEFM].
+#' @export
+get_stats <- function(m) {
+    .Call(`_defm_get_stats`, m)
+}
+

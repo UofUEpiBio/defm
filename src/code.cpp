@@ -23,7 +23,7 @@ using namespace Rcpp;
 //' @aliases new_defm defm
 // [[Rcpp::export(rng = false)]]
 SEXP new_defm(
-    const std::vector< int > & id,
+    const IntegerVector & id,
     const IntegerMatrix & Y,
     const NumericMatrix & X,
     int order = 1
@@ -342,5 +342,58 @@ int morder_defm(SEXP m)
   Rcpp::XPtr< DEFM > ptr(m);
 
   return ptr->get_m_order();
+
+}
+
+//' Get sufficient statistics counts
+//' @param m An object of class [DEFM].
+//' @export
+// [[Rcpp::export]]
+NumericMatrix get_stats(SEXP m)
+{
+
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  auto model = ptr->get_model();
+
+  // Getting sizes
+  size_t nrows = ptr->get_n_rows();
+  size_t ncols = model.nterms();
+  size_t m_ord = ptr->get_m_order();
+
+  const int * ID = ptr->get_ID();
+
+  NumericMatrix res(nrows, ncols);
+  auto target = model.get_stats_target();
+
+  size_t i_effective = 0u;
+  size_t n_obs_i = 0u;
+  for (size_t i = 0u; i < nrows; ++i)
+  {
+
+    // Do we need to reset the counter?
+    if ((i > 0) && (*(ID + i - 1u) != *(ID + i)))
+    {
+      std::fill(res.row(i).begin(), res.row(i).end(), NA_REAL);
+      n_obs_i = 1u;
+      continue;
+    }
+
+    // Did we passed the Markov order?
+    if (n_obs_i++ < m_ord)
+    {
+      std::fill(res.row(i).begin(), res.row(i).end(), NA_REAL);
+      continue;
+    }
+
+    for (size_t j = 0u; j < ncols; ++j)
+      res(i, j) = (*target)[i_effective][j];
+
+    // Completed the current
+    ++i_effective;
+
+  }
+
+  return res;
 
 }

@@ -135,38 +135,55 @@ ans <- defm_mle(d_model_sim)
 summary(ans)
 ```
 
+We can also see the counts
+
+```{r example1-counts, echo=FALSE}
+obs_stats <- get_stats(d_model_sim)
+colnames(obs_stats) <- names(d_model_sim)
+colnames(simulated_Y) <- paste0("y", 1:n_y - 1)
+cbind(id, simulated_Y, X, obs_stats) |> 
+  head(n = 10) |> knitr::kable(row.names = FALSE, digits = 2L)
+```
+
+
 ## Example 2: A fun model
 
 Let's try out making some patterns
 
 ```{r}
-
-id <- rep(1,100)
-Y <- matrix(0, nrow = 100, ncol = 10)
+n   <- 20
+n_y <- 10
+id <- rep(1, n)
+Y <- matrix(0, nrow = n, ncol = n_y)
 Y[1] <- 1
-X <- cbind(1:100)
+X <- cbind(1:n)
 
 d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 
-for (i in (1:9 - 1)) {
-  transition <- matrix(0, nrow = 2, ncol = 10)
-  transition[c(1,4) + 2 * i] <- 1
+for (i in (1:(n_y - 1) - 1)) {
+  transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
+  transition[c(1:4) + 2 * i] <- c(1,0,0,1)
   term_defm_transition(d_model, transition)
 }
 
-transition <- matrix(0, nrow = 2, ncol = 10)
-transition[c(20,1)] <- 1
+transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
+transition[c(n_y * 2 - 1, n_y * 2, 1, 2)] <- c(1,0,0,1)
 term_defm_transition(d_model, transition)
 
 term_defm_ones(d_model)
 
 init_defm(d_model)
 
-Y_sim <-sim_defm(d_model, par = c(rep(100, 10), 0))
-image(Y_sim)
-
-
+Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), 0))
 ```
+
+Let's see how it looks like
+
+```{r echo = FALSE}
+library(Matrix)
+Matrix::image(as(Y_sim, "dgCMatrix"))
+```
+
 
 
 

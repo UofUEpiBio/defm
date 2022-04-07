@@ -144,44 +144,62 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                    Estimate Std. Error
-#> # of ones         -1.936861 0.02668241
+#> # of ones         -1.936861 0.02668245
 #> # of ones x attr1  1.974452 0.02976233
-#> Motif 0 1 3        4.761756 0.09453799
+#> Motif 0 1 3        4.761756 0.09453860
 #> 
 #> -2 log L: 15471.32
 ```
+
+We can also see the counts
+
+|  id |  y0 |  y1 |  y2 |  y3 |    x0 |    x1 | # of ones | # of ones x attr1 | Motif 0 1 3 |
+|----:|----:|----:|----:|----:|------:|------:|----------:|------------------:|------------:|
+|   1 |   0 |   0 |   0 |   0 |  1.96 |  0.02 |        NA |                NA |          NA |
+|   1 |   0 |   0 |   0 |   0 | -1.23 | -1.73 |         0 |              0.00 |           0 |
+|   1 |   0 |   0 |   1 |   0 |  0.17 | -0.21 |         1 |             -0.21 |           0 |
+|   1 |   1 |   0 |   0 |   0 |  2.23 | -0.18 |         2 |             -0.36 |           0 |
+|   2 |   0 |   0 |   1 |   0 | -1.51 | -0.30 |        NA |                NA |          NA |
+|   2 |   1 |   1 |   0 |   1 |  0.67 |  1.37 |         4 |              5.49 |           0 |
+|   2 |   1 |   1 |   0 |   1 |  1.91 |  0.97 |         6 |              5.79 |           1 |
+|   2 |   1 |   1 |   0 |   1 | -0.67 |  0.66 |         6 |              3.99 |           1 |
+|   2 |   1 |   1 |   0 |   0 | -0.04 |  0.81 |         5 |              4.05 |           1 |
+|   2 |   1 |   1 |   1 |   1 | -0.76 |  1.37 |         6 |              8.20 |           1 |
 
 ## Example 2: A fun model
 
 Let’s try out making some patterns
 
 ``` r
-id <- rep(1,100)
-Y <- matrix(0, nrow = 100, ncol = 10)
+n   <- 20
+n_y <- 10
+id <- rep(1, n)
+Y <- matrix(0, nrow = n, ncol = n_y)
 Y[1] <- 1
-X <- cbind(1:100)
+X <- cbind(1:n)
 
 d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 
-for (i in (1:9 - 1)) {
-  transition <- matrix(0, nrow = 2, ncol = 10)
-  transition[c(1,4) + 2 * i] <- 1
+for (i in (1:(n_y - 1) - 1)) {
+  transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
+  transition[c(1:4) + 2 * i] <- c(1,0,0,1)
   term_defm_transition(d_model, transition)
 }
 
-transition <- matrix(0, nrow = 2, ncol = 10)
-transition[c(20,1)] <- 1
+transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
+transition[c(n_y * 2 - 1, n_y * 2, 1, 2)] <- c(1,0,0,1)
 term_defm_transition(d_model, transition)
 
 term_defm_ones(d_model)
 
 init_defm(d_model)
 
-Y_sim <-sim_defm(d_model, par = c(rep(100, 10), 0))
-image(Y_sim)
+Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), 0))
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+Let’s see how it looks like
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 # Code of Conduct
 
