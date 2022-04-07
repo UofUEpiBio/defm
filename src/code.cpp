@@ -23,28 +23,32 @@ using namespace Rcpp;
 //' @aliases new_defm defm
 // [[Rcpp::export(rng = false)]]
 SEXP new_defm(
-    const IntegerVector & id,
-    const IntegerMatrix & Y,
-    const NumericMatrix & X,
+    const SEXP & id,
+    const SEXP & Y,
+    const SEXP & X,
     int order = 1
   ) {
 
-  if (static_cast<int>(id.size()) <= order)
+  int n_id = LENGTH(id);
+  int n_y  = Rf_ncols(Y);
+  int n_x  = Rf_ncols(X);
+
+  if (n_id <= order)
     stop("The -order- cannot be greater than the number of observations.");
 
-  if (static_cast<int>(id.size()) != Y.nrow())
+  if (n_id != Rf_nrows(Y))
     stop("The number of rows in Y does not match the length of id.");
 
-  if (static_cast<int>(id.size()) != X.nrow())
+  if (n_id != Rf_nrows(X))
     stop("The number of rows in X does not match the length of id.");
 
   Rcpp::XPtr< DEFM > model(new DEFM(
-    &(id[0u]),
-    &(Y(0,0)),
-    &(X(0,0)),
-    id.size(),
-    Y.ncol(),
-    X.ncol(),
+    &(INTEGER(id)[0u]),
+    &(INTEGER(Y)[0u]),
+    &(REAL(X)[0u]),
+    static_cast< size_t >(n_id),
+    static_cast< size_t >(n_y),
+    static_cast< size_t >(n_x),
     order
   ), true);
 
@@ -242,8 +246,8 @@ IntegerMatrix sim_defm(
     for (size_t j = 0u; j < ncols; ++j)
     {
 
-      if ((out[iter] == -1) & fill_t0)
-        res(i, j) = *(Y + iter);
+      if (fill_t0 & (out[iter] == -1))
+        res(i, j) = *(Y + j * ncols + i);
       else
         res(i, j) = out[iter];
 

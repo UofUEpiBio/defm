@@ -11,13 +11,13 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // new_defm
-SEXP new_defm(const IntegerVector& id, const IntegerMatrix& Y, const NumericMatrix& X, int order);
+SEXP new_defm(const SEXP& id, const SEXP& Y, const SEXP& X, int order);
 RcppExport SEXP _defm_new_defm(SEXP idSEXP, SEXP YSEXP, SEXP XSEXP, SEXP orderSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const IntegerVector& >::type id(idSEXP);
-    Rcpp::traits::input_parameter< const IntegerMatrix& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const NumericMatrix& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type id(idSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type X(XSEXP);
     Rcpp::traits::input_parameter< int >::type order(orderSEXP);
     rcpp_result_gen = Rcpp::wrap(new_defm(id, Y, X, order));
     return rcpp_result_gen;
