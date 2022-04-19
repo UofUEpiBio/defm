@@ -4,7 +4,6 @@
 # defm: Fit and simulate discrete binary exponential family models
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with
@@ -40,12 +39,12 @@ library(defm)
 
 # Simulation parameters
 set.seed(1231)
-n   <- 1000L # Count of individuals
+n   <- 5000L # Count of individuals
 n_y <- 4L    # Number of dependent variables
 n_x <- 2L    # Number of independent variables
 
 # Simulating how many observations we will have per individuals
-n_reps <- sample(3:10, 1000, replace = TRUE)
+n_reps <- sample(3:10, n, replace = TRUE)
 
 # Final number of rows in the data
 n_t <- sum(n_reps)
@@ -56,29 +55,34 @@ colnames(Y) <- paste0("y", 1:n_y - 1)
 X <- matrix(rnorm(n_x * n_t), ncol = n_x)
 colnames(X) <- paste0("x", 1:n_x - 1L)
 id <- rep(1L:n, n_reps)
+time <- unlist(sapply(n_reps, \(x) 1:x))
 ```
 
 Here is a brief look at the data structure. Remember, we still have not
 actually simulated data **WITH THE MODEL**.
 
-| id | y0 | y1 | y2 | y3 |          x0 |          x1 |
-| -: | -: | -: | -: | -: | ----------: | ----------: |
-|  1 |  0 |  0 |  0 |  0 |   1.9565904 |   0.0224265 |
-|  1 |  0 |  0 |  0 |  0 | \-1.2255416 | \-1.7320384 |
-|  1 |  0 |  0 |  0 |  0 |   0.1668458 | \-0.2145377 |
-|  1 |  0 |  1 |  0 |  1 |   2.2339416 | \-0.1821917 |
-|  2 |  1 |  0 |  0 |  0 | \-1.5118288 | \-0.3010826 |
-|  2 |  0 |  1 |  0 |  0 |   0.6656071 |   1.3720245 |
+|  id | time |  y0 |  y1 |  y2 |  y3 |         x0 |         x1 |
+|----:|-----:|----:|----:|----:|----:|-----------:|-----------:|
+|   1 |    1 |   0 |   0 |   0 |   0 | -1.7238865 | -1.2474585 |
+|   1 |    2 |   0 |   0 |   0 |   1 |  1.2510625 |  0.5263177 |
+|   1 |    3 |   0 |   0 |   0 |   0 | -0.6812962 |  1.7394782 |
+|   1 |    4 |   0 |   1 |   0 |   0 |  0.4816515 |  0.2770174 |
+|   2 |    1 |   0 |   1 |   0 |   0 | -0.5469139 | -1.4155620 |
+|   2 |    2 |   1 |   0 |   0 |   1 |  0.7742398 | -1.1119233 |
+|   2 |    3 |   0 |   0 |   1 |   0 |  0.0686962 | -0.5938007 |
+|   2 |    4 |   0 |   0 |   0 |   0 |  0.2790892 |  0.5546419 |
+|   2 |    5 |   0 |   0 |   0 |   0 |  0.2303643 |  0.3736067 |
+|   2 |    6 |   0 |   0 |   0 |   0 | -1.5854474 |  1.3133376 |
 
 For this example, we will simulate a model with the following features:
 
-  - **Ones**: Baseline density (prevalence of ones).
-  - **Ones x Attr 2**: Same as before, but weighted by one of the
+-   **Ones**: Baseline density (prevalence of ones).
+-   **Ones x Attr 2**: Same as before, but weighted by one of the
     covariates. (simil to fixed effect)
-  - **Transition** : And a transition structure, in particular `y0 ->
-    (y0, y1)`, which will be represented as a matrix in the form:
+-   **Transition** : And a transition structure, in particular
+    `y0 -> (y0, y1)`, which will be represented as a matrix in the form:
 
-<!-- end list -->
+<!-- -->
 
     1 0 0 0
     1 1 0 0
@@ -110,12 +114,10 @@ With this factory function, we will use it to simulate some data with
 the same dimensions of the original dataset. In this case, the
 parameters used for the simulation will be:
 
-  - **Ones**: -2, i.e., low density,
-  - **Ones x Attr 2**: 2, yet correlated with covariate \# 2,
-  - **Transition** : 5, And a high chance of observing the transition
+-   **Ones**: -2, i.e., low density,
+-   **Ones x Attr 2**: 2, yet correlated with covariate # 2,
+-   **Transition** : 5, And a high chance of observing the transition
     `y0 -> (y0, y1)`
-
-<!-- end list -->
 
 ``` r
 sim_par <- c(-2, 2, 5)
@@ -123,12 +125,12 @@ d_model <- build_model(id, Y, X, order = 1, par. = sim_par)
 simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
 #>      id        
-#> [1,]  1 0 1 0 0
+#> [1,]  1 0 0 0 0
 #> [2,]  1 0 0 0 0
-#> [3,]  1 0 0 1 0
-#> [4,]  1 1 0 0 0
-#> [5,]  2 1 0 0 0
-#> [6,]  2 1 1 0 1
+#> [3,]  1 1 1 1 1
+#> [4,]  1 1 1 1 0
+#> [5,]  2 0 0 0 0
+#> [6,]  2 0 0 0 0
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -145,28 +147,28 @@ summary(ans)
 #>     nobs = nrow_defm(object), lower = lower, upper = upper)
 #> 
 #> Coefficients:
-#>                    Estimate Std. Error
-#> # of ones         -1.999357 0.02749039
-#> # of ones x attr1  2.015401 0.03047928
-#> Motif 0 1 3        5.136348 0.09835722
+#>                           Estimate Std. Error
+#> # of ones                -2.008529 0.01231394
+#> # of ones x attr1         2.001101 0.01370736
+#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  5.031889 0.04388755
 #> 
-#> -2 log L: 15032.66
+#> -2 log L: 74926.75
 ```
 
 We can also see the counts
 
-| id | y0 | y1 | y2 | y3 |     x0 |     x1 | \# of ones | \# of ones x attr1 | Motif 0 1 3 |
-| -: | -: | -: | -: | -: | -----: | -----: | ---------: | -----------------: | ----------: |
-|  1 |  0 |  1 |  0 |  0 |   1.96 |   0.02 |         NA |                 NA |          NA |
-|  1 |  0 |  0 |  0 |  0 | \-1.23 | \-1.73 |          1 |             \-1.73 |           0 |
-|  1 |  0 |  0 |  1 |  0 |   0.17 | \-0.21 |          1 |             \-0.21 |           0 |
-|  1 |  1 |  0 |  0 |  0 |   2.23 | \-0.18 |          2 |             \-0.36 |           0 |
-|  2 |  1 |  0 |  0 |  0 | \-1.51 | \-0.30 |         NA |                 NA |          NA |
-|  2 |  1 |  1 |  0 |  1 |   0.67 |   1.37 |          4 |               5.49 |           1 |
-|  2 |  1 |  1 |  0 |  1 |   1.91 |   0.97 |          6 |               5.79 |           1 |
-|  2 |  1 |  1 |  0 |  1 | \-0.67 |   0.66 |          6 |               3.99 |           1 |
-|  2 |  1 |  1 |  0 |  0 | \-0.04 |   0.81 |          5 |               4.05 |           1 |
-|  2 |  1 |  1 |  1 |  1 | \-0.76 |   1.37 |          6 |               8.20 |           1 |
+|  id |  y0 |  y1 |  y2 |  y3 |    x0 |    x1 | # of ones | # of ones x attr1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
+|----:|----:|----:|----:|----:|------:|------:|----------:|------------------:|-------------------------:|
+|   1 |   0 |   0 |   0 |   0 | -1.72 | -1.25 |        NA |                NA |                       NA |
+|   1 |   0 |   0 |   0 |   0 |  1.25 |  0.53 |         0 |              0.00 |                        0 |
+|   1 |   1 |   1 |   1 |   1 | -0.68 |  1.74 |         4 |              6.96 |                        0 |
+|   1 |   1 |   1 |   1 |   0 |  0.48 |  0.28 |         7 |              1.94 |                        1 |
+|   2 |   0 |   0 |   0 |   0 | -0.55 | -1.42 |        NA |                NA |                       NA |
+|   2 |   0 |   0 |   0 |   0 |  0.77 | -1.11 |         0 |              0.00 |                        0 |
+|   2 |   0 |   0 |   0 |   0 |  0.07 | -0.59 |         0 |              0.00 |                        0 |
+|   2 |   0 |   1 |   0 |   0 |  0.28 |  0.55 |         1 |              0.55 |                        0 |
+|   2 |   0 |   0 |   0 |   0 |  0.23 |  0.37 |         1 |              0.37 |                        0 |
+|   2 |   1 |   1 |   1 |   1 | -1.59 |  1.31 |         4 |              5.25 |                        0 |
 
 ## Example 2: A fun model
 

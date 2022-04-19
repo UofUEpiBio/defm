@@ -49,12 +49,12 @@ library(defm)
 
 # Simulation parameters
 set.seed(1231)
-n   <- 1000L # Count of individuals
+n   <- 5000L # Count of individuals
 n_y <- 4L    # Number of dependent variables
 n_x <- 2L    # Number of independent variables
 
 # Simulating how many observations we will have per individuals
-n_reps <- sample(3:10, 1000, replace = TRUE)
+n_reps <- sample(3:10, n, replace = TRUE)
 
 # Final number of rows in the data
 n_t <- sum(n_reps)
@@ -65,13 +65,14 @@ colnames(Y) <- paste0("y", 1:n_y - 1)
 X <- matrix(rnorm(n_x * n_t), ncol = n_x)
 colnames(X) <- paste0("x", 1:n_x - 1L)
 id <- rep(1L:n, n_reps)
+time <- unlist(sapply(n_reps, \(x) 1:x))
 ```
 
 Here is a brief look at the data structure. Remember, we still have not actually
 simulated data **WITH THE MODEL**.
 
 ```{r echo = FALSE}
-knitr::kable(head(cbind(id, Y, X)), row.names = FALSE)
+knitr::kable(head(cbind(id, time, Y, X), n = 10), row.names = FALSE)
 ```
 
 

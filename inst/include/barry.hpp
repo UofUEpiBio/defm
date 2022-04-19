@@ -2943,6 +2943,7 @@ public:
      * @param source An unsigned vector ranging from 0 to N_
      * @param target An unsigned int vector ranging from 0 to M_
      * @param target When `true` tries to add repeated observations.
+     * @param value Cell_Type defaul fill-in value (zero, by default.)
      */
     ///@{
     
@@ -2950,9 +2951,9 @@ public:
     BArrayDense() : N(0u), M(0u), el(0u), el_rowsums(0u), el_colsums(0u) {};
     
     /** @brief Empty array */
-    BArrayDense (uint N_, uint M_) :
-        N(N_), M(M_), el(N_ * M_, 0),
-        el_rowsums(N_, 0), el_colsums(M_, 0) {};
+    BArrayDense (uint N_, uint M_, Cell_Type value = static_cast<Cell_Type>(0)) :
+        N(N_), M(M_), el(N_ * M_, value),
+        el_rowsums(N_, static_cast<Cell_Type>(value * M_)), el_colsums(M_, static_cast<Cell_Type>(value * N_)) {};
     
     /** @brief Edgelist with data */
     BArrayDense (
@@ -13419,6 +13420,8 @@ inline void counter_transition(
     DEFMCounters * counters,
     std::vector< size_t > coords,
     std::vector< bool > signs,
+    size_t m_order,
+    size_t n_y,
     int covar_index = -1
 )
 {
@@ -13433,6 +13436,24 @@ inline void counter_transition(
         coords.push_back(static_cast<size_t>(covar_index));
     else
         coords.push_back(1000u);
+
+    DEFM_COUNTER_LAMBDA(count_init)
+    {
+
+        auto indices = data.indices;
+
+        for (size_t i = 0u; i < (indices.size() - 1u); ++i)
+        {
+            if (
+                std::floor(indices[i] / Array.nrow()) >= 
+                static_cast<int>(Array.ncol())
+                )
+                throw std::range_error("The motif includes entries out of range.");
+        }
+            
+        return 0.0;
+        
+    };
 
     DEFM_COUNTER_LAMBDA(count_ones)
     {
@@ -13500,17 +13521,106 @@ inline void counter_transition(
     };
 
     // Creating name of the structure
-    std::string name = "Motif";
+    std::string name = "Motif {";
+
+    // Creating an empty motif filled with zeros
+    barry::BArrayDense<int> motif(m_order + 1u, n_y, 0);
+
+    // Filling the matrix in, negative values are 0s and 1s are... 1s.
+    // Zero are values not used.
     size_t n_cells = coords.size() - 1u;
     for (size_t d = 0u; d < n_cells; ++d)
-        name += (" "+ std::to_string(coords[d]));
+    {
+        size_t c = std::floor(coords[d] / (m_order + 1u));
+        size_t r = coords[d] - c * (m_order + 1u);
+        motif(r, c) = signs[d] ? 1 : -1;
+        
+    }
 
+    #define UNI_SUB(a) \
+        (\
+            ((a) == 0) ? "\u2080" : (\
+            ((a) == 1) ? "\u2081" : (\
+            ((a) == 2) ? "\u2082" : (\
+            ((a) == 3) ? "\u2083" : (\
+            ((a) == 4) ? "\u2084" : (\
+            ((a) == 5) ? "\u2085" : (\
+            ((a) == 6) ? "\u2086" : (\
+            ((a) == 7) ? "\u2087" : (\
+            ((a) == 8) ? "\u2088" : \
+            "\u2089"))))))))\
+        )
+
+
+    // If order is greater than zero, the starting point of the transtion
+    for (size_t i = 0u; i < m_order; ++i)
+    {
+        for (size_t j = 0u; j < n_y; ++j)
+        {
+
+            // Is it included?
+            if (motif(i,j) == 0)
+                continue;
+
+            // Is not the first?
+            if ((i != 0u) | (j != 0u))
+                name += ", ";
+
+            name += (motif(i,j) < 0 ? "y\u207B" : "y\u207A");
+
+            if (m_order > 1)
+                name += UNI_SUB(i);
+                
+            name += UNI_SUB(j);
+        }
+    }
+
+    #define UNI0S \u2080
+    #define UNI1S \u2081
+    #define UNI2S \u2082
+    #define UNI3S \u2083
+    #define UNI4S \u2084
+    #define UNI5S \u2085
+    #define UNI6S \u2086
+    #define UNI7S \u2087
+    #define UNI8S \u2088
+    #define UNI9S \u2089
+
+
+
+
+    // If it has starting point, then need to close.
+    if (m_order > 0u)
+        name += "} \u21E8 {";
+
+    // Looking onto the transtions
+    for (size_t j = 0u; j < n_y; ++j)
+    {
+
+        if (motif(m_order, j) == 0)
+            continue;
+
+        if (j != 0u)
+            name += ", ";
+
+        name += (motif(m_order, j) < 0 ? "y\u207B" : "y\u207A" );
+
+        if (m_order > 1)
+            name += UNI_SUB(m_order);
+
+        name += UNI_SUB(j);
+
+    }
+
+    #undef UNI_SUB
+
+    name += "}";
 
     if (covar_index >= 0)
     {
 
         counters->add_counter(
-            count_ones, nullptr,
+            count_ones, count_init,
             DEFMCounterData(coords, {}, signs), 
             name + " with attr " + std::to_string(covar_index), 
             "Motif weighted by single attribute"
@@ -13519,7 +13629,7 @@ inline void counter_transition(
     } else {
 
         counters->add_counter(
-            count_ones, nullptr,
+            count_ones, count_init,
             DEFMCounterData(coords, {}, signs), 
             name, 
             "Motif"

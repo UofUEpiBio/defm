@@ -161,7 +161,10 @@ int term_defm_transition(
     }
 
   defmcounters::counter_transition(
-    ptr->get_model().get_counters(), coords, signs, covar_idx);
+    ptr->get_model().get_counters(), coords, signs,
+      ptr->get_m_order(), ptr->get_n_y(),
+      covar_idx
+      );
 
   return 0;
 }
