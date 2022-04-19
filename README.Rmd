@@ -26,12 +26,12 @@ to model jointly distributed binary variables.
 This package, built on top of the C++ library [`barry`](https://github.com/USCbiostats/barry),
 provides a computationally efficient implementation of this family of models.
 
-## Installation
+# Installation
 
-You can install the development version of defm like so:
+You can install `defm` using devtools:
 
 ``` r
-# FILL THIS IN! HOW CAN PEOPLE INSTALL YOUR DEV PACKAGE?
+devtools::install_github("UofUEpi/defm")
 ```
 
 # Examples
@@ -149,38 +149,72 @@ cbind(id, simulated_Y, X, obs_stats) |>
 
 ## Example 2: A fun model
 
-Let's try out making some patterns
+For fun, imagine that we want to describe a process in which an individual
+moves sequentially through a set of states. In this example, there are
+ten different `y` variables, but the person can only have one of them as
+active (equal to one.) We can simulate such data using DEFM.
 
-```{r}
+We first need to generate the baseline data we will use for the simulation.
+This involves creating a matrix of size 20x10 (so we have 20 time-points,)
+filled with zeros in all but the first entry:
+
+```{r example2-sim}
 n   <- 20L
 n_y <- 10L
 id <- rep(1L, n)
 Y <- matrix(0L, nrow = n, ncol = n_y)
 Y[1] <- 1L
-X <- cbind(1:n + 0.1)
+X <- matrix(0.0, nrow = n, ncol = 1)
+```
 
+With the data in hand, we can now simulate the process. First, we need
+to build the model. The key component of the model will be the transition
+matrices:
+
+<!-- $$
+\left[\begin{array}{cccc}
+1 & 0 & NA & \dots \\
+0 & 1 & NA & \dots
+\end{array}\right] \dots 
+\left[\begin{array}{cccccc}
+\dots & NA & 1 & 0 & NA & \dots  \\
+\dots & NA & 0 & 1 & NA & \dots  
+\end{array}\right] \dots 
+\left[\begin{array}{cccc}
+\dots & NA & 1 & 0 \\
+\dots & NA & 0 & 1 
+\end{array}\right]
+$$ --> 
+
+<div align="center"><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D"></div>
+
+Let's take a look at the process:
+
+```{r}
+# Creating a new instance of a DEFM object
 d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 
+# Creating the transition terms, these
 for (i in (1:(n_y - 1) - 1)) {
   transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
   transition[c(1:4) + 2 * i] <- c(1,0,0,1)
   term_defm_transition(d_model, transition)
 }
 
+# Here is the last transition term
 transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
 transition[c(n_y * 2 - 1, n_y * 2, 1, 2)] <- c(1,0,0,1)
 term_defm_transition(d_model, transition)
 
+# Adding a term of ones
 term_defm_ones(d_model)
 
+# Initializing and simulating
 init_defm(d_model)
-
 Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
-
-stopifnot(all(Y_sim[1,] == Y[1,]))
 ```
 
-Let's see how it looks like
+The simulation should produce a nice looking figure:
 
 ```{r echo = FALSE}
 library(Matrix)
