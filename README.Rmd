@@ -1,5 +1,10 @@
 ---
-output: github_document
+output:
+  github_document:
+    math_method:
+      engine: webtex
+      url: https://latex.codecogs.com/gif.image?
+    pandoc_args: --webtex=https://ibm.codecogs.com/gif.latex?
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -50,7 +55,7 @@ library(defm)
 # Simulation parameters
 set.seed(1231)
 n   <- 5000L # Count of individuals
-n_y <- 4L    # Number of dependent variables
+n_y <- 3L    # Number of dependent variables
 n_x <- 2L    # Number of independent variables
 
 # Simulating how many observations we will have per individuals
@@ -72,30 +77,43 @@ Here is a brief look at the data structure. Remember, we still have not actually
 simulated data **WITH THE MODEL**.
 
 ```{r echo = FALSE}
-knitr::kable(head(cbind(id, time, Y, X), n = 10), row.names = FALSE)
+knitr::kable(head(cbind(id, time, Y, X), n = 10), row.names = FALSE, digits = 2)
 ```
 
 
 For this example, we will simulate a model with the following features:
 
-- **Ones**: Baseline density (prevalence of ones).
-- **Ones x Attr 2**: Same as before, but weighted by one of the covariates. (simil to fixed effect)
-- **Transition** : And a transition structure, in particular `y0 -> (y0, y1)`, which will be represented
-as a matrix in the form:
+- **Ones**: Baseline density (prevalence of ones), $\sum_{itk}y_{itk}$
 
-```
-1 0 0 0
-1 1 0 0
+- **Ones x Attr 2**: Same as before, but weighted by one of the covariates. (simil to fixed effect) $\sum_{itk}y_{itk}x_{it}$
+
+- **Transition** : And a transition structure, in particular `y0 -> (y0, y1)`, $y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}$.
+
+In `defm`, transition statistics can be represented using matrices. In this case, the transition can be written as:
+
+$$
+\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]
+$$
+
+which in `R` is
+
+```r
+> matrix(c(1,NA_integer_,NA_integer_,1,1,NA_integer_), nrow = 2, byrow = TRUE)
+#      [,1] [,2] [,3]
+# [1,]    1   NA   NA
+# [2,]    1    1   NA
 ```
 
-Here is the factory function:
+The `NA` entries in the matrix mean that those can be either zero or one. In other words, only values different from `NA` will be taken into account for specifying the terms. Here is the factory function:
 
 ```{r factory-function}
 # Creating the model and adding a couple of terms
 build_model <- function(id., Y., X., order. = 1, par. = par.) {
   
+  # Mapping the data to the C++ wrapper
   d_model. <- new_defm(id., Y., X., order = order.)
 
+  # Adding the model terms
   term_defm_ones(d_model.)
   term_defm_ones(d_model., 1)
   
@@ -104,8 +122,10 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
   
   term_defm_transition(d_model., transition)
   
+  # Initializing the model
   init_defm(d_model.)
   
+  # Returning
   d_model.
   
 }
@@ -134,6 +154,17 @@ d_model_sim <- build_model(id, simulated_Y, X, order = 1, par. = sim_par)
 ans <- defm_mle(d_model_sim)
 
 summary(ans)
+```
+
+Or better, we can use `texreg` to generate a pretty output:
+
+```{r mle-out, echo=FALSE, results='asis'}
+texreg::createTexreg(
+  coef.names = names(coef(ans)),
+  coef = coef(ans),
+  se = sqrt(diag(vcov(ans))),
+  gof.names = c("AIC", "BIC", "N"), gof = c(AIC(ans), BIC(ans), nobs(ans)), gof.decimal = c(T,T,F)
+) |> texreg::htmlreg()
 ```
 
 We can also see the counts

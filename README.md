@@ -4,7 +4,6 @@
 # defm: Fit and simulate discrete binary exponential family models
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with
@@ -41,7 +40,7 @@ library(defm)
 # Simulation parameters
 set.seed(1231)
 n   <- 5000L # Count of individuals
-n_y <- 4L    # Number of dependent variables
+n_y <- 3L    # Number of dependent variables
 n_x <- 2L    # Number of independent variables
 
 # Simulating how many observations we will have per individuals
@@ -62,40 +61,62 @@ time <- unlist(sapply(n_reps, \(x) 1:x))
 Here is a brief look at the data structure. Remember, we still have not
 actually simulated data **WITH THE MODEL**.
 
-| id | time | y0 | y1 | y2 | y3 |          x0 |          x1 |
-| -: | ---: | -: | -: | -: | -: | ----------: | ----------: |
-|  1 |    1 |  0 |  0 |  0 |  0 | \-1.7238865 | \-1.2474585 |
-|  1 |    2 |  0 |  0 |  0 |  1 |   1.2510625 |   0.5263177 |
-|  1 |    3 |  0 |  0 |  0 |  0 | \-0.6812962 |   1.7394782 |
-|  1 |    4 |  0 |  1 |  0 |  0 |   0.4816515 |   0.2770174 |
-|  2 |    1 |  0 |  1 |  0 |  0 | \-0.5469139 | \-1.4155620 |
-|  2 |    2 |  1 |  0 |  0 |  1 |   0.7742398 | \-1.1119233 |
-|  2 |    3 |  0 |  0 |  1 |  0 |   0.0686962 | \-0.5938007 |
-|  2 |    4 |  0 |  0 |  0 |  0 |   0.2790892 |   0.5546419 |
-|  2 |    5 |  0 |  0 |  0 |  0 |   0.2303643 |   0.3736067 |
-|  2 |    6 |  0 |  0 |  0 |  0 | \-1.5854474 |   1.3133376 |
+|  id | time |  y0 |  y1 |  y2 |    x0 |    x1 |
+|----:|-----:|----:|----:|----:|------:|------:|
+|   1 |    1 |   0 |   0 |   0 |  0.51 |  0.95 |
+|   1 |    2 |   0 |   0 |   0 |  0.16 |  0.25 |
+|   1 |    3 |   0 |   0 |   0 |  1.20 | -1.72 |
+|   1 |    4 |   0 |   1 |   0 | -0.20 |  1.55 |
+|   2 |    1 |   0 |   1 |   0 | -0.15 | -0.68 |
+|   2 |    2 |   1 |   0 |   0 |  1.19 |  0.92 |
+|   2 |    3 |   0 |   0 |   1 | -0.65 |  1.16 |
+|   2 |    4 |   0 |   0 |   0 | -0.99 |  0.21 |
+|   2 |    5 |   0 |   0 |   0 |  0.76 |  1.45 |
+|   2 |    6 |   0 |   0 |   0 | -0.68 | -1.34 |
 
 For this example, we will simulate a model with the following features:
 
-  - **Ones**: Baseline density (prevalence of ones).
-  - **Ones x Attr 2**: Same as before, but weighted by one of the
+-   **Ones**: Baseline density (prevalence of ones),
+    ![\\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
+
+-   **Ones x Attr 2**: Same as before, but weighted by one of the
     covariates. (simil to fixed effect)
-  - **Transition** : And a transition structure, in particular `y0 ->
-    (y0, y1)`, which will be represented as a matrix in the form:
+    ![\\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
 
-<!-- end list -->
+-   **Transition** : And a transition structure, in particular
+    `y0 -> (y0, y1)`,
+    ![y\_{i0}^0y\_{i0}^{t+1} y\_{i1}^{t+1}](https://latex.codecogs.com/gif.image?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D "y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}").
 
-    1 0 0 0
-    1 1 0 0
+In `defm`, transition statistics can be represented using matrices. In
+this case, the transition can be written as:
 
-Here is the factory function:
+![
+\\begin{array}{c}t\\\\t+1\\end{array}\\left\[\\begin{array}{ccc}1 & \\cdot & \\cdot \\\\ 1 & 1 & \\cdot\\end{array}\\right\]
+](https://latex.codecogs.com/gif.image?%0A%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D%0A "
+\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]
+")
+
+which in `R` is
+
+``` r
+> matrix(c(1,NA_integer_,NA_integer_,1,1,NA_integer_), nrow = 2, byrow = TRUE)
+#      [,1] [,2] [,3]
+# [1,]    1   NA   NA
+# [2,]    1    1   NA
+```
+
+The `NA` entries in the matrix mean that those can be either zero or
+one. In other words, only values different from `NA` will be taken into
+account for specifying the terms. Here is the factory function:
 
 ``` r
 # Creating the model and adding a couple of terms
 build_model <- function(id., Y., X., order. = 1, par. = par.) {
   
+  # Mapping the data to the C++ wrapper
   d_model. <- new_defm(id., Y., X., order = order.)
 
+  # Adding the model terms
   term_defm_ones(d_model.)
   term_defm_ones(d_model., 1)
   
@@ -104,8 +125,10 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
   
   term_defm_transition(d_model., transition)
   
+  # Initializing the model
   init_defm(d_model.)
   
+  # Returning
   d_model.
   
 }
@@ -115,25 +138,23 @@ With this factory function, we will use it to simulate some data with
 the same dimensions of the original dataset. In this case, the
 parameters used for the simulation will be:
 
-  - **Ones**: -2, i.e., low density,
-  - **Ones x Attr 2**: 2, yet correlated with covariate \# 2,
-  - **Transition** : 5, And a high chance of observing the transition
+-   **Ones**: -2, i.e., low density,
+-   **Ones x Attr 2**: 2, yet correlated with covariate # 2,
+-   **Transition** : 5, And a high chance of observing the transition
     `y0 -> (y0, y1)`
-
-<!-- end list -->
 
 ``` r
 sim_par <- c(-2, 2, 5)
 d_model <- build_model(id, Y, X, order = 1, par. = sim_par)
 simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
-#>      id        
-#> [1,]  1 0 0 0 0
-#> [2,]  1 0 0 0 0
-#> [3,]  1 1 1 1 1
-#> [4,]  1 1 1 1 0
-#> [5,]  2 0 0 0 0
-#> [6,]  2 0 0 0 0
+#>      id      
+#> [1,]  1 0 0 0
+#> [2,]  1 0 0 0
+#> [3,]  1 0 0 0
+#> [4,]  1 1 1 1
+#> [5,]  2 0 0 0
+#> [6,]  2 0 0 1
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -151,27 +172,127 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                           Estimate Std. Error
-#> # of ones                -2.008529 0.01231394
-#> # of ones x attr1         2.001101 0.01370736
-#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  5.031889 0.04388755
+#> # of ones                -2.011721 0.01432386
+#> # of ones x attr1         2.002699 0.01583182
+#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  4.997817 0.04617565
 #> 
-#> -2 log L: 74926.75
+#> -2 log L: 55019.12
 ```
+
+Or better, we can use `texreg` to generate a pretty output:
+
+<table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
+<caption>
+Statistical models
+</caption>
+<thead>
+<tr>
+<th style="padding-left: 5px;padding-right: 5px;">
+ 
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+# of ones
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-2.01
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.01)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+# of ones x attr1
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.00
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.02)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.00
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.05)
+</td>
+</tr>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+AIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+55025.12
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+BIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+55050.31
+</td>
+</tr>
+<tr style="border-bottom: 2px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+N
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+32777
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="font-size: 0.8em;" colspan="2">
+<sup>\*\*\*</sup>p \< 0.001; <sup>\*\*</sup>p \< 0.01; <sup>\*</sup>p \<
+0.05
+</td>
+</tr>
+</tfoot>
+</table>
 
 We can also see the counts
 
-| id | y0 | y1 | y2 | y3 |     x0 |     x1 | \# of ones | \# of ones x attr1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
-| -: | -: | -: | -: | -: | -----: | -----: | ---------: | -----------------: | -----------------------: |
-|  1 |  0 |  0 |  0 |  0 | \-1.72 | \-1.25 |         NA |                 NA |                       NA |
-|  1 |  0 |  0 |  0 |  0 |   1.25 |   0.53 |          0 |               0.00 |                        0 |
-|  1 |  1 |  1 |  1 |  1 | \-0.68 |   1.74 |          4 |               6.96 |                        0 |
-|  1 |  1 |  1 |  1 |  0 |   0.48 |   0.28 |          7 |               1.94 |                        1 |
-|  2 |  0 |  0 |  0 |  0 | \-0.55 | \-1.42 |         NA |                 NA |                       NA |
-|  2 |  0 |  0 |  0 |  0 |   0.77 | \-1.11 |          0 |               0.00 |                        0 |
-|  2 |  0 |  0 |  0 |  0 |   0.07 | \-0.59 |          0 |               0.00 |                        0 |
-|  2 |  0 |  1 |  0 |  0 |   0.28 |   0.55 |          1 |               0.55 |                        0 |
-|  2 |  0 |  0 |  0 |  0 |   0.23 |   0.37 |          1 |               0.37 |                        0 |
-|  2 |  1 |  1 |  1 |  1 | \-1.59 |   1.31 |          4 |               5.25 |                        0 |
+|  id |  y0 |  y1 |  y2 |    x0 |    x1 | # of ones | # of ones x attr1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
+|----:|----:|----:|----:|------:|------:|----------:|------------------:|-------------------------:|
+|   1 |   0 |   0 |   0 |  0.51 |  0.95 |        NA |                NA |                       NA |
+|   1 |   0 |   0 |   0 |  0.16 |  0.25 |         0 |              0.00 |                        0 |
+|   1 |   0 |   0 |   0 |  1.20 | -1.72 |         0 |              0.00 |                        0 |
+|   1 |   1 |   1 |   1 | -0.20 |  1.55 |         3 |              4.66 |                        0 |
+|   2 |   0 |   0 |   0 | -0.15 | -0.68 |        NA |                NA |                       NA |
+|   2 |   0 |   0 |   1 |  1.19 |  0.92 |         1 |              0.92 |                        0 |
+|   2 |   0 |   1 |   1 | -0.65 |  1.16 |         3 |              3.48 |                        0 |
+|   2 |   0 |   0 |   0 | -0.99 |  0.21 |         2 |              0.43 |                        0 |
+|   2 |   0 |   1 |   1 |  0.76 |  1.45 |         2 |              2.90 |                        0 |
+|   2 |   1 |   0 |   0 | -0.68 | -1.34 |         3 |             -4.03 |                        0 |
 
 ## Example 2: A fun model
 
@@ -212,7 +333,7 @@ transition matrices:
 \end{array}\right]
 $$ -->
 
-<div data-align="center">
+<div align="center">
 
 <img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D">
 
