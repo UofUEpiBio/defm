@@ -115,7 +115,7 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
 
   # Adding the model terms
   term_defm_ones(d_model.)
-  term_defm_ones(d_model., 1)
+  term_defm_ones(d_model., 1, "Variable 1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1

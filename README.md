@@ -118,7 +118,7 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
 
   # Adding the model terms
   term_defm_ones(d_model.)
-  term_defm_ones(d_model., 1)
+  term_defm_ones(d_model., 1, "Variable 1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
@@ -139,7 +139,7 @@ the same dimensions of the original dataset. In this case, the
 parameters used for the simulation will be:
 
 -   **Ones**: -2, i.e., low density,
--   **Ones x Attr 2**: 2, yet correlated with covariate # 2,
+-   **Ones x Attr 2**: 2, yet correlated with covariate \# 2,
 -   **Transition** : 5, And a high chance of observing the transition
     `y0 -> (y0, y1)`
 
@@ -173,7 +173,7 @@ summary(ans)
 #> Coefficients:
 #>                           Estimate Std. Error
 #> # of ones                -2.011721 0.01432386
-#> # of ones x attr1         2.002699 0.01583182
+#> # of ones x Variable 1    2.002699 0.01583182
 #> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  4.997817 0.04617565
 #> 
 #> -2 log L: 55019.12
@@ -198,7 +198,7 @@ Model 1
 <tbody>
 <tr style="border-top: 1px solid #000000;">
 <td style="padding-left: 5px;padding-right: 5px;">
-# of ones
+\# of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 -2.01
@@ -214,7 +214,7 @@ Model 1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-# of ones x attr1
+\# of ones x Variable 1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 2.00
@@ -281,18 +281,18 @@ N
 
 We can also see the counts
 
-|  id |  y0 |  y1 |  y2 |    x0 |    x1 | # of ones | # of ones x attr1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
-|----:|----:|----:|----:|------:|------:|----------:|------------------:|-------------------------:|
-|   1 |   0 |   0 |   0 |  0.51 |  0.95 |        NA |                NA |                       NA |
-|   1 |   0 |   0 |   0 |  0.16 |  0.25 |         0 |              0.00 |                        0 |
-|   1 |   0 |   0 |   0 |  1.20 | -1.72 |         0 |              0.00 |                        0 |
-|   1 |   1 |   1 |   1 | -0.20 |  1.55 |         3 |              4.66 |                        0 |
-|   2 |   0 |   0 |   0 | -0.15 | -0.68 |        NA |                NA |                       NA |
-|   2 |   0 |   0 |   1 |  1.19 |  0.92 |         1 |              0.92 |                        0 |
-|   2 |   0 |   1 |   1 | -0.65 |  1.16 |         3 |              3.48 |                        0 |
-|   2 |   0 |   0 |   0 | -0.99 |  0.21 |         2 |              0.43 |                        0 |
-|   2 |   0 |   1 |   1 |  0.76 |  1.45 |         2 |              2.90 |                        0 |
-|   2 |   1 |   0 |   0 | -0.68 | -1.34 |         3 |             -4.03 |                        0 |
+|  id |  y0 |  y1 |  y2 |    x0 |    x1 | \# of ones | \# of ones x Variable 1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
+|----:|----:|----:|----:|------:|------:|-----------:|------------------------:|-------------------------:|
+|   1 |   0 |   0 |   0 |  0.51 |  0.95 |         NA |                      NA |                       NA |
+|   1 |   0 |   0 |   0 |  0.16 |  0.25 |          0 |                    0.00 |                        0 |
+|   1 |   0 |   0 |   0 |  1.20 | -1.72 |          0 |                    0.00 |                        0 |
+|   1 |   1 |   1 |   1 | -0.20 |  1.55 |          3 |                    4.66 |                        0 |
+|   2 |   0 |   0 |   0 | -0.15 | -0.68 |         NA |                      NA |                       NA |
+|   2 |   0 |   0 |   1 |  1.19 |  0.92 |          1 |                    0.92 |                        0 |
+|   2 |   0 |   1 |   1 | -0.65 |  1.16 |          3 |                    3.48 |                        0 |
+|   2 |   0 |   0 |   0 | -0.99 |  0.21 |          2 |                    0.43 |                        0 |
+|   2 |   0 |   1 |   1 |  0.76 |  1.45 |          2 |                    2.90 |                        0 |
+|   2 |   1 |   0 |   0 | -0.68 | -1.34 |          3 |                   -4.03 |                        0 |
 
 ## Example 2: A fun model
 

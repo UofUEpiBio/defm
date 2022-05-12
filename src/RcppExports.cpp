@@ -34,37 +34,40 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_ones
-int term_defm_ones(SEXP m, int idx);
-RcppExport SEXP _defm_term_defm_ones(SEXP mSEXP, SEXP idxSEXP) {
+int term_defm_ones(SEXP m, int idx, std::string vname);
+RcppExport SEXP _defm_term_defm_ones(SEXP mSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_ones(m, idx));
+    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
+    rcpp_result_gen = Rcpp::wrap(term_defm_ones(m, idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
 // term_defm_fe
-int term_defm_fe(SEXP m, int idx, double k);
-RcppExport SEXP _defm_term_defm_fe(SEXP mSEXP, SEXP idxSEXP, SEXP kSEXP) {
+int term_defm_fe(SEXP m, int idx, double k, std::string vname);
+RcppExport SEXP _defm_term_defm_fe(SEXP mSEXP, SEXP idxSEXP, SEXP kSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< double >::type k(kSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_fe(m, idx, k));
+    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
+    rcpp_result_gen = Rcpp::wrap(term_defm_fe(m, idx, k, vname));
     return rcpp_result_gen;
 END_RCPP
 }
 // term_defm_transition
-int term_defm_transition(SEXP m, IntegerMatrix& mat, int covar_idx);
-RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP covar_idxSEXP) {
+int term_defm_transition(SEXP m, IntegerMatrix& mat, int covar_idx, std::string vname);
+RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP covar_idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix& >::type mat(matSEXP);
     Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, covar_idx));
+    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
+    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, covar_idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -198,9 +201,9 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
     {"_defm_init_defm", (DL_FUNC) &_defm_init_defm, 1},
-    {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 2},
-    {"_defm_term_defm_fe", (DL_FUNC) &_defm_term_defm_fe, 3},
-    {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 3},
+    {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 3},
+    {"_defm_term_defm_fe", (DL_FUNC) &_defm_term_defm_fe, 4},
+    {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 4},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
     {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 3},

@@ -9,11 +9,11 @@
 \alias{print.DEFM}
 \title{Model specification for DEFM}
 \usage{
-term_defm_ones(m, idx = -1L)
+term_defm_ones(m, idx = -1L, vname = "")
 
-term_defm_fe(m, idx = -1L, k = 1)
+term_defm_fe(m, idx = -1L, k = 1, vname = "")
 
-term_defm_transition(m, mat, covar_idx = -1L)
+term_defm_transition(m, mat, covar_idx = -1L, vname = "")
 
 \method{print}{DEFM}(x)
 }

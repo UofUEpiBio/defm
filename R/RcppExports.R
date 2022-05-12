@@ -40,15 +40,15 @@ init_defm <- function(m) {
 #'
 #' @name defm_terms
 #' @aliases terms_defm
-term_defm_ones <- function(m, idx = -1L) {
-    invisible(.Call(`_defm_term_defm_ones`, m, idx))
+term_defm_ones <- function(m, idx = -1L, vname = "") {
+    invisible(.Call(`_defm_term_defm_ones`, m, idx, vname))
 }
 
 #' @rdname defm_terms
 #' @export
 #' @param k Numeric scalar. Exponent used in the term.
-term_defm_fe <- function(m, idx = -1L, k = 1.0) {
-    invisible(.Call(`_defm_term_defm_fe`, m, idx, k))
+term_defm_fe <- function(m, idx = -1L, k = 1.0, vname = "") {
+    invisible(.Call(`_defm_term_defm_fe`, m, idx, k, vname))
 }
 
 #' @param mat Integer matrix. The matrix specifies the type of motif to capture
@@ -66,8 +66,8 @@ term_defm_fe <- function(m, idx = -1L, k = 1.0) {
 #' the matrix should include 0 to mark zero values.
 #' @export
 #' @rdname defm_terms
-term_defm_transition <- function(m, mat, covar_idx = -1L) {
-    invisible(.Call(`_defm_term_defm_transition`, m, mat, covar_idx))
+term_defm_transition <- function(m, mat, covar_idx = -1L, vname = "") {
+    invisible(.Call(`_defm_term_defm_transition`, m, mat, covar_idx, vname))
 }
 
 #' @export

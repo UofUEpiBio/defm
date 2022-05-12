@@ -82,11 +82,11 @@ int init_defm(SEXP m)
 //' @name defm_terms
 //' @aliases terms_defm
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_ones(SEXP m, int idx = -1)
+int term_defm_ones(SEXP m, int idx = -1, std::string vname = "")
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  defmcounters::counter_ones(ptr->get_model().get_counters(), idx);
+  defmcounters::counter_ones(ptr->get_model().get_counters(), idx, vname);
 
   return 0;
 }
@@ -96,11 +96,11 @@ int term_defm_ones(SEXP m, int idx = -1)
 //' @export
 //' @param k Numeric scalar. Exponent used in the term.
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_fe(SEXP m, int idx = -1, double k = 1.0)
+int term_defm_fe(SEXP m, int idx = -1, double k = 1.0, std::string vname = "")
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx, k);
+  defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx, k, vname);
 
   return 0;
 }
@@ -124,7 +124,8 @@ int term_defm_fe(SEXP m, int idx = -1, double k = 1.0)
 int term_defm_transition(
     SEXP m,
     IntegerMatrix & mat,
-    int covar_idx = -1
+    int covar_idx = -1,
+    std::string vname = ""
 )
 {
 
@@ -163,7 +164,7 @@ int term_defm_transition(
   defmcounters::counter_transition(
     ptr->get_model().get_counters(), coords, signs,
       ptr->get_m_order(), ptr->get_n_y(),
-      covar_idx
+      covar_idx, vname
       );
 
   return 0;
@@ -400,6 +401,12 @@ NumericMatrix get_stats(SEXP m)
     ++i_effective;
 
   }
+
+  // Setting the names
+  Rcpp::CharacterVector cnames(0);
+  for (auto & n : model.colnames())
+    cnames.push_back(n);
+  Rcpp::colnames(res) = cnames;
 
   return res;
 
