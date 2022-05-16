@@ -382,9 +382,10 @@ NumericMatrix get_stats(SEXP m)
     // Do we need to reset the counter?
     if ((i > 0) && (*(ID + i - 1u) != *(ID + i)))
     {
-      std::fill(res.row(i).begin(), res.row(i).end(), NA_REAL);
       n_obs_i = 1u;
-      continue;
+
+      // Completed the current
+      ++i_effective;
     }
 
     // Did we passed the Markov order?
@@ -396,9 +397,6 @@ NumericMatrix get_stats(SEXP m)
 
     for (size_t j = 0u; j < ncols; ++j)
       res(i, j) = (*target)[i_effective][j];
-
-    // Completed the current
-    ++i_effective;
 
   }
 
