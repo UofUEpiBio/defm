@@ -409,3 +409,41 @@ NumericMatrix get_stats(SEXP m)
   return res;
 
 }
+
+//' Motif census
+//' @param m An object of class [DEFM].
+//' @param locs Idx (starting from zero) with the variables that will be
+//' included in the census.
+//' @export
+// [[Rcpp::export]]
+NumericMatrix motif_census(SEXP m, std::vector<size_t> locs)
+{
+
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  barry::FreqTable<int> res = ptr->motif_census(locs);
+  auto dat = res.get_data();
+
+  size_t nele = res.size();
+  NumericMatrix m_res(nele, locs.size() * (ptr->get_m_order() + 1) + 1);
+
+  size_t ele = 0u;
+  for (size_t i = 0u; i < nele; ++i)
+    for (size_t j = 0u; j < (locs.size() * (ptr->get_m_order() + 1) + 1); ++j)
+      m_res(i, j) = dat[ele++];
+
+  // Setting the names
+  Rcpp::CharacterVector cnames = {"count"};
+  for (size_t m = 0u; m < (ptr->get_m_order() + 1); ++m)
+  {
+    for (auto & n : locs)
+      cnames.push_back(
+        std::string("y") + std::to_string(m) + std::to_string(n)
+      );
+  }
+
+  Rcpp::colnames(m_res) = cnames;
+
+  return m_res;
+
+}

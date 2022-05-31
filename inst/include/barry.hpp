@@ -608,7 +608,7 @@ public:
      */
     size_t size() const noexcept;
 
-    size_t make_hash(const std::vector< double > & x) const;
+    size_t make_hash(const std::vector< T > & x) const;
     
 };
 
@@ -793,7 +793,7 @@ inline size_t FreqTable<T>::size() const noexcept
 }
 
 template<typename T>
-inline size_t FreqTable<T>::make_hash(const std::vector< double > & x) const
+inline size_t FreqTable<T>::make_hash(const std::vector< T > & x) const
 {
 
     std::hash< T > hasher;

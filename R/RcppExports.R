@@ -166,3 +166,12 @@ get_stats <- function(m) {
     .Call(`_defm_get_stats`, m)
 }
 
+#' Motif census
+#' @param m An object of class [DEFM].
+#' @param locs Idx (starting from zero) with the variables that will be
+#' included in the census.
+#' @export
+motif_census <- function(m, locs) {
+    .Call(`_defm_motif_census`, m, locs)
+}
+

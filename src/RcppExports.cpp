@@ -197,6 +197,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// motif_census
+NumericMatrix motif_census(SEXP m, std::vector<size_t> locs);
+RcppExport SEXP _defm_motif_census(SEXP mSEXP, SEXP locsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::vector<size_t> >::type locs(locsSEXP);
+    rcpp_result_gen = Rcpp::wrap(motif_census(m, locs));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -216,6 +228,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_nobs_defm", (DL_FUNC) &_defm_nobs_defm, 1},
     {"_defm_morder_defm", (DL_FUNC) &_defm_morder_defm, 1},
     {"_defm_get_stats", (DL_FUNC) &_defm_get_stats, 1},
+    {"_defm_motif_census", (DL_FUNC) &_defm_motif_census, 2},
     {NULL, NULL, 0}
 };
 
