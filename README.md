@@ -294,6 +294,29 @@ We can also see the counts
 |   2 |   0 |   1 |   1 |  0.76 |  1.45 |          0 |                       0 |                        0 |
 |   2 |   1 |   0 |   0 | -0.68 | -1.34 |          0 |                       0 |                        0 |
 
+Finally, we can also take a look at the distribution of the log-odds.
+The way we calculate this is by looking at changes in a single entry of
+the array. For example, the log-odds of having
+![y\_{12}: 0\\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
+which are equivalent to
+
+![
+\\log{\\frac{\\mbox{Pr}\\left(\\left.y\_{12} = 1\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 1}\\right)}{\\mbox{Pr}\\left(\\left.y\_{12} = 0\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 0}\\right)}} = \\mbox{logit}\\left(\\mbox{Pr}\\left(\\left.y\_{12} = 1\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 1}\\right)\\right)
+](https://latex.codecogs.com/gif.image?%0A%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29%0A "
+\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)
+")
+
+We can use the `logodds` function for this:
+
+``` r
+lo <- logodds(d_model_sim, coef(ans), 1,  2) 
+hist(lo, main = "Distribution of Log-odds for term Y(1,2)",
+     col="tomato", border = "transparent", breaks = 100)
+abline(v=0, lwd = 2, lty = 2, col = "steelblue")
+```
+
+<img src="man/figures/README-logodds-1.png" width="100%" />
+
 ## Example 2: A fun model
 
 For fun, imagine that we want to describe a process in which an

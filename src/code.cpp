@@ -447,3 +447,20 @@ NumericMatrix motif_census(SEXP m, std::vector<size_t> locs)
   return m_res;
 
 }
+
+//' Log odds (aka conditional prob, aka gibbs sampler)
+//' @export
+// [[Rcpp::export]]
+NumericVector logodds(
+    SEXP m,
+    const std::vector<double> & par,
+    int i,
+    int j
+) {
+
+
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  return wrap(ptr->logodds(par, i, j));
+
+}

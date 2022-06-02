@@ -209,6 +209,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// logodds
+NumericVector logodds(SEXP m, const std::vector<double>& par, int i, int j);
+RcppExport SEXP _defm_logodds(SEXP mSEXP, SEXP parSEXP, SEXP iSEXP, SEXP jSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type par(parSEXP);
+    Rcpp::traits::input_parameter< int >::type i(iSEXP);
+    Rcpp::traits::input_parameter< int >::type j(jSEXP);
+    rcpp_result_gen = Rcpp::wrap(logodds(m, par, i, j));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -229,6 +243,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_morder_defm", (DL_FUNC) &_defm_morder_defm, 1},
     {"_defm_get_stats", (DL_FUNC) &_defm_get_stats, 1},
     {"_defm_motif_census", (DL_FUNC) &_defm_motif_census, 2},
+    {"_defm_logodds", (DL_FUNC) &_defm_logodds, 4},
     {NULL, NULL, 0}
 };
 

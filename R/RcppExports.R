@@ -175,3 +175,9 @@ motif_census <- function(m, locs) {
     .Call(`_defm_motif_census`, m, locs)
 }
 
+#' Log odds (aka conditional prob, aka gibbs sampler)
+#' @export
+logodds <- function(m, par, i, j) {
+    .Call(`_defm_logodds`, m, par, i, j)
+}
+
