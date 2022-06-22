@@ -6,6 +6,7 @@
 \alias{terms_defm}
 \alias{term_defm_fe}
 \alias{term_defm_transition}
+\alias{term_defm_transition_formula}
 \alias{print.DEFM}
 \title{Model specification for DEFM}
 \usage{
@@ -14,6 +15,8 @@ term_defm_ones(m, idx = -1L, vname = "")
 term_defm_fe(m, idx = -1L, k = 1, vname = "")
 
 term_defm_transition(m, mat, covar_idx = -1L, vname = "")
+
+term_defm_transition_formula(m, formula, covar_idx = -1L, vname = "")
 
 \method{print}{DEFM}(x)
 }
@@ -44,4 +47,40 @@ t1:   1  1 NA
 
 represents a transition \verb{y0 -> (y1, y2)}. If 0 is a motif of interest, then
 the matrix should include 0 to mark zero values.
+
+The function \code{term_defm_transition_formula},
+will take the formula and generate the corresponding
+input for defm::counter_transition(). Formulas can be specified in the
+following ways:
+\itemize{
+\item Intercept effect: {...} No transition, only including the current state.
+\item Transition effect: {...} > {...} Includes current and previous states.
+}
+
+The general notation is \verb{[0]y[column id]_[row id]}. A preceeding zero
+means that the value of the cell is considered to be zero. The column
+id goes between 0 and the number of columns in the array - 1 (so it
+is indexed from 0,) and the row id goes from 0 to m_order.
+\subsection{Intercept effects}{
+
+Intercept effects only involve a single set of curly brackets. Using the
+'greater-than' symbol (i.e., '<') is only for transition effects. When
+specifying intercept effects, users can skip the \code{row_id}, e.g.,
+\code{y0_0} is equivalent to \code{y0}. If the passed \verb{row id} is different from
+the Markov order, i.e., \code{row_id != m_order}, then the function returns
+with an error.
+
+Examples:
+\itemize{
+\item \code{"{y0, 0y1}"} is equivalent to set a motif with the first element equal
+to one and the second to zero.
+}
+}
+
+\subsection{Transition effects}{
+
+Transition effects can be specified using two sets of curly brackets and
+an greater-than symbol, i.e., \code{{...} > {...}}. The first set of brackets,
+which we call LHS, can only hold \verb{row id} that are less than \code{m_order}.
+}
 }

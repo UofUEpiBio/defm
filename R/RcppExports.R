@@ -70,6 +70,44 @@ term_defm_transition <- function(m, mat, covar_idx = -1L, vname = "") {
     invisible(.Call(`_defm_term_defm_transition`, m, mat, covar_idx, vname))
 }
 
+#' @details The function `term_defm_transition_formula`,
+#' will take the formula and generate the corresponding
+#' input for defm::counter_transition(). Formulas can be specified in the
+#' following ways:
+#'
+#' - Intercept effect: {...} No transition, only including the current state.
+#' - Transition effect: {...} > {...} Includes current and previous states.
+#'
+#' The general notation is `[0]y[column id]_[row id]`. A preceeding zero
+#' means that the value of the cell is considered to be zero. The column
+#' id goes between 0 and the number of columns in the array - 1 (so it
+#' is indexed from 0,) and the row id goes from 0 to m_order.
+#'
+#' ## Intercept effects
+#'
+#' Intercept effects only involve a single set of curly brackets. Using the
+#' 'greater-than' symbol (i.e., '<') is only for transition effects. When
+#' specifying intercept effects, users can skip the `row_id`, e.g.,
+#' `y0_0` is equivalent to `y0`. If the passed `row id` is different from
+#' the Markov order, i.e., `row_id != m_order`, then the function returns
+#' with an error.
+#'
+#' Examples:
+#'
+#' - `"{y0, 0y1}"` is equivalent to set a motif with the first element equal
+#' to one and the second to zero.
+#'
+#' ## Transition effects
+#'
+#' Transition effects can be specified using two sets of curly brackets and
+#' an greater-than symbol, i.e., `{...} > {...}`. The first set of brackets,
+#' which we call LHS, can only hold `row id` that are less than `m_order`.
+#' @export
+#' @rdname defm_terms
+term_defm_transition_formula <- function(m, formula, covar_idx = -1L, vname = "") {
+    invisible(.Call(`_defm_term_defm_transition_formula`, m, formula, covar_idx, vname))
+}
+
 #' @export
 #' @rdname defm_terms
 print.DEFM <- function(x) {

@@ -152,9 +152,9 @@ head(cbind(id, simulated_Y))
 #> [1,]  1 0 0 0
 #> [2,]  1 0 0 0
 #> [3,]  1 0 0 0
-#> [4,]  1 1 1 1
+#> [4,]  1 0 1 1
 #> [5,]  2 0 0 0
-#> [6,]  2 0 0 1
+#> [6,]  2 0 1 0
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -172,11 +172,11 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                           Estimate Std. Error
-#> # of ones                -2.011721 0.01432388
-#> # of ones x Variable 1    2.002699 0.01583181
-#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  4.997817 0.04617595
+#> # of ones                -1.966198 0.01401444
+#> # of ones x Variable 1    1.957017 0.01548504
+#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  4.905981 0.04516844
 #> 
-#> -2 log L: 55019.12
+#> -2 log L: 56154.07
 ```
 
 Or better, we can use `texreg` to generate a pretty output:
@@ -201,7 +201,7 @@ Model 1
 \# of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
--2.01
+-1.97
 </td>
 </tr>
 <tr>
@@ -217,7 +217,7 @@ Model 1
 \# of ones x Variable 1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-2.00
+1.96
 </td>
 </tr>
 <tr>
@@ -233,7 +233,7 @@ Model 1
 Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-5.00
+4.91
 </td>
 </tr>
 <tr>
@@ -249,7 +249,7 @@ Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}
 AIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-55025.12
+56160.07
 </td>
 </tr>
 <tr>
@@ -257,7 +257,7 @@ AIC
 BIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-55050.31
+56185.26
 </td>
 </tr>
 <tr style="border-bottom: 2px solid #000000;">
@@ -286,13 +286,13 @@ We can also see the counts
 |   1 |   0 |   0 |   0 |  0.51 |  0.95 |         NA |                      NA |                       NA |
 |   1 |   0 |   0 |   0 |  0.16 |  0.25 |          0 |                       0 |                        0 |
 |   1 |   0 |   0 |   0 |  1.20 | -1.72 |          0 |                       0 |                        0 |
-|   1 |   1 |   1 |   1 | -0.20 |  1.55 |          0 |                       0 |                        0 |
+|   1 |   0 |   1 |   1 | -0.20 |  1.55 |          0 |                       0 |                        0 |
 |   2 |   0 |   0 |   0 | -0.15 | -0.68 |          0 |                       0 |                        0 |
-|   2 |   0 |   0 |   1 |  1.19 |  0.92 |          0 |                       0 |                        0 |
-|   2 |   0 |   1 |   1 | -0.65 |  1.16 |          0 |                       0 |                        0 |
+|   2 |   0 |   1 |   0 |  1.19 |  0.92 |          0 |                       0 |                        0 |
+|   2 |   1 |   0 |   0 | -0.65 |  1.16 |          0 |                       0 |                        0 |
 |   2 |   0 |   0 |   0 | -0.99 |  0.21 |          0 |                       0 |                        0 |
-|   2 |   0 |   1 |   1 |  0.76 |  1.45 |          0 |                       0 |                        0 |
-|   2 |   1 |   0 |   0 | -0.68 | -1.34 |          0 |                       0 |                        0 |
+|   2 |   1 |   1 |   0 |  0.76 |  1.45 |          0 |                       0 |                        0 |
+|   2 |   0 |   0 |   0 | -0.68 | -1.34 |          0 |                       0 |                        0 |
 
 Finally, we can also take a look at the distribution of the log-odds.
 The way we calculate this is by looking at changes in a single entry of
@@ -391,6 +391,37 @@ Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
 The simulation should produce a nice looking figure:
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+## Example 3: Using formulas for transitions
+
+In this example, we will redo the previous model, but now using formulas
+for specifying the transitions:
+
+``` r
+d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
+
+term_defm_transition_formula(d_model_formula, "{y0, 0y1} > {0y0, y1}")
+term_defm_transition_formula(d_model_formula, "{y1, 0y2} > {0y1, y2}")
+term_defm_transition_formula(d_model_formula, "{y2, 0y3} > {0y2, y3}")
+term_defm_transition_formula(d_model_formula, "{y3, 0y4} > {0y3, y4}")
+term_defm_transition_formula(d_model_formula, "{y4, 0y5} > {0y4, y5}")
+term_defm_transition_formula(d_model_formula, "{y5, 0y6} > {0y5, y6}")
+term_defm_transition_formula(d_model_formula, "{y6, 0y7} > {0y6, y7}")
+term_defm_transition_formula(d_model_formula, "{y7, 0y8} > {0y7, y8}")
+term_defm_transition_formula(d_model_formula, "{y8, 0y9} > {0y8, y9}")
+term_defm_transition_formula(d_model_formula, "{0y0, y9} > {y0, 0y9}")
+
+# Adding a term of ones
+term_defm_ones(d_model_formula)
+
+# Initializing and simulating
+init_defm(d_model_formula)
+Y_sim_formula <-sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+```
+
+The new simulation…
+
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
 
 # Acknowledgement
 

@@ -272,6 +272,39 @@ library(Matrix)
 Matrix::image(as(Y_sim, "dgCMatrix"))
 ```
 
+## Example 3: Using formulas for transitions
+
+In this example, we will redo the previous model, but now using formulas for
+specifying the transitions:
+
+```{r}
+d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
+
+term_defm_transition_formula(d_model_formula, "{y0, 0y1} > {0y0, y1}")
+term_defm_transition_formula(d_model_formula, "{y1, 0y2} > {0y1, y2}")
+term_defm_transition_formula(d_model_formula, "{y2, 0y3} > {0y2, y3}")
+term_defm_transition_formula(d_model_formula, "{y3, 0y4} > {0y3, y4}")
+term_defm_transition_formula(d_model_formula, "{y4, 0y5} > {0y4, y5}")
+term_defm_transition_formula(d_model_formula, "{y5, 0y6} > {0y5, y6}")
+term_defm_transition_formula(d_model_formula, "{y6, 0y7} > {0y6, y7}")
+term_defm_transition_formula(d_model_formula, "{y7, 0y8} > {0y7, y8}")
+term_defm_transition_formula(d_model_formula, "{y8, 0y9} > {0y8, y9}")
+term_defm_transition_formula(d_model_formula, "{0y0, y9} > {y0, 0y9}")
+
+# Adding a term of ones
+term_defm_ones(d_model_formula)
+
+# Initializing and simulating
+init_defm(d_model_formula)
+Y_sim_formula <-sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+```
+
+The new simulation...
+
+```{r echo = FALSE}
+library(Matrix)
+Matrix::image(as(Y_sim_formula, "dgCMatrix"))
+```
 
 # Acknowledgement
 

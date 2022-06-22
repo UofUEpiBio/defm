@@ -71,6 +71,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// term_defm_transition_formula
+int term_defm_transition_formula(SEXP m, std::string formula, int covar_idx, std::string vname);
+RcppExport SEXP _defm_term_defm_transition_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP covar_idxSEXP, SEXP vnameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::string >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
+    rcpp_result_gen = Rcpp::wrap(term_defm_transition_formula(m, formula, covar_idx, vname));
+    return rcpp_result_gen;
+END_RCPP
+}
 // print_defm
 SEXP print_defm(SEXP x);
 RcppExport SEXP _defm_print_defm(SEXP xSEXP) {
@@ -98,6 +111,7 @@ IntegerMatrix sim_defm(SEXP m, std::vector< double > par, bool fill_t0);
 RcppExport SEXP _defm_sim_defm(SEXP mSEXP, SEXP parSEXP, SEXP fill_t0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
     Rcpp::traits::input_parameter< bool >::type fill_t0(fill_t0SEXP);
@@ -230,6 +244,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 3},
     {"_defm_term_defm_fe", (DL_FUNC) &_defm_term_defm_fe, 4},
     {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 4},
+    {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
     {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 3},
