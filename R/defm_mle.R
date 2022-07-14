@@ -33,6 +33,8 @@ defm_mle <- function(
     }", paste0("`", names(start), "`", collapse = ", ")
   )
 
+  minuslog <- gsub("\\\\", "\\\\\\", minuslog)
+
   minuslog <- eval(parse(text = minuslog))
 
   stats4::mle(
