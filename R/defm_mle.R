@@ -43,7 +43,9 @@ defm_mle <- function(
     lower     = lower,
     upper     = upper,
     method    = "L-BFGS-B",
-    nobs      = nrow_defm(object),
+    nobs      = nrow_defm(object) + ifelse(
+      morder_defm(object) > 0, -nobs_defm(object), 0
+      ),
     ...
   )
 }
