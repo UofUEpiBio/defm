@@ -15,11 +15,14 @@
 #'
 #' @return An external pointer of class `DEFM.`
 #'
-#' @export
 #' @name DEFM
 #' @aliases new_defm defm
-new_defm <- function(id, Y, X, order = 1L) {
+new_defm_cpp <- function(id, Y, X, order = 1L) {
     .Call(`_defm_new_defm`, id, Y, X, order)
+}
+
+set_names <- function(m, ynames, xnames) {
+    invisible(.Call(`_defm_set_names`, m, ynames, xnames))
 }
 
 #' @rdname DEFM

@@ -2,9 +2,12 @@
 % Please edit documentation in R/defm_mle.R
 \name{defm_mle}
 \alias{defm_mle}
+\alias{summary_table}
 \title{Maximum Likelihood Estimation of DEFM}
 \usage{
 defm_mle(object, start, lower, upper, ...)
+
+summary_table(object, as_texreg = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \link{DEFM}.}
@@ -15,7 +18,14 @@ defm_mle(object, start, lower, upper, ...)
 \link[stats4:mle]{stats4::mle}.)}
 
 \item{...}{Further arguments passed to \link[stats4:mle]{stats4::mle}.}
+
+\item{as_texreg}{When \code{TRUE}, wraps the result in a texreg object}
 }
 \description{
 Maximum Likelihood Estimation of DEFM
+}
+\details{
+The function \code{summary_table} computes pvalues and returns a table
+with the estimates, se, and pvalues. If \code{as_texreg = TRUE}, then it will
+return a texreg object.
 }

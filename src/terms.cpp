@@ -20,7 +20,10 @@ int term_defm_ones(SEXP m, int idx = -1, std::string vname = "")
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  defmcounters::counter_ones(ptr->get_model().get_counters(), idx, vname);
+  defmcounters::counter_ones(
+    ptr->get_model().get_counters(), idx, vname,
+    &ptr->get_X_names()
+    );
 
   return 0;
 }
@@ -102,7 +105,9 @@ int term_defm_transition(
     defmcounters::counter_transition(
       ptr->get_model().get_counters(), coords, signs,
       ptr->get_m_order(), ptr->get_n_y(),
-      covar_idx, vname
+      covar_idx, vname,
+      &ptr->get_X_names(),
+      &ptr->get_Y_names()
     );
 
   return 0;
@@ -158,7 +163,9 @@ int term_defm_transition_formula(
   defmcounters::counter_transition_formula(
     ptr->get_model().get_counters(), formula,
     ptr->get_m_order(), ptr->get_n_y(),
-    covar_idx, vname
+    covar_idx, vname,
+    &ptr->get_X_names(),
+    &ptr->get_Y_names()
   );
 
   return 0;
@@ -194,7 +201,9 @@ int term_defm_logit_intercept(
     ptr->get_n_y(),
     coords_,
     covar_idx,
-    vname
+    vname,
+    &ptr->get_X_names(),
+    &ptr->get_Y_names()
   );
 
   return 0;

@@ -18,10 +18,9 @@ using namespace Rcpp;
 //'
 //' @return An external pointer of class `DEFM.`
 //'
-//' @export
 //' @name DEFM
 //' @aliases new_defm defm
-// [[Rcpp::export(rng = false)]]
+// [[Rcpp::export(rng = false, name = 'new_defm_cpp')]]
 SEXP new_defm(
     const SEXP & id,
     const SEXP & Y,
@@ -55,6 +54,23 @@ SEXP new_defm(
   model.attr("class") = "DEFM";
 
   return model;
+
+}
+
+// [[Rcpp::export(invisible = true, rng = false)]]
+int set_names(
+  SEXP m,
+  const std::vector< std::string > & ynames,
+  const std::vector< std::string > & xnames
+) {
+
+  Rcpp::XPtr< DEFM > ptr(m);
+  ptr->set_names(
+    ynames,
+    xnames
+  );
+
+  return 0;
 
 }
 
