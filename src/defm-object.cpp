@@ -117,7 +117,12 @@ double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
 
   Rcpp::XPtr< DEFM > ptr(m);
 
-  return ptr->get_model().likelihood_total(par, as_log);
+  double res = ptr->get_model().likelihood_total(par, as_log);
+
+  if (std::isfinite(res))
+    return res;
+  else
+    return std::numeric_limits<double>::min() * 10e-10;
 
 }
 

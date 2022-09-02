@@ -1,5 +1,5 @@
 # CXX = $(BINPREF)g++ -std=c++11
 # CXXFLAGS=-O2 -fdebug-prefix-map=/build/r-base-EkOYxp/r-base-4.0.4=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2
 CXX_STD = CXX11
-PKG_CXXFLAGS= -I../inst/include/ -O2 -Wall -pedantic -g -march=corei7-avx -mtune=corei7-avx -DBARRY_USE_LATEX # -fopenmp
+PKG_CXXFLAGS= -I../inst/include/ -O2 -Wall -pedantic -g -mtune=native -DBARRY_USE_LATEX # -fopenmp
 #CXXFLAGS=-O3 -Wall -pedantic
