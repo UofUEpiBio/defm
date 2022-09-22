@@ -177,9 +177,9 @@ IntegerMatrix sim_defm(
     {
 
       if (fill_t0 & (out[iter] == -1))
-        res(i, j) = *(Y + j * ncols + i);
+        res(i, j) = *(Y + j * nrows + i); // Column wise
       else
-        res(i, j) = out[iter];
+        res(i, j) = out[iter]; // But the simulation is row wise
 
       iter++;
 
@@ -300,6 +300,7 @@ NumericMatrix get_stats(SEXP m)
   NumericMatrix res(nrows, ncols);
   auto target = model.get_stats_target();
 
+
   size_t i_effective = 0u;
   size_t n_obs_i = 0u;
   for (size_t i = 0u; i < nrows; ++i)
@@ -307,12 +308,7 @@ NumericMatrix get_stats(SEXP m)
 
     // Do we need to reset the counter?
     if ((i > 0) && (*(ID + i - 1u) != *(ID + i)))
-    {
-      n_obs_i = 1u;
-
-      // Completed the current
-      ++i_effective;
-    }
+      n_obs_i = 0u;
 
     // Did we passed the Markov order?
     if (n_obs_i++ < m_ord)
@@ -323,6 +319,8 @@ NumericMatrix get_stats(SEXP m)
 
     for (size_t j = 0u; j < ncols; ++j)
       res(i, j) = (*target)[i_effective][j];
+
+    i_effective++;
 
   }
 

@@ -77,11 +77,11 @@ actually simulated data **WITH THE MODEL**.
 For this example, we will simulate a model with the following features:
 
 -   **Ones**: Baseline density (prevalence of ones),
-    ![\\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
+    ![\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
 
 -   **Ones x Attr 2**: Same as before, but weighted by one of the
     covariates. (simil to fixed effect)
-    ![\\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
+    ![\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
 
 -   **Transition** : And a transition structure, in particular
     `y0 -> (y0, y1)`,
@@ -90,11 +90,7 @@ For this example, we will simulate a model with the following features:
 In `defm`, transition statistics can be represented using matrices. In
 this case, the transition can be written as:
 
-![
-\\begin{array}{c}t\\\\t+1\\end{array}\\left\[\\begin{array}{ccc}1 & \\cdot & \\cdot \\\\ 1 & 1 & \\cdot\\end{array}\\right\]
-](https://latex.codecogs.com/gif.image?%0A%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D%0A "
-\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]
-")
+![\begin{array}{c}t\\\t+1\end{array}\left\[\begin{array}{ccc}1 & \cdot & \cdot \\\\ 1 & 1 & \cdot\end{array}\right\]](https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D "\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]")
 
 which in `R` is
 
@@ -153,7 +149,7 @@ head(cbind(id, simulated_Y))
 #> [2,]  1 0 0 0
 #> [3,]  1 0 0 0
 #> [4,]  1 0 1 1
-#> [5,]  2 0 0 0
+#> [5,]  2 0 1 0
 #> [6,]  2 0 1 0
 ```
 
@@ -168,13 +164,14 @@ summary(ans)
 #> 
 #> Call:
 #> stats4::mle(minuslogl = minuslog, start = start, method = "L-BFGS-B", 
-#>     nobs = nrow_defm(object), lower = lower, upper = upper)
+#>     nobs = nrow_defm(object) + ifelse(morder_defm(object) > 0, 
+#>         -nobs_defm(object), 0L), lower = lower, upper = upper)
 #> 
 #> Coefficients:
-#>                           Estimate Std. Error
-#> # of ones                -1.966198 0.01401444
-#> # of ones x Variable 1    1.957017 0.01548504
-#> Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}  4.905981 0.04516844
+#>                                 Estimate Std. Error
+#> Num. of ones                   -1.966198 0.01401444
+#> Num. of ones x Variable 1       1.957017 0.01548504
+#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516844
 #> 
 #> -2 log L: 56154.07
 ```
@@ -198,7 +195,7 @@ Model 1
 <tbody>
 <tr style="border-top: 1px solid #000000;">
 <td style="padding-left: 5px;padding-right: 5px;">
-\# of ones
+Num. of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 -1.97
@@ -214,7 +211,7 @@ Model 1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-\# of ones x Variable 1
+Num. of ones x Variable 1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 1.96
@@ -230,7 +227,8 @@ Model 1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁}
+Motif
+![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)")
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 4.91
@@ -257,7 +255,7 @@ AIC
 BIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-56185.26
+56184.76
 </td>
 </tr>
 <tr style="border-bottom: 2px solid #000000;">
@@ -265,7 +263,7 @@ BIC
 N
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-32777
+27777
 </td>
 </tr>
 </tbody>
@@ -281,30 +279,26 @@ N
 
 We can also see the counts
 
-|  id |  y0 |  y1 |  y2 |    x0 |    x1 | \# of ones | \# of ones x Variable 1 | Motif {y⁺₀} ⇨ {y⁺₀, y⁺₁} |
-|----:|----:|----:|----:|------:|------:|-----------:|------------------------:|-------------------------:|
-|   1 |   0 |   0 |   0 |  0.51 |  0.95 |         NA |                      NA |                       NA |
-|   1 |   0 |   0 |   0 |  0.16 |  0.25 |          0 |                       0 |                        0 |
-|   1 |   0 |   0 |   0 |  1.20 | -1.72 |          0 |                       0 |                        0 |
-|   1 |   0 |   1 |   1 | -0.20 |  1.55 |          0 |                       0 |                        0 |
-|   2 |   0 |   0 |   0 | -0.15 | -0.68 |          0 |                       0 |                        0 |
-|   2 |   0 |   1 |   0 |  1.19 |  0.92 |          0 |                       0 |                        0 |
-|   2 |   1 |   0 |   0 | -0.65 |  1.16 |          0 |                       0 |                        0 |
-|   2 |   0 |   0 |   0 | -0.99 |  0.21 |          0 |                       0 |                        0 |
-|   2 |   1 |   1 |   0 |  0.76 |  1.45 |          0 |                       0 |                        0 |
-|   2 |   0 |   0 |   0 | -0.68 | -1.34 |          0 |                       0 |                        0 |
+|  id |  y0 |  y1 |  y2 |    x0 |    x1 | Num. of ones | Num. of ones x Variable 1 | Motif ![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)") |
+|----:|----:|----:|----:|------:|------:|-------------:|--------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   1 |   0 |   0 |   0 |  0.51 |  0.95 |           NA |                        NA |                                                                                                                                                   NA |
+|   1 |   0 |   0 |   0 |  0.16 |  0.25 |            0 |                      0.00 |                                                                                                                                                    0 |
+|   1 |   0 |   0 |   0 |  1.20 | -1.72 |            0 |                      0.00 |                                                                                                                                                    0 |
+|   1 |   0 |   1 |   1 | -0.20 |  1.55 |            2 |                      3.11 |                                                                                                                                                    0 |
+|   2 |   0 |   1 |   0 | -0.15 | -0.68 |           NA |                        NA |                                                                                                                                                   NA |
+|   2 |   0 |   1 |   0 |  1.19 |  0.92 |            1 |                      0.92 |                                                                                                                                                    0 |
+|   2 |   1 |   0 |   0 | -0.65 |  1.16 |            1 |                      1.16 |                                                                                                                                                    0 |
+|   2 |   0 |   0 |   0 | -0.99 |  0.21 |            0 |                      0.00 |                                                                                                                                                    0 |
+|   2 |   1 |   1 |   0 |  0.76 |  1.45 |            2 |                      2.90 |                                                                                                                                                    0 |
+|   2 |   0 |   0 |   0 | -0.68 | -1.34 |            0 |                      0.00 |                                                                                                                                                    0 |
 
 Finally, we can also take a look at the distribution of the log-odds.
 The way we calculate this is by looking at changes in a single entry of
 the array. For example, the log-odds of having
-![y\_{12}: 0\\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
+![y\_{12}: 0\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
 which are equivalent to
 
-![
-\\log{\\frac{\\mbox{Pr}\\left(\\left.y\_{12} = 1\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 1}\\right)}{\\mbox{Pr}\\left(\\left.y\_{12} = 0\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 0}\\right)}} = \\mbox{logit}\\left(\\mbox{Pr}\\left(\\left.y\_{12} = 1\\vphantom{\\mathbf{y}\_{-12}}\\;\\right\|\\mathbf{y}\_{-12}\\vphantom{y\_{12} = 1}\\right)\\right)
-](https://latex.codecogs.com/gif.image?%0A%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29%0A "
-\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)
-")
+![\log{\frac{\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)}{\mbox{Pr}\left(\left.y\_{12} = 0\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)\right)](https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29 "\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)")
 
 We can use the `logodds` function for this:
 
@@ -392,6 +386,154 @@ The simulation should produce a nice looking figure:
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
+``` r
+d_model_formula2 <- new_defm(id = id, Y = Y_sim, X = X, order = 1)
+term_defm_transition_formula(d_model_formula2, "{y0, 0y1} > {0y0, y1}")
+term_defm_transition_formula(d_model_formula2, "{y1, 0y2} > {0y1, y2}")
+term_defm_transition_formula(d_model_formula2, "{y2, 0y3} > {0y2, y3}")
+term_defm_transition_formula(d_model_formula2, "{y3, 0y4} > {0y3, y4}")
+term_defm_transition_formula(d_model_formula2, "{y4, 0y5} > {0y4, y5}")
+term_defm_transition_formula(d_model_formula2, "{y5, 0y6} > {0y5, y6}")
+term_defm_transition_formula(d_model_formula2, "{y6, 0y7} > {0y6, y7}")
+term_defm_transition_formula(d_model_formula2, "{y7, 0y8} > {0y7, y8}")
+term_defm_transition_formula(d_model_formula2, "{y8, 0y9} > {0y8, y9}")
+term_defm_transition_formula(d_model_formula2, "{0y0, y9} > {y0, 0y9}")
+
+# Adding a term of ones
+term_defm_ones(d_model_formula2)
+
+# Initializing and simulating
+init_defm(d_model_formula2)
+
+get_stats(d_model_formula2)
+#>       Motif $(y0^+, y1^-) -> (y0^-, y1^+)$ Motif $(y1^+, y2^-) -> (y1^-, y2^+)$
+#>  [1,]                                   NA                                   NA
+#>  [2,]                                    1                                    0
+#>  [3,]                                    0                                    0
+#>  [4,]                                    0                                    0
+#>  [5,]                                    0                                    0
+#>  [6,]                                    0                                    0
+#>  [7,]                                    0                                    0
+#>  [8,]                                    0                                    0
+#>  [9,]                                    0                                    0
+#> [10,]                                    0                                    0
+#> [11,]                                    0                                    0
+#> [12,]                                    0                                    0
+#> [13,]                                    0                                    0
+#> [14,]                                    0                                    0
+#> [15,]                                    0                                    0
+#> [16,]                                    0                                    0
+#> [17,]                                    0                                    0
+#> [18,]                                    0                                    0
+#> [19,]                                    0                                    0
+#> [20,]                                    0                                    0
+#>       Motif $(y2^+, y3^-) -> (y2^-, y3^+)$ Motif $(y3^+, y4^-) -> (y3^-, y4^+)$
+#>  [1,]                                   NA                                   NA
+#>  [2,]                                    0                                    0
+#>  [3,]                                    0                                    0
+#>  [4,]                                    0                                    0
+#>  [5,]                                    0                                    0
+#>  [6,]                                    0                                    0
+#>  [7,]                                    0                                    0
+#>  [8,]                                    0                                    0
+#>  [9,]                                    0                                    0
+#> [10,]                                    0                                    0
+#> [11,]                                    0                                    0
+#> [12,]                                    0                                    0
+#> [13,]                                    0                                    0
+#> [14,]                                    0                                    0
+#> [15,]                                    0                                    0
+#> [16,]                                    0                                    0
+#> [17,]                                    0                                    0
+#> [18,]                                    0                                    0
+#> [19,]                                    0                                    0
+#> [20,]                                    0                                    0
+#>       Motif $(y4^+, y5^-) -> (y4^-, y5^+)$ Motif $(y5^+, y6^-) -> (y5^-, y6^+)$
+#>  [1,]                                   NA                                   NA
+#>  [2,]                                    0                                    0
+#>  [3,]                                    0                                    0
+#>  [4,]                                    0                                    0
+#>  [5,]                                    0                                    0
+#>  [6,]                                    0                                    0
+#>  [7,]                                    0                                    0
+#>  [8,]                                    0                                    0
+#>  [9,]                                    0                                    0
+#> [10,]                                    0                                    0
+#> [11,]                                    0                                    0
+#> [12,]                                    0                                    0
+#> [13,]                                    0                                    0
+#> [14,]                                    0                                    0
+#> [15,]                                    0                                    0
+#> [16,]                                    0                                    0
+#> [17,]                                    0                                    0
+#> [18,]                                    0                                    0
+#> [19,]                                    0                                    0
+#> [20,]                                    0                                    0
+#>       Motif $(y6^+, y7^-) -> (y6^-, y7^+)$ Motif $(y7^+, y8^-) -> (y7^-, y8^+)$
+#>  [1,]                                   NA                                   NA
+#>  [2,]                                    0                                    0
+#>  [3,]                                    0                                    0
+#>  [4,]                                    0                                    0
+#>  [5,]                                    0                                    0
+#>  [6,]                                    0                                    0
+#>  [7,]                                    0                                    0
+#>  [8,]                                    0                                    0
+#>  [9,]                                    0                                    0
+#> [10,]                                    0                                    0
+#> [11,]                                    0                                    0
+#> [12,]                                    0                                    0
+#> [13,]                                    0                                    0
+#> [14,]                                    0                                    0
+#> [15,]                                    0                                    0
+#> [16,]                                    0                                    0
+#> [17,]                                    0                                    0
+#> [18,]                                    0                                    0
+#> [19,]                                    0                                    0
+#> [20,]                                    0                                    0
+#>       Motif $(y8^+, y9^-) -> (y8^-, y9^+)$ Motif $(y0^-, y9^+) -> (y0^+, y9^-)$
+#>  [1,]                                   NA                                   NA
+#>  [2,]                                    0                                    0
+#>  [3,]                                    0                                    0
+#>  [4,]                                    0                                    0
+#>  [5,]                                    0                                    0
+#>  [6,]                                    0                                    0
+#>  [7,]                                    0                                    0
+#>  [8,]                                    0                                    0
+#>  [9,]                                    0                                    0
+#> [10,]                                    0                                    0
+#> [11,]                                    0                                    0
+#> [12,]                                    0                                    0
+#> [13,]                                    0                                    0
+#> [14,]                                    0                                    0
+#> [15,]                                    0                                    0
+#> [16,]                                    0                                    0
+#> [17,]                                    0                                    0
+#> [18,]                                    0                                    0
+#> [19,]                                    0                                    0
+#> [20,]                                    0                                    0
+#>       Num. of ones
+#>  [1,]           NA
+#>  [2,]            1
+#>  [3,]            1
+#>  [4,]            1
+#>  [5,]            1
+#>  [6,]            1
+#>  [7,]            1
+#>  [8,]            1
+#>  [9,]            1
+#> [10,]            1
+#> [11,]            1
+#> [12,]            1
+#> [13,]            1
+#> [14,]            1
+#> [15,]            1
+#> [16,]            1
+#> [17,]            1
+#> [18,]            1
+#> [19,]            1
+#> [20,]            1
+```
+
 ## Example 3: Using formulas for transitions
 
 In this example, we will redo the previous model, but now using formulas
@@ -416,12 +558,12 @@ term_defm_ones(d_model_formula)
 
 # Initializing and simulating
 init_defm(d_model_formula)
-Y_sim_formula <-sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
 ```
 
 The new simulation…
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 # Acknowledgement
 

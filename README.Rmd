@@ -164,7 +164,7 @@ texreg::createTexreg(
   coef = coef(ans),
   se = sqrt(diag(vcov(ans))),
   gof.names = c("AIC", "BIC", "N"), gof = c(AIC(ans), BIC(ans), nobs(ans)), gof.decimal = c(T,T,F)
-) |> texreg::htmlreg()
+) |> texreg::knitreg(single.row = TRUE)
 ```
 
 We can also see the counts
@@ -272,6 +272,30 @@ library(Matrix)
 Matrix::image(as(Y_sim, "dgCMatrix"))
 ```
 
+
+```{r}
+d_model_formula2 <- new_defm(id = id, Y = Y_sim, X = X, order = 1)
+term_defm_transition_formula(d_model_formula2, "{y0, 0y1} > {0y0, y1}")
+term_defm_transition_formula(d_model_formula2, "{y1, 0y2} > {0y1, y2}")
+term_defm_transition_formula(d_model_formula2, "{y2, 0y3} > {0y2, y3}")
+term_defm_transition_formula(d_model_formula2, "{y3, 0y4} > {0y3, y4}")
+term_defm_transition_formula(d_model_formula2, "{y4, 0y5} > {0y4, y5}")
+term_defm_transition_formula(d_model_formula2, "{y5, 0y6} > {0y5, y6}")
+term_defm_transition_formula(d_model_formula2, "{y6, 0y7} > {0y6, y7}")
+term_defm_transition_formula(d_model_formula2, "{y7, 0y8} > {0y7, y8}")
+term_defm_transition_formula(d_model_formula2, "{y8, 0y9} > {0y8, y9}")
+term_defm_transition_formula(d_model_formula2, "{0y0, y9} > {y0, 0y9}")
+
+# Adding a term of ones
+term_defm_ones(d_model_formula2)
+
+# Initializing and simulating
+init_defm(d_model_formula2)
+
+get_stats(d_model_formula2)
+```
+
+
 ## Example 3: Using formulas for transitions
 
 In this example, we will redo the previous model, but now using formulas for
@@ -296,7 +320,7 @@ term_defm_ones(d_model_formula)
 
 # Initializing and simulating
 init_defm(d_model_formula)
-Y_sim_formula <-sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
 ```
 
 The new simulation...
