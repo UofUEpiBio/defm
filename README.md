@@ -198,15 +198,7 @@ Model 1
 Num. of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
--1.97
-</td>
-</tr>
-<tr>
-<td style="padding-left: 5px;padding-right: 5px;">
- 
-</td>
-<td style="padding-left: 5px;padding-right: 5px;">
-(0.01)
+-1.97 (0.01)
 </td>
 </tr>
 <tr>
@@ -214,15 +206,7 @@ Num. of ones
 Num. of ones x Variable 1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-1.96
-</td>
-</tr>
-<tr>
-<td style="padding-left: 5px;padding-right: 5px;">
- 
-</td>
-<td style="padding-left: 5px;padding-right: 5px;">
-(0.02)
+1.96 (0.02)
 </td>
 </tr>
 <tr>
@@ -231,15 +215,7 @@ Motif
 ![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)")
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-4.91
-</td>
-</tr>
-<tr>
-<td style="padding-left: 5px;padding-right: 5px;">
- 
-</td>
-<td style="padding-left: 5px;padding-right: 5px;">
-(0.05)
+4.91 (0.05)
 </td>
 </tr>
 <tr style="border-top: 1px solid #000000;">
@@ -384,155 +360,7 @@ Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
 
 The simulation should produce a nice looking figure:
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
-
-``` r
-d_model_formula2 <- new_defm(id = id, Y = Y_sim, X = X, order = 1)
-term_defm_transition_formula(d_model_formula2, "{y0, 0y1} > {0y0, y1}")
-term_defm_transition_formula(d_model_formula2, "{y1, 0y2} > {0y1, y2}")
-term_defm_transition_formula(d_model_formula2, "{y2, 0y3} > {0y2, y3}")
-term_defm_transition_formula(d_model_formula2, "{y3, 0y4} > {0y3, y4}")
-term_defm_transition_formula(d_model_formula2, "{y4, 0y5} > {0y4, y5}")
-term_defm_transition_formula(d_model_formula2, "{y5, 0y6} > {0y5, y6}")
-term_defm_transition_formula(d_model_formula2, "{y6, 0y7} > {0y6, y7}")
-term_defm_transition_formula(d_model_formula2, "{y7, 0y8} > {0y7, y8}")
-term_defm_transition_formula(d_model_formula2, "{y8, 0y9} > {0y8, y9}")
-term_defm_transition_formula(d_model_formula2, "{0y0, y9} > {y0, 0y9}")
-
-# Adding a term of ones
-term_defm_ones(d_model_formula2)
-
-# Initializing and simulating
-init_defm(d_model_formula2)
-
-get_stats(d_model_formula2)
-#>       Motif $(y0^+, y1^-) -> (y0^-, y1^+)$ Motif $(y1^+, y2^-) -> (y1^-, y2^+)$
-#>  [1,]                                   NA                                   NA
-#>  [2,]                                    1                                    0
-#>  [3,]                                    0                                    0
-#>  [4,]                                    0                                    0
-#>  [5,]                                    0                                    0
-#>  [6,]                                    0                                    0
-#>  [7,]                                    0                                    0
-#>  [8,]                                    0                                    0
-#>  [9,]                                    0                                    0
-#> [10,]                                    0                                    0
-#> [11,]                                    0                                    0
-#> [12,]                                    0                                    0
-#> [13,]                                    0                                    0
-#> [14,]                                    0                                    0
-#> [15,]                                    0                                    0
-#> [16,]                                    0                                    0
-#> [17,]                                    0                                    0
-#> [18,]                                    0                                    0
-#> [19,]                                    0                                    0
-#> [20,]                                    0                                    0
-#>       Motif $(y2^+, y3^-) -> (y2^-, y3^+)$ Motif $(y3^+, y4^-) -> (y3^-, y4^+)$
-#>  [1,]                                   NA                                   NA
-#>  [2,]                                    0                                    0
-#>  [3,]                                    0                                    0
-#>  [4,]                                    0                                    0
-#>  [5,]                                    0                                    0
-#>  [6,]                                    0                                    0
-#>  [7,]                                    0                                    0
-#>  [8,]                                    0                                    0
-#>  [9,]                                    0                                    0
-#> [10,]                                    0                                    0
-#> [11,]                                    0                                    0
-#> [12,]                                    0                                    0
-#> [13,]                                    0                                    0
-#> [14,]                                    0                                    0
-#> [15,]                                    0                                    0
-#> [16,]                                    0                                    0
-#> [17,]                                    0                                    0
-#> [18,]                                    0                                    0
-#> [19,]                                    0                                    0
-#> [20,]                                    0                                    0
-#>       Motif $(y4^+, y5^-) -> (y4^-, y5^+)$ Motif $(y5^+, y6^-) -> (y5^-, y6^+)$
-#>  [1,]                                   NA                                   NA
-#>  [2,]                                    0                                    0
-#>  [3,]                                    0                                    0
-#>  [4,]                                    0                                    0
-#>  [5,]                                    0                                    0
-#>  [6,]                                    0                                    0
-#>  [7,]                                    0                                    0
-#>  [8,]                                    0                                    0
-#>  [9,]                                    0                                    0
-#> [10,]                                    0                                    0
-#> [11,]                                    0                                    0
-#> [12,]                                    0                                    0
-#> [13,]                                    0                                    0
-#> [14,]                                    0                                    0
-#> [15,]                                    0                                    0
-#> [16,]                                    0                                    0
-#> [17,]                                    0                                    0
-#> [18,]                                    0                                    0
-#> [19,]                                    0                                    0
-#> [20,]                                    0                                    0
-#>       Motif $(y6^+, y7^-) -> (y6^-, y7^+)$ Motif $(y7^+, y8^-) -> (y7^-, y8^+)$
-#>  [1,]                                   NA                                   NA
-#>  [2,]                                    0                                    0
-#>  [3,]                                    0                                    0
-#>  [4,]                                    0                                    0
-#>  [5,]                                    0                                    0
-#>  [6,]                                    0                                    0
-#>  [7,]                                    0                                    0
-#>  [8,]                                    0                                    0
-#>  [9,]                                    0                                    0
-#> [10,]                                    0                                    0
-#> [11,]                                    0                                    0
-#> [12,]                                    0                                    0
-#> [13,]                                    0                                    0
-#> [14,]                                    0                                    0
-#> [15,]                                    0                                    0
-#> [16,]                                    0                                    0
-#> [17,]                                    0                                    0
-#> [18,]                                    0                                    0
-#> [19,]                                    0                                    0
-#> [20,]                                    0                                    0
-#>       Motif $(y8^+, y9^-) -> (y8^-, y9^+)$ Motif $(y0^-, y9^+) -> (y0^+, y9^-)$
-#>  [1,]                                   NA                                   NA
-#>  [2,]                                    0                                    0
-#>  [3,]                                    0                                    0
-#>  [4,]                                    0                                    0
-#>  [5,]                                    0                                    0
-#>  [6,]                                    0                                    0
-#>  [7,]                                    0                                    0
-#>  [8,]                                    0                                    0
-#>  [9,]                                    0                                    0
-#> [10,]                                    0                                    0
-#> [11,]                                    0                                    0
-#> [12,]                                    0                                    0
-#> [13,]                                    0                                    0
-#> [14,]                                    0                                    0
-#> [15,]                                    0                                    0
-#> [16,]                                    0                                    0
-#> [17,]                                    0                                    0
-#> [18,]                                    0                                    0
-#> [19,]                                    0                                    0
-#> [20,]                                    0                                    0
-#>       Num. of ones
-#>  [1,]           NA
-#>  [2,]            1
-#>  [3,]            1
-#>  [4,]            1
-#>  [5,]            1
-#>  [6,]            1
-#>  [7,]            1
-#>  [8,]            1
-#>  [9,]            1
-#> [10,]            1
-#> [11,]            1
-#> [12,]            1
-#> [13,]            1
-#> [14,]            1
-#> [15,]            1
-#> [16,]            1
-#> [17,]            1
-#> [18,]            1
-#> [19,]            1
-#> [20,]            1
-```
+<img src="man/figures/README-chain1fig-1.png" width="100%" />
 
 ## Example 3: Using formulas for transitions
 
@@ -563,7 +391,7 @@ Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
 
 The new simulation…
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/README-chain2fig-1.png" width="100%" />
 
 # Acknowledgement
 

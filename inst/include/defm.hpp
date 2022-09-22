@@ -2,6 +2,8 @@
 #ifndef DEFM_HPP
 #define DEFM_HPP 1
 
+// #include "../barry.hpp"
+
 #include <iterator>
 #include <regex>
 
@@ -63,15 +65,7 @@ public:
         return *model;
     };
 
-    
-    /**
-     * @brief Initialize the model
-     * 
-     * @param force When `false`, the default, it will use the hasher function and
-     * recycle support when feasible, otherwise it will forcefully add the array to the model
-     * computing its support.
-     */
-    void init(bool force = false);
+    void init();
 
     double likelihood(std::vector< double > & par, bool as_log = false);
     void simulate(std::vector< double > par, int * y_out);
@@ -128,6 +122,32 @@ public:
 
 #ifndef DEFM_MEAT_HPP
 #define DEFM_MEAT_HPP 1
+
+inline std::vector< double > keygen_defm(
+    const defmcounters::DEFMArray & Array_,
+    defmcounters::DEFMCounterData * data
+    ) {
+    
+    size_t nrow = Array_.nrow();
+    size_t ncol = Array_.ncol();
+
+    std::vector< double > res(
+        2u +                // Rows + cols
+        ncol * (nrow - 1u) // Markov cells
+        );
+
+    res[0u] = static_cast<double>(nrow);
+    res[1u] = static_cast<double>(ncol);
+
+    size_t iter = 2u;
+    // Adding the cells
+    for (size_t i = 0u; i < (nrow - 1); ++i)
+        for (size_t j = 0u; j < ncol; ++j)
+            res[iter++] = Array_(i, j);
+
+    return res;
+
+}
 
 #define DEFM_RANGES(a) \
     size_t __CONCAT(start_,a) = start_end[a * 2u];\
@@ -235,6 +255,8 @@ inline DEFM::DEFM(
 
     model->set_rengine(&(*(rengine)));
     model->store_psets();
+    auto kgen = keygen_defm;
+    model->add_hasher(kgen);
 
     // Iterating for adding observations
     start_end.reserve(id_length);
@@ -286,7 +308,7 @@ inline DEFM::DEFM(
 }
 
 
-inline void DEFM::init(bool force) 
+inline void DEFM::init() 
 {
 
     // Adding the rule
@@ -319,7 +341,7 @@ inline void DEFM::init(bool force)
                     array(o, k) = *(Y + k * ID_length + start_i + n_proc + o);
 
             // Adding to the model
-            model_ord.push_back( model->add_array(array, force) );
+            model_ord.push_back( model->add_array(array, true) );
 
         }
 
