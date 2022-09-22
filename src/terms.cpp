@@ -209,3 +209,22 @@ int term_defm_logit_intercept(
   return 0;
 
 }
+
+
+//' Add rule for avoiding switching a one to zero in a Markov process
+//' @export
+// [[Rcpp::export(invisible = true, rng = false)]]
+int rule_not_one_to_zero(
+  SEXP m,
+  std::vector< size_t > idx
+) {
+
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  defmcounters::rules_dont_become_zero(
+    ptr->get_model().get_rules(),
+    idx
+  );
+
+  return 0;
+}

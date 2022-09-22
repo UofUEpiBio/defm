@@ -232,3 +232,9 @@ term_defm_logit_intercept <- function(m, coords = as.integer( c()), covar_idx = 
     invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, covar_idx, vname))
 }
 
+#' Add rule for avoiding switching a one to zero in a Markov process
+#' @export
+rule_not_one_to_zero <- function(m, idx) {
+    invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
+}
+

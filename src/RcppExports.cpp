@@ -262,6 +262,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rule_not_one_to_zero
+int rule_not_one_to_zero(SEXP m, std::vector< size_t > idx);
+RcppExport SEXP _defm_rule_not_one_to_zero(SEXP mSEXP, SEXP idxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::vector< size_t > >::type idx(idxSEXP);
+    rcpp_result_gen = Rcpp::wrap(rule_not_one_to_zero(m, idx));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -286,6 +297,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 4},
     {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
     {"_defm_term_defm_logit_intercept", (DL_FUNC) &_defm_term_defm_logit_intercept, 4},
+    {"_defm_rule_not_one_to_zero", (DL_FUNC) &_defm_rule_not_one_to_zero, 2},
     {NULL, NULL, 0}
 };
 
