@@ -154,14 +154,14 @@ logodds <- function(m, par, i, j) {
 #'
 #' @name defm_terms
 #' @aliases terms_defm
-term_defm_ones <- function(m, idx = -1L, vname = "") {
+term_defm_ones <- function(m, idx = "", vname = "") {
     invisible(.Call(`_defm_term_defm_ones`, m, idx, vname))
 }
 
 #' @rdname defm_terms
 #' @export
 #' @param k Numeric scalar. Exponent used in the term.
-term_defm_fe <- function(m, idx = -1L, k = 1.0, vname = "") {
+term_defm_fe <- function(m, idx = "", k = 1.0, vname = "") {
     invisible(.Call(`_defm_term_defm_fe`, m, idx, k, vname))
 }
 
@@ -180,8 +180,8 @@ term_defm_fe <- function(m, idx = -1L, k = 1.0, vname = "") {
 #' the matrix should include 0 to mark zero values.
 #' @export
 #' @rdname defm_terms
-term_defm_transition <- function(m, mat, covar_idx = -1L, vname = "") {
-    invisible(.Call(`_defm_term_defm_transition`, m, mat, covar_idx, vname))
+term_defm_transition <- function(m, mat, idx = "", vname = "") {
+    invisible(.Call(`_defm_term_defm_transition`, m, mat, idx, vname))
 }
 
 #' @details The function `term_defm_transition_formula`,
@@ -218,8 +218,8 @@ term_defm_transition <- function(m, mat, covar_idx = -1L, vname = "") {
 #' which we call LHS, can only hold `row id` that are less than `m_order`.
 #' @export
 #' @rdname defm_terms
-term_defm_transition_formula <- function(m, formula, covar_idx = -1L, vname = "") {
-    invisible(.Call(`_defm_term_defm_transition_formula`, m, formula, covar_idx, vname))
+term_defm_transition_formula <- function(m, formula, idx = "", vname = "") {
+    invisible(.Call(`_defm_term_defm_transition_formula`, m, formula, idx, vname))
 }
 
 #' @export
@@ -228,8 +228,8 @@ term_defm_transition_formula <- function(m, formula, covar_idx = -1L, vname = ""
 #' intercept in a logistic regression. When `coords` is specified, then the
 #' function will add one intercept per outcome. These can be weighted by
 #' a covariate.
-term_defm_logit_intercept <- function(m, coords = as.integer( c()), covar_idx = -1L, vname = "") {
-    invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, covar_idx, vname))
+term_defm_logit_intercept <- function(m, coords = as.integer( c()), idx = "", vname = "") {
+    invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, idx, vname))
 }
 
 #' Add rule for avoiding switching a one to zero in a Markov process

@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "barry.hpp"
 #include "defm.hpp"
+#include "defm-common.h"
 
 using namespace Rcpp;
 
@@ -16,12 +17,17 @@ using namespace Rcpp;
 //' @name defm_terms
 //' @aliases terms_defm
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_ones(SEXP m, int idx = -1, std::string vname = "")
+int term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 {
 
+  int idx_ = -1;
   Rcpp::XPtr< DEFM > ptr(m);
+
+  // This will set the covar index, if needed
+  check_covar(idx_, idx, ptr);
+
   defmcounters::counter_ones(
-    ptr->get_model().get_counters(), idx, vname,
+    ptr->get_model().get_counters(), idx_, vname,
     &ptr->get_X_names()
     );
 
@@ -33,11 +39,16 @@ int term_defm_ones(SEXP m, int idx = -1, std::string vname = "")
 //' @export
 //' @param k Numeric scalar. Exponent used in the term.
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_fe(SEXP m, int idx = -1, double k = 1.0, std::string vname = "")
+int term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname = "")
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx, k, vname);
+  int idx_ = -1;
+
+  // This will set the covar index, if needed
+  check_covar(idx_, idx, ptr);
+
+  defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx_, k, vname);
 
   return 0;
 }
@@ -61,12 +72,16 @@ int term_defm_fe(SEXP m, int idx = -1, double k = 1.0, std::string vname = "")
 int term_defm_transition(
     SEXP m,
     IntegerMatrix & mat,
-    int covar_idx = -1,
+    std::string idx = "",
     std::string vname = ""
 )
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
+  int idx_ = -1;
+
+  // This will set the covar index, if needed
+  check_covar(idx_, idx, ptr);
 
   if (static_cast<size_t>(mat.nrow()) != (ptr->get_m_order() + 1u))
     stop("The number of rows in -mat- must be equal to the Markov order of the model + 1.");
@@ -105,7 +120,7 @@ int term_defm_transition(
     defmcounters::counter_transition(
       ptr->get_model().get_counters(), coords, signs,
       ptr->get_m_order(), ptr->get_n_y(),
-      covar_idx, vname,
+      idx_, vname,
       &ptr->get_X_names(),
       &ptr->get_Y_names()
     );
@@ -153,17 +168,22 @@ int term_defm_transition(
 int term_defm_transition_formula(
     SEXP m,
     std::string formula,
-    int covar_idx = -1,
+    std::string idx = "",
     std::string vname = ""
 )
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
 
+  int idx_ = -1;
+
+  // This will set the covar index, if needed
+  check_covar(idx_, idx, ptr);
+
   defmcounters::counter_transition_formula(
     ptr->get_model().get_counters(), formula,
     ptr->get_m_order(), ptr->get_n_y(),
-    covar_idx, vname,
+    idx_, vname,
     &ptr->get_X_names(),
     &ptr->get_Y_names()
   );
@@ -182,11 +202,15 @@ int term_defm_transition_formula(
 int term_defm_logit_intercept(
   SEXP m,
   IntegerVector coords = IntegerVector::create(),
-  int covar_idx = -1,
+  std::string idx = "",
   std::string vname = ""
 ) {
 
   Rcpp::XPtr< DEFM > ptr(m);
+  int idx_ = -1;
+
+  // This will set the covar index, if needed
+  check_covar(idx_, idx, ptr);
 
   std::vector< size_t > coords_;
   for (auto c : coords)
@@ -200,7 +224,7 @@ int term_defm_logit_intercept(
     ptr->get_model().get_counters(),
     ptr->get_n_y(),
     coords_,
-    covar_idx,
+    idx_,
     vname,
     &ptr->get_X_names(),
     &ptr->get_Y_names()

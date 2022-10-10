@@ -13,20 +13,15 @@
 \usage{
 \method{print}{DEFM}(x)
 
-term_defm_ones(m, idx = -1L, vname = "")
+term_defm_ones(m, idx = "", vname = "")
 
-term_defm_fe(m, idx = -1L, k = 1, vname = "")
+term_defm_fe(m, idx = "", k = 1, vname = "")
 
-term_defm_transition(m, mat, covar_idx = -1L, vname = "")
+term_defm_transition(m, mat, idx = "", vname = "")
 
-term_defm_transition_formula(m, formula, covar_idx = -1L, vname = "")
+term_defm_transition_formula(m, formula, idx = "", vname = "")
 
-term_defm_logit_intercept(
-  m,
-  coords = as.integer(c()),
-  covar_idx = -1L,
-  vname = ""
-)
+term_defm_logit_intercept(m, coords = as.integer(c()), idx = "", vname = "")
 }
 \arguments{
 \item{m}{An object of class \link{DEFM}.}

@@ -199,24 +199,24 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_ones
-int term_defm_ones(SEXP m, int idx, std::string vname);
+int term_defm_ones(SEXP m, std::string idx, std::string vname);
 RcppExport SEXP _defm_term_defm_ones(SEXP mSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
     rcpp_result_gen = Rcpp::wrap(term_defm_ones(m, idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
 // term_defm_fe
-int term_defm_fe(SEXP m, int idx, double k, std::string vname);
+int term_defm_fe(SEXP m, std::string idx, double k, std::string vname);
 RcppExport SEXP _defm_term_defm_fe(SEXP mSEXP, SEXP idxSEXP, SEXP kSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< double >::type k(kSEXP);
     Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
     rcpp_result_gen = Rcpp::wrap(term_defm_fe(m, idx, k, vname));
@@ -224,41 +224,41 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_transition
-int term_defm_transition(SEXP m, IntegerMatrix& mat, int covar_idx, std::string vname);
-RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP covar_idxSEXP, SEXP vnameSEXP) {
+int term_defm_transition(SEXP m, IntegerMatrix& mat, std::string idx, std::string vname);
+RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix& >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, covar_idx, vname));
+    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
 // term_defm_transition_formula
-int term_defm_transition_formula(SEXP m, std::string formula, int covar_idx, std::string vname);
-RcppExport SEXP _defm_term_defm_transition_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP covar_idxSEXP, SEXP vnameSEXP) {
+int term_defm_transition_formula(SEXP m, std::string formula, std::string idx, std::string vname);
+RcppExport SEXP _defm_term_defm_transition_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::string >::type formula(formulaSEXP);
-    Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition_formula(m, formula, covar_idx, vname));
+    rcpp_result_gen = Rcpp::wrap(term_defm_transition_formula(m, formula, idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
 // term_defm_logit_intercept
-int term_defm_logit_intercept(SEXP m, IntegerVector coords, int covar_idx, std::string vname);
-RcppExport SEXP _defm_term_defm_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP covar_idxSEXP, SEXP vnameSEXP) {
+int term_defm_logit_intercept(SEXP m, IntegerVector coords, std::string idx, std::string vname);
+RcppExport SEXP _defm_term_defm_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type coords(coordsSEXP);
-    Rcpp::traits::input_parameter< int >::type covar_idx(covar_idxSEXP);
+    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
     Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_logit_intercept(m, coords, covar_idx, vname));
+    rcpp_result_gen = Rcpp::wrap(term_defm_logit_intercept(m, coords, idx, vname));
     return rcpp_result_gen;
 END_RCPP
 }
