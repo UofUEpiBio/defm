@@ -5068,6 +5068,7 @@ public:
 };
 
 #endif
+
 /*//////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -6385,6 +6386,11 @@ SUPPORT_TEMPLATE(void, calc)(
 
     if (max_num_elements_ != 0u)
         this->max_num_elements = BARRY_MAX_NUM_ELEMENTS;
+
+    if (this->data.size() == 0u)
+    {
+        throw std::logic_error("The array has support of size 0 (i.e., empty support). This could be a problem in the rules (constraints).\n");
+    }
 
 
     return;
@@ -7733,6 +7739,8 @@ MODEL_TEMPLATE(uint, add_array)(
                     "A problem ocurred while trying to add the array (and recording the powerset). "
                 );
                 printf_barry("with error %s\n", e.what());
+                printf_barry("Here is the array that generated the error.\n");
+                Array_.print();
                 throw std::logic_error("");
                 
             }
@@ -7740,7 +7748,24 @@ MODEL_TEMPLATE(uint, add_array)(
         }
         else
         {
-            support_fun.calc();
+            try
+            {
+
+                support_fun.calc();
+                
+            }
+            catch (const std::exception& e)
+            {
+
+                printf_barry(
+                    "A problem ocurred while trying to add the array (and recording the powerset). "
+                );
+                printf_barry("with error %s\n", e.what());
+                printf_barry("Here is the array that generated the error.\n");
+                Array_.print();
+                throw std::logic_error("");
+
+            }
         }
         
         if (transform_model_fun)
@@ -7923,11 +7948,17 @@ MODEL_TEMPLATE(double, likelihood)(
 
     // Checking if passes the rules
     if (!support_fun.eval_rules_dyn(target_, 0u, 0u))
-        return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+    {
+        throw std::range_error("The array is not in the support set.");
+    }
+        
 
     // Checking if this actually has a change of happening
     if (this->stats_support[loc].size() == 0u)
-        return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+    {
+        // return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+        throw std::logic_error("The support set for this array is empty.");
+    }
     
     // Checking if we have updated the normalizing constant or not
     if (!first_calc_done[loc] || !vec_equal_approx(params, params_last[loc]) ) {
@@ -7977,13 +8008,19 @@ MODEL_TEMPLATE(double, likelihood)(
             tmp_target[t] = *(target_ + t);
 
         if (!support_fun.eval_rules_dyn(tmp_target, 0u, 0u))
-            return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+        {
+            throw std::range_error("The array is not in the support set.");
+            // return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+        }
 
     }
 
     // Checking if this actually has a change of happening
     if (this->stats_support[loc].size() == 0u)
-        return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+    {
+        // return as_log ? -std::numeric_limits<double>::infinity() : 0.0;
+        throw std::logic_error("The support set for this array is empty.");
+    }
     
     // Checking if we have updated the normalizing constant or not
     if (!first_calc_done[loc] || !vec_equal_approx(params, params_last[loc]) ) {
@@ -8177,18 +8214,23 @@ MODEL_TEMPLATE(void, print)() const
     // - Size of the support
     // - Terms involved
 
-    uint min_v = std::numeric_limits<uint>::infinity();
-    uint max_v = 0u;
+    int min_v = std::numeric_limits<int>::max();
+    int max_v = 0;
 
     for (const auto & stat : this->stats_support)
     {
-        if (stat.size() > max_v)
-            max_v = stat.size();
+
+        if (static_cast<int>(stat.size()) > max_v)
+            max_v = static_cast<int>(stat.size());
         
-        if (stat.size() < min_v)
-            min_v = stat.size();
+        if (static_cast<int>(stat.size()) < min_v)
+            min_v = static_cast<int>(stat.size());
 
     }  
+
+    // The vectors in the support reflec the size of nterms x entries
+    max_v /= static_cast<int>(nterms() + 1);
+    min_v /= static_cast<int>(nterms() + 1);
 
     printf_barry("Num. of Arrays     : %i\n", this->size());
     printf_barry("Support size       : %i\n", this->size_unique());
@@ -13659,9 +13701,9 @@ public:
     ): indices(indices_), numbers(numbers_), 
         logical(logical_) {};
 
-    size_t idx(size_t i) {return indices[i];};
-    double num(size_t i) {return numbers[i];};
-    bool is_true(size_t i) {return logical[i];};
+    size_t idx(size_t i) const {return indices[i];};
+    double num(size_t i) const {return numbers[i];};
+    bool is_true(size_t i) const {return logical[i];};
     
     ~DEFMCounterData() {};
     
@@ -13672,19 +13714,49 @@ public:
 
     std::vector< double > numbers;
     std::vector< size_t > indices;
+    std::vector< bool >   logical;
 
     bool init = false;
 
-    double num(size_t i) {return numbers[i];};
-    size_t idx(size_t i) {return indices[i];};
+    double num(size_t i) const {return numbers[i];};
+    size_t idx(size_t i) const {return indices[i];};
+    bool is_true(size_t i) const {return logical[i];};
 
     DEFMRuleData() {};
 
     DEFMRuleData(
         std::vector< double > numbers_,
-        std::vector< size_t > indices_
-    ) : numbers(numbers_), indices(indices_) {};
+        std::vector< size_t > indices_,
+        std::vector< bool > logical_
+    ) : numbers(numbers_), indices(indices_), logical(logical_) {};
 
+    DEFMRuleData(
+        std::vector< double > numbers_,
+        std::vector< size_t > indices_
+    ) : numbers(numbers_), indices(indices_), logical(numbers_.size()) {};
+
+};
+
+/**
+ * @weakgroup rules-phylo Phylo rules
+ * @brief Rules for phylogenetic modeling
+ * @param rules A pointer to a `PhyloRules` object (`Rules`<`PhyloArray`, `PhyloRuleData`>).
+ */
+///@{
+
+class DEFMRuleDynData : public DEFMRuleData {
+public:
+    const std::vector< double > * counts;
+    
+    DEFMRuleDynData(
+        const std::vector< double > * counts_,
+        std::vector< double > numbers_ = {},
+        std::vector< size_t > indices_ = {},
+        std::vector< bool > logical_ = {}
+        ) : DEFMRuleData(numbers_, indices_, logical_), counts(counts_) {};
+    
+    ~DEFMRuleDynData() {};
+    
 };
 
 /**
@@ -13693,11 +13765,18 @@ public:
 ///@{
 typedef Counter<DEFMArray, DEFMCounterData > DEFMCounter;
 typedef Counters<DEFMArray, DEFMCounterData> DEFMCounters;
-typedef Support<DEFMArray, DEFMCounterData, DEFMRuleData> DEFMSupport;
+typedef Support<DEFMArray, DEFMCounterData, DEFMRuleData,DEFMRuleDynData> DEFMSupport;
 typedef StatsCounter<DEFMArray, DEFMCounterData> DEFMStatsCounter;
-typedef Model<DEFMArray, DEFMCounterData,DEFMRuleData,DEFMRuleData> DEFMModel;
+typedef Model<DEFMArray, DEFMCounterData,DEFMRuleData,DEFMRuleDynData> DEFMModel;
+
+
 typedef Rule<DEFMArray, DEFMRuleData> DEFMRule;
 typedef Rules<DEFMArray, DEFMRuleData> DEFMRules;
+typedef Rule<DEFMArray, DEFMRuleDynData> DEFMRuleDyn;
+typedef Rules<DEFMArray, DEFMRuleDynData> DEFMRulesDyn;
+
+
+
 ///@}
 
 inline double DEFMData::operator()(size_t i, size_t j) const
@@ -13765,6 +13844,12 @@ inline bool (a) (const DEFMArray & Array, uint i, uint j, bool & data)
 #define DEFM_RULE_LAMBDA(a) \
 Rule_fun_type<DEFMArray, DEFMRuleData> a = \
 [](const DEFMArray & Array, uint i, uint j, DEFMRuleData & data) -> bool
+///@}
+
+/**Lambda function for definition of a network counter function*/
+#define DEFM_RULEDYN_LAMBDA(a) \
+Rule_fun_type<DEFMArray, DEFMRuleDynData> a = \
+[](const DEFMArray & Array, uint i, uint j, DEFMRuleDynData & data) -> bool
 ///@}
 
 /**
@@ -14373,15 +14458,12 @@ inline void rules_markov_fixed(
  * @param ids Ids of the variables that will follow this rule.
  */
 inline void rules_dont_become_zero(
-    DEFMRules * rules,
+    DEFMSupport * support,
     std::vector<size_t> ids
     ) {
     
     
     DEFM_RULE_LAMBDA(rule) {
-
-        if (i != (Array.nrow() - 1))
-            return true;
 
         if (!data.init)
         {
@@ -14406,15 +14488,51 @@ inline void rules_dont_become_zero(
         if (data.indices[j] == 0u)
             return true;
 
-        // If the previous observation was one, then block this
-        return (Array(i - 1, j) != 1) |
-            (Array(i, j) != 1);
+        // The last observation is always included
+        if (i == (Array.nrow() - 1))
+            return true;
+
+        // This is now one, is the next different zero? If so,
+        // we can include it (1->1)
+        return (Array(i + 1, j) != 0); // |
+            // (Array(i, j) != 1);
 
     };
     
-    rules->add_rule(
+    support->get_rules()->add_rule(
         rule,
-        DEFMRuleData({},{ids})
+        DEFMRuleData({}, {ids})
+        );
+    
+    return;
+}
+
+/**
+ * @brief Blocks switching a one to zero.
+ * 
+ * @param rules 
+ * @param ids Ids of the variables that will follow this rule.
+ */
+inline void rules_exclude_all_ones(
+    DEFMSupport * support
+    ) {
+    
+
+    DEFM_RULEDYN_LAMBDA(rule) {
+
+        if (!data.init)
+        {
+            data.init = true;
+            data.indices[0u] = (Array.nrow() * Array.ncol());
+        }
+
+        return Array.nnozero() != data.idx(0u);
+
+    };
+    
+    support->get_rules_dyn()->add_rule(
+        rule,
+        DEFMRuleDynData(nullptr, {}, {0u})
         );
     
     return;

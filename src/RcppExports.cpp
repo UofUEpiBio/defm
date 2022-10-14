@@ -273,6 +273,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rules_exclude_all_ones
+int rules_exclude_all_ones(SEXP m);
+RcppExport SEXP _defm_rules_exclude_all_ones(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(rules_exclude_all_ones(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
@@ -298,6 +308,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
     {"_defm_term_defm_logit_intercept", (DL_FUNC) &_defm_term_defm_logit_intercept, 4},
     {"_defm_rule_not_one_to_zero", (DL_FUNC) &_defm_rule_not_one_to_zero, 2},
+    {"_defm_rules_exclude_all_ones", (DL_FUNC) &_defm_rules_exclude_all_ones, 1},
     {NULL, NULL, 0}
 };
 

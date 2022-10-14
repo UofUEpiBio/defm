@@ -246,9 +246,25 @@ int rule_not_one_to_zero(
   Rcpp::XPtr< DEFM > ptr(m);
 
   defmcounters::rules_dont_become_zero(
-    ptr->get_model().get_rules(),
+    ptr->get_model().get_support_fun(),
     idx
   );
 
   return 0;
 }
+
+//' @export
+// [[Rcpp::export(invisible = true, rng = false)]]
+int rules_exclude_all_ones(
+    SEXP m
+) {
+
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  defmcounters::rules_exclude_all_ones(
+    ptr->get_model().get_support_fun()
+  );
+
+  return 0;
+}
+

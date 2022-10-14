@@ -238,3 +238,8 @@ rule_not_one_to_zero <- function(m, idx) {
     invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
 }
 
+#' @export
+rules_exclude_all_ones <- function(m) {
+    invisible(.Call(`_defm_rules_exclude_all_ones`, m))
+}
+
