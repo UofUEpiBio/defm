@@ -17,7 +17,7 @@ using namespace Rcpp;
 //' @name defm_terms
 //' @aliases terms_defm
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
+SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 {
 
   int idx_ = -1;
@@ -31,7 +31,7 @@ int term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
     &ptr->get_X_names()
     );
 
-  return 0;
+  return m;
 }
 
 
@@ -39,7 +39,7 @@ int term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 //' @export
 //' @param k Numeric scalar. Exponent used in the term.
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname = "")
+SEXP term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname = "")
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
@@ -50,7 +50,7 @@ int term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname
 
   defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx_, k, vname);
 
-  return 0;
+  return m;
 }
 
 //' @param mat Integer matrix. The matrix specifies the type of motif to capture
@@ -69,7 +69,7 @@ int term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname
 //' @export
 //' @rdname defm_terms
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_transition(
+SEXP term_defm_transition(
     SEXP m,
     IntegerMatrix & mat,
     std::string idx = "",
@@ -125,7 +125,7 @@ int term_defm_transition(
       &ptr->get_Y_names()
     );
 
-  return 0;
+  return m;
 
 }
 
@@ -165,7 +165,7 @@ int term_defm_transition(
 //' @export
 //' @rdname defm_terms
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_transition_formula(
+SEXP term_defm_transition_formula(
     SEXP m,
     std::string formula,
     std::string idx = "",
@@ -188,7 +188,7 @@ int term_defm_transition_formula(
     &ptr->get_Y_names()
   );
 
-  return 0;
+  return m;
 
 }
 
@@ -199,7 +199,7 @@ int term_defm_transition_formula(
 //' function will add one intercept per outcome. These can be weighted by
 //' a covariate.
 // [[Rcpp::export(invisible = true, rng = false)]]
-int term_defm_logit_intercept(
+SEXP term_defm_logit_intercept(
   SEXP m,
   IntegerVector coords = IntegerVector::create(),
   std::string idx = "",
@@ -230,7 +230,7 @@ int term_defm_logit_intercept(
     &ptr->get_Y_names()
   );
 
-  return 0;
+  return m;
 
 }
 
@@ -238,7 +238,7 @@ int term_defm_logit_intercept(
 //' Add rule for avoiding switching a one to zero in a Markov process
 //' @export
 // [[Rcpp::export(invisible = true, rng = false)]]
-int rule_not_one_to_zero(
+SEXP rule_not_one_to_zero(
   SEXP m,
   std::vector< size_t > idx
 ) {
@@ -250,21 +250,6 @@ int rule_not_one_to_zero(
     idx
   );
 
-  return 0;
-}
-
-//' @export
-// [[Rcpp::export(invisible = true, rng = false)]]
-int rules_exclude_all_ones(
-    SEXP m
-) {
-
-  Rcpp::XPtr< DEFM > ptr(m);
-
-  defmcounters::rules_exclude_all_ones(
-    ptr->get_model().get_support_fun()
-  );
-
-  return 0;
+  return m;
 }
 

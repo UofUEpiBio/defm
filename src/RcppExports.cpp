@@ -24,7 +24,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // set_names
-int set_names(SEXP m, const std::vector< std::string >& ynames, const std::vector< std::string >& xnames);
+SEXP set_names(SEXP m, const std::vector< std::string >& ynames, const std::vector< std::string >& xnames);
 RcppExport SEXP _defm_set_names(SEXP mSEXP, SEXP ynamesSEXP, SEXP xnamesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -36,7 +36,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // init_defm
-int init_defm(SEXP m);
+SEXP init_defm(SEXP m);
 RcppExport SEXP _defm_init_defm(SEXP mSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -199,7 +199,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_ones
-int term_defm_ones(SEXP m, std::string idx, std::string vname);
+SEXP term_defm_ones(SEXP m, std::string idx, std::string vname);
 RcppExport SEXP _defm_term_defm_ones(SEXP mSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -211,7 +211,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_fe
-int term_defm_fe(SEXP m, std::string idx, double k, std::string vname);
+SEXP term_defm_fe(SEXP m, std::string idx, double k, std::string vname);
 RcppExport SEXP _defm_term_defm_fe(SEXP mSEXP, SEXP idxSEXP, SEXP kSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -224,7 +224,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_transition
-int term_defm_transition(SEXP m, IntegerMatrix& mat, std::string idx, std::string vname);
+SEXP term_defm_transition(SEXP m, IntegerMatrix& mat, std::string idx, std::string vname);
 RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -237,7 +237,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_transition_formula
-int term_defm_transition_formula(SEXP m, std::string formula, std::string idx, std::string vname);
+SEXP term_defm_transition_formula(SEXP m, std::string formula, std::string idx, std::string vname);
 RcppExport SEXP _defm_term_defm_transition_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -250,7 +250,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // term_defm_logit_intercept
-int term_defm_logit_intercept(SEXP m, IntegerVector coords, std::string idx, std::string vname);
+SEXP term_defm_logit_intercept(SEXP m, IntegerVector coords, std::string idx, std::string vname);
 RcppExport SEXP _defm_term_defm_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -263,23 +263,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // rule_not_one_to_zero
-int rule_not_one_to_zero(SEXP m, std::vector< size_t > idx);
+SEXP rule_not_one_to_zero(SEXP m, std::vector< size_t > idx);
 RcppExport SEXP _defm_rule_not_one_to_zero(SEXP mSEXP, SEXP idxSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector< size_t > >::type idx(idxSEXP);
     rcpp_result_gen = Rcpp::wrap(rule_not_one_to_zero(m, idx));
-    return rcpp_result_gen;
-END_RCPP
-}
-// rules_exclude_all_ones
-int rules_exclude_all_ones(SEXP m);
-RcppExport SEXP _defm_rules_exclude_all_ones(SEXP mSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    rcpp_result_gen = Rcpp::wrap(rules_exclude_all_ones(m));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -308,7 +298,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
     {"_defm_term_defm_logit_intercept", (DL_FUNC) &_defm_term_defm_logit_intercept, 4},
     {"_defm_rule_not_one_to_zero", (DL_FUNC) &_defm_rule_not_one_to_zero, 2},
-    {"_defm_rules_exclude_all_ones", (DL_FUNC) &_defm_rules_exclude_all_ones, 1},
     {NULL, NULL, 0}
 };
 

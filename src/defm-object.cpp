@@ -58,7 +58,7 @@ SEXP new_defm(
 }
 
 // [[Rcpp::export(invisible = true, rng = false)]]
-int set_names(
+SEXP set_names(
   SEXP m,
   const std::vector< std::string > & ynames,
   const std::vector< std::string > & xnames
@@ -70,7 +70,7 @@ int set_names(
     xnames
   );
 
-  return 0;
+  return m;
 
 }
 
@@ -78,11 +78,11 @@ int set_names(
 //' @param m An object of class `DEFM`.
 //' @export
 // [[Rcpp::export(invisible = true, rng = false)]]
-int init_defm(SEXP m)
+SEXP init_defm(SEXP m)
 {
   Rcpp::XPtr< DEFM > ptr(m);
   ptr->init();
-  return 0;
+  return m;
 }
 
 
@@ -122,7 +122,7 @@ double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
   if (std::isfinite(res))
     return res;
   else
-    return std::numeric_limits<double>::min() * 10e-10;
+    return R_NegInf;
 
 }
 
