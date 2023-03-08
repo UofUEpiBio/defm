@@ -76,16 +76,16 @@ actually simulated data **WITH THE MODEL**.
 
 For this example, we will simulate a model with the following features:
 
--   **Ones**: Baseline density (prevalence of ones),
-    ![\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
+- **Ones**: Baseline density (prevalence of ones),
+  ![\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
 
--   **Ones x Attr 2**: Same as before, but weighted by one of the
-    covariates. (simil to fixed effect)
-    ![\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
+- **Ones x Attr 2**: Same as before, but weighted by one of the
+  covariates. (simil to fixed effect)
+  ![\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
 
--   **Transition** : And a transition structure, in particular
-    `y0 -> (y0, y1)`,
-    ![y\_{i0}^0y\_{i0}^{t+1} y\_{i1}^{t+1}](https://latex.codecogs.com/gif.image?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D "y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}").
+- **Transition** : And a transition structure, in particular
+  `y0 -> (y0, y1)`,
+  ![y\_{i0}^0y\_{i0}^{t+1} y\_{i1}^{t+1}](https://latex.codecogs.com/gif.image?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D "y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}").
 
 In `defm`, transition statistics can be represented using matrices. In
 this case, the transition can be written as:
@@ -114,7 +114,7 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
 
   # Adding the model terms
   term_defm_ones(d_model.)
-  term_defm_ones(d_model., 1, "Variable 1")
+  term_defm_ones(d_model., "x1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
@@ -134,14 +134,14 @@ With this factory function, we will use it to simulate some data with
 the same dimensions of the original dataset. In this case, the
 parameters used for the simulation will be:
 
--   **Ones**: -2, i.e., low density,
--   **Ones x Attr 2**: 2, yet correlated with covariate \# 2,
--   **Transition** : 5, And a high chance of observing the transition
-    `y0 -> (y0, y1)`
+- **Ones**: -2, i.e., low density,
+- **Ones x Attr 2**: 2, yet correlated with covariate \# 2,
+- **Transition** : 5, And a high chance of observing the transition
+  `y0 -> (y0, y1)`
 
 ``` r
 sim_par <- c(-2, 2, 5)
-d_model <- build_model(id, Y, X, order = 1, par. = sim_par)
+d_model <- build_model(id, Y, X, order = 1L, par. = sim_par)
 simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
 #>      id      
@@ -170,7 +170,7 @@ summary(ans)
 #> Coefficients:
 #>                                 Estimate Std. Error
 #> Num. of ones                   -1.966198 0.01401444
-#> Num. of ones x Variable 1       1.957017 0.01548504
+#> Num. of ones x x1               1.957017 0.01548504
 #> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516844
 #> 
 #> -2 log L: 56154.07
@@ -203,7 +203,7 @@ Num. of ones
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Num. of ones x Variable 1
+Num. of ones x x1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 1.96 (0.02)
@@ -255,18 +255,18 @@ N
 
 We can also see the counts
 
-|  id |  y0 |  y1 |  y2 |    x0 |    x1 | Num. of ones | Num. of ones x Variable 1 | Motif ![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)") |
-|----:|----:|----:|----:|------:|------:|-------------:|--------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------:|
-|   1 |   0 |   0 |   0 |  0.51 |  0.95 |           NA |                        NA |                                                                                                                                                   NA |
-|   1 |   0 |   0 |   0 |  0.16 |  0.25 |            0 |                      0.00 |                                                                                                                                                    0 |
-|   1 |   0 |   0 |   0 |  1.20 | -1.72 |            0 |                      0.00 |                                                                                                                                                    0 |
-|   1 |   0 |   1 |   1 | -0.20 |  1.55 |            2 |                      3.11 |                                                                                                                                                    0 |
-|   2 |   0 |   1 |   0 | -0.15 | -0.68 |           NA |                        NA |                                                                                                                                                   NA |
-|   2 |   0 |   1 |   0 |  1.19 |  0.92 |            1 |                      0.92 |                                                                                                                                                    0 |
-|   2 |   1 |   0 |   0 | -0.65 |  1.16 |            1 |                      1.16 |                                                                                                                                                    0 |
-|   2 |   0 |   0 |   0 | -0.99 |  0.21 |            0 |                      0.00 |                                                                                                                                                    0 |
-|   2 |   1 |   1 |   0 |  0.76 |  1.45 |            2 |                      2.90 |                                                                                                                                                    0 |
-|   2 |   0 |   0 |   0 | -0.68 | -1.34 |            0 |                      0.00 |                                                                                                                                                    0 |
+|  id |  y0 |  y1 |  y2 |    x0 |    x1 | Num. of ones | Num. of ones x x1 | Motif ![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)") |
+|----:|----:|----:|----:|------:|------:|-------------:|------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------:|
+|   1 |   0 |   0 |   0 |  0.51 |  0.95 |           NA |                NA |                                                                                                                                                   NA |
+|   1 |   0 |   0 |   0 |  0.16 |  0.25 |            0 |              0.00 |                                                                                                                                                    0 |
+|   1 |   0 |   0 |   0 |  1.20 | -1.72 |            0 |              0.00 |                                                                                                                                                    0 |
+|   1 |   0 |   1 |   1 | -0.20 |  1.55 |            2 |              3.11 |                                                                                                                                                    0 |
+|   2 |   0 |   1 |   0 | -0.15 | -0.68 |           NA |                NA |                                                                                                                                                   NA |
+|   2 |   0 |   1 |   0 |  1.19 |  0.92 |            1 |              0.92 |                                                                                                                                                    0 |
+|   2 |   1 |   0 |   0 | -0.65 |  1.16 |            1 |              1.16 |                                                                                                                                                    0 |
+|   2 |   0 |   0 |   0 | -0.99 |  0.21 |            0 |              0.00 |                                                                                                                                                    0 |
+|   2 |   1 |   1 |   0 |  0.76 |  1.45 |            2 |              2.90 |                                                                                                                                                    0 |
+|   2 |   0 |   0 |   0 | -0.68 | -1.34 |            0 |              0.00 |                                                                                                                                                    0 |
 
 Finally, we can also take a look at the distribution of the log-odds.
 The way we calculate this is by looking at changes in a single entry of
@@ -370,22 +370,42 @@ for specifying the transitions:
 ``` r
 d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 
-term_defm_transition_formula(d_model_formula, "{y0, 0y1} > {0y0, y1}")
-term_defm_transition_formula(d_model_formula, "{y1, 0y2} > {0y1, y2}")
-term_defm_transition_formula(d_model_formula, "{y2, 0y3} > {0y2, y3}")
-term_defm_transition_formula(d_model_formula, "{y3, 0y4} > {0y3, y4}")
-term_defm_transition_formula(d_model_formula, "{y4, 0y5} > {0y4, y5}")
-term_defm_transition_formula(d_model_formula, "{y5, 0y6} > {0y5, y6}")
-term_defm_transition_formula(d_model_formula, "{y6, 0y7} > {0y6, y7}")
-term_defm_transition_formula(d_model_formula, "{y7, 0y8} > {0y7, y8}")
-term_defm_transition_formula(d_model_formula, "{y8, 0y9} > {0y8, y9}")
-term_defm_transition_formula(d_model_formula, "{0y0, y9} > {y0, 0y9}")
+d_model_formula |>
+  term_defm_transition_formula("{y0, 0y1} > {0y0, y1}") |>
+  term_defm_transition_formula("{y1, 0y2} > {0y1, y2}") |>
+  term_defm_transition_formula("{y2, 0y3} > {0y2, y3}") |>
+  term_defm_transition_formula("{y3, 0y4} > {0y3, y4}") |>
+  term_defm_transition_formula("{y4, 0y5} > {0y4, y5}") |>
+  term_defm_transition_formula("{y5, 0y6} > {0y5, y6}") |>
+  term_defm_transition_formula("{y6, 0y7} > {0y6, y7}") |>
+  term_defm_transition_formula("{y7, 0y8} > {0y7, y8}") |>
+  term_defm_transition_formula("{y8, 0y9} > {0y8, y9}") |>
+  term_defm_transition_formula("{0y0, y9} > {y0, 0y9}") |>
+  term_defm_ones() |>
+  init_defm()
 
-# Adding a term of ones
-term_defm_ones(d_model_formula)
+# Inspecting
+d_model_formula
+#> Num. of Arrays       : 19
+#> Support size         : 19
+#> Support size range   : [11, 20]
+#> Transform. Fun.      : no
+#> Model terms (11)     :
+#>  - Motif $(y0^+, y1^-) -> (y0^-, y1^+)$
+#>  - Motif $(y1^+, y2^-) -> (y1^-, y2^+)$
+#>  - Motif $(y2^+, y3^-) -> (y2^-, y3^+)$
+#>  - Motif $(y3^+, y4^-) -> (y3^-, y4^+)$
+#>  - Motif $(y4^+, y5^-) -> (y4^-, y5^+)$
+#>  - Motif $(y5^+, y6^-) -> (y5^-, y6^+)$
+#>  - Motif $(y6^+, y7^-) -> (y6^-, y7^+)$
+#>  - Motif $(y7^+, y8^-) -> (y7^-, y8^+)$
+#>  - Motif $(y8^+, y9^-) -> (y8^-, y9^+)$
+#>  - Motif $(y0^-, y9^+) -> (y0^+, y9^-)$
+#>  - Num. of ones
+#> Model rules (1)     :
+#>  - Markov model of order 1
 
-# Initializing and simulating
-init_defm(d_model_formula)
+# Simulating
 Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
 ```
 

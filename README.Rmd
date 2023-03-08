@@ -115,7 +115,7 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
 
   # Adding the model terms
   term_defm_ones(d_model.)
-  term_defm_ones(d_model., 1, "Variable 1")
+  term_defm_ones(d_model., "x1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
@@ -141,7 +141,7 @@ will be:
 
 ```{r simulation}
 sim_par <- c(-2, 2, 5)
-d_model <- build_model(id, Y, X, order = 1, par. = sim_par)
+d_model <- build_model(id, Y, X, order = 1L, par. = sim_par)
 simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
 ```
@@ -280,22 +280,24 @@ specifying the transitions:
 ```{r}
 d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 
-term_defm_transition_formula(d_model_formula, "{y0, 0y1} > {0y0, y1}")
-term_defm_transition_formula(d_model_formula, "{y1, 0y2} > {0y1, y2}")
-term_defm_transition_formula(d_model_formula, "{y2, 0y3} > {0y2, y3}")
-term_defm_transition_formula(d_model_formula, "{y3, 0y4} > {0y3, y4}")
-term_defm_transition_formula(d_model_formula, "{y4, 0y5} > {0y4, y5}")
-term_defm_transition_formula(d_model_formula, "{y5, 0y6} > {0y5, y6}")
-term_defm_transition_formula(d_model_formula, "{y6, 0y7} > {0y6, y7}")
-term_defm_transition_formula(d_model_formula, "{y7, 0y8} > {0y7, y8}")
-term_defm_transition_formula(d_model_formula, "{y8, 0y9} > {0y8, y9}")
-term_defm_transition_formula(d_model_formula, "{0y0, y9} > {y0, 0y9}")
+d_model_formula |>
+  term_defm_transition_formula("{y0, 0y1} > {0y0, y1}") |>
+  term_defm_transition_formula("{y1, 0y2} > {0y1, y2}") |>
+  term_defm_transition_formula("{y2, 0y3} > {0y2, y3}") |>
+  term_defm_transition_formula("{y3, 0y4} > {0y3, y4}") |>
+  term_defm_transition_formula("{y4, 0y5} > {0y4, y5}") |>
+  term_defm_transition_formula("{y5, 0y6} > {0y5, y6}") |>
+  term_defm_transition_formula("{y6, 0y7} > {0y6, y7}") |>
+  term_defm_transition_formula("{y7, 0y8} > {0y7, y8}") |>
+  term_defm_transition_formula("{y8, 0y9} > {0y8, y9}") |>
+  term_defm_transition_formula("{0y0, y9} > {y0, 0y9}") |>
+  term_defm_ones() |>
+  init_defm()
 
-# Adding a term of ones
-term_defm_ones(d_model_formula)
+# Inspecting
+d_model_formula
 
-# Initializing and simulating
-init_defm(d_model_formula)
+# Simulating
 Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
 ```
 
