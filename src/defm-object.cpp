@@ -94,7 +94,7 @@ SEXP print_defm(SEXP x)
 
   Rcpp::XPtr< DEFM > ptr(x);
 
-  ptr->get_model().print();
+  ptr->print();
 
   return x;
 
@@ -117,7 +117,7 @@ double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
 
   Rcpp::XPtr< DEFM > ptr(m);
 
-  double res = ptr->get_model().likelihood_total(par, as_log);
+  double res = ptr->likelihood_total(par, as_log);
 
   if (std::isfinite(res))
     return res;
@@ -158,7 +158,7 @@ IntegerMatrix sim_defm(
 
   Rcpp::XPtr< DEFM > ptr(m);
 
-  ptr->get_model().set_seed(seed);
+  ptr->set_seed(seed);
 
   size_t nrows = ptr->get_n_rows();
   size_t ncols = ptr->get_n_y();
@@ -197,7 +197,7 @@ IntegerMatrix sim_defm(
 int print_stats(SEXP m, int i = 0)
 {
   Rcpp::XPtr< DEFM > ptr(m);
-  ptr->get_model().print_stats(static_cast< unsigned int >(i));
+  ptr->print_stats(static_cast< unsigned int >(i));
 
   return 0;
 }
@@ -209,7 +209,7 @@ int nterms_defm(SEXP m)
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  return ptr->get_model().nterms();
+  return ptr->nterms();
 }
 
 //' @export
@@ -219,7 +219,7 @@ CharacterVector names_defm(SEXP m)
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
-  return wrap(ptr->get_model().colnames());
+  return wrap(ptr->colnames());
 }
 
 //' @export

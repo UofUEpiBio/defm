@@ -5,6 +5,8 @@ output:
       engine: webtex
       url: https://latex.codecogs.com/gif.image?
     pandoc_args: --webtex=https://ibm.codecogs.com/gif.latex?
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->

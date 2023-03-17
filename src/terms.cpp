@@ -27,7 +27,7 @@ SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
   check_covar(idx_, idx, ptr);
 
   defmcounters::counter_ones(
-    ptr->get_model().get_counters(), idx_, vname,
+    ptr->get_counters(), idx_, vname,
     &ptr->get_X_names()
     );
 
@@ -48,7 +48,7 @@ SEXP term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vnam
   // This will set the covar index, if needed
   check_covar(idx_, idx, ptr);
 
-  defmcounters::counter_fixed_effect(ptr->get_model().get_counters(), idx_, k, vname);
+  defmcounters::counter_fixed_effect(ptr->get_counters(), idx_, k, vname);
 
   return m;
 }
@@ -118,7 +118,7 @@ SEXP term_defm_transition(
   }
 
     defmcounters::counter_transition(
-      ptr->get_model().get_counters(), coords, signs,
+      ptr->get_counters(), coords, signs,
       ptr->get_m_order(), ptr->get_n_y(),
       idx_, vname,
       &ptr->get_X_names(),
@@ -181,7 +181,7 @@ SEXP term_defm_transition_formula(
   check_covar(idx_, idx, ptr);
 
   defmcounters::counter_transition_formula(
-    ptr->get_model().get_counters(), formula,
+    ptr->get_counters(), formula,
     ptr->get_m_order(), ptr->get_n_y(),
     idx_, vname,
     &ptr->get_X_names(),
@@ -221,7 +221,7 @@ SEXP term_defm_logit_intercept(
   }
 
   defmcounters::counter_logit_intercept(
-    ptr->get_model().get_counters(),
+    ptr->get_counters(),
     ptr->get_n_y(),
     coords_,
     idx_,
@@ -246,7 +246,7 @@ SEXP rule_not_one_to_zero(
   Rcpp::XPtr< DEFM > ptr(m);
 
   defmcounters::rules_dont_become_zero(
-    ptr->get_model().get_support_fun(),
+    ptr->get_support_fun(),
     idx
   );
 

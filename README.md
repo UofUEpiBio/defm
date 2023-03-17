@@ -169,9 +169,9 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                                 Estimate Std. Error
-#> Num. of ones                   -1.966198 0.01401444
-#> Num. of ones x x1               1.957017 0.01548504
-#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516844
+#> Num. of ones                   -1.966198 0.01401447
+#> Num. of ones x x1               1.957017 0.01548505
+#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516842
 #> 
 #> -2 log L: 56154.07
 ```

@@ -19,11 +19,11 @@
 #ifndef DEFM_BONES_HPP
 #define DEFM_BONES_HPP 1
 
-class DEFM {
+class DEFM : public defmcounters::DEFMModel {
 private:
 
-    std::shared_ptr< std::mt19937 > rengine = nullptr;
-    std::shared_ptr< defmcounters::DEFMModel > model = nullptr;
+    // std::shared_ptr< std::mt19937 > rengine = nullptr;
+    // std::shared_ptr< defmcounters::DEFMModel > model = nullptr;
 
     /**
      * @brief Model data
@@ -62,7 +62,7 @@ public:
     ~DEFM() {};
 
     defmcounters::DEFMModel & get_model() {
-        return *model;
+        return *this;
     };
 
     void init();
@@ -95,8 +95,10 @@ public:
         std::vector< std::string > X_names_
     );
 
-    const std::vector< std::string > & get_Y_names();
-    const std::vector< std::string > & get_X_names();
+    const std::vector< std::string > & get_Y_names() const;
+    const std::vector< std::string > & get_X_names() const;
+
+    void print() const;
 
 };
 
@@ -164,7 +166,7 @@ inline void DEFM::simulate(
 
     size_t model_num = 0u; 
     size_t n_entry = M_order * Y_ncol;
-    auto idx = model->get_arrays2support();
+    auto idx = this->get_arrays2support();
     defmcounters::DEFMArray last_array;
     for (size_t i = 0u; i < N; ++i)
     {
@@ -178,7 +180,7 @@ inline void DEFM::simulate(
             // In the first process, we take the data as is
             if (proc_n == 0u)
             {
-                last_array = model->sample(idx->at(model_num++), par);
+                last_array = this->sample(idx->at(model_num++), par);
                 for (size_t y = 0u; y < Y_ncol; ++y)
                     *(y_out + n_entry++) = last_array(M_order, y, false);
 
@@ -205,7 +207,7 @@ inline void DEFM::simulate(
                 // tmp_array.D().print();
 
                 model_num++;
-                last_array = model->sample(tmp_array, par);
+                last_array = this->sample(tmp_array, par);
                 for (size_t y = 0u; y < Y_ncol; ++y)
                     *(y_out + n_entry++) = last_array(M_order, y, false);
 
@@ -250,13 +252,12 @@ inline DEFM::DEFM(
     M_order   = m_order;
 
     // Creating the model and engine
-    rengine = std::make_shared< std::mt19937 >();
-    model   = std::make_shared< defmcounters::DEFMModel >();
+    this->rengine = new std::mt19937();
+    this->delete_rengine = true;
 
-    model->set_rengine(&(*(rengine)));
-    model->store_psets();
+    this->store_psets();
     auto kgen = keygen_defm;
-    model->add_hasher(kgen);
+    this->add_hasher(kgen);
 
     // Iterating for adding observations
     start_end.reserve(id_length);
@@ -312,7 +313,7 @@ inline void DEFM::init()
 {
 
     // Adding the rule
-    defmcounters::rules_markov_fixed(model->get_rules(), M_order);
+    defmcounters::rules_markov_fixed(this->get_rules(), M_order);
 
     // Creating the arrays
     for (size_t i = 0u; i < N; ++i)
@@ -341,7 +342,7 @@ inline void DEFM::init()
                     array(o, k) = *(Y + k * ID_length + start_i + n_proc + o);
 
             // Adding to the model
-            model_ord.push_back( model->add_array(array, true) );
+            model_ord.push_back( this->add_array(array, true) );
 
         }
 
@@ -458,7 +459,7 @@ inline std::vector< double > DEFM::logodds(
                 for (size_t o = 0u; o < (M_order + 1u); ++o)
                     array(o, k) = *(Y + k * ID_length + start_i + n_proc + o);
 
-            double p_1 = model->conditional_prob(array, par, i_, j_);
+            double p_1 = this->conditional_prob(array, par, i_, j_);
             res[M_order + start_i + n_proc] = std::log(p_1/(1.0 - p_1));
 
         }
@@ -487,12 +488,24 @@ inline void DEFM::set_names(
 
 }
 
-inline const std::vector<std::string > & DEFM::get_Y_names() {
+inline const std::vector<std::string > & DEFM::get_Y_names() const {
     return Y_names;
 }
 
-inline const std::vector<std::string > & DEFM::get_X_names() {
+inline const std::vector<std::string > & DEFM::get_X_names() const {
     return X_names;
+}
+
+inline void DEFM::print() const
+{
+    defmcounters::DEFMModel::print();
+    printf_barry("Model Y variables:\n");
+    for (const auto & y : get_Y_names())
+    {
+
+        printf_barry(" - %s\n", y.c_str());
+
+    }
 }
 
 #undef DEFM_RANGES

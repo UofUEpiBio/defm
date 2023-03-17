@@ -1,0 +1,3 @@
+[submodule "barry"]
+	path = barry
+	url = git@github.com:USCbiostats/barry.git
