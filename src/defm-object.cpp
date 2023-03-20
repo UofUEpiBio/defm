@@ -282,7 +282,7 @@ int morder_defm(SEXP m)
 //' Get sufficient statistics counts
 //' @param m An object of class [DEFM].
 //' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(rng = false)]]
 NumericMatrix get_stats(SEXP m)
 {
 
@@ -339,7 +339,7 @@ NumericMatrix get_stats(SEXP m)
 //' @param locs Idx (starting from zero) with the variables that will be
 //' included in the census.
 //' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(rng = false)]]
 NumericMatrix motif_census(SEXP m, std::vector<size_t> locs)
 {
 
@@ -374,7 +374,7 @@ NumericMatrix motif_census(SEXP m, std::vector<size_t> locs)
 
 //' Log odds (aka conditional prob, aka gibbs sampler)
 //' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(rng = false)]]
 NumericVector logodds(
     SEXP m,
     const std::vector<double> & par,
@@ -386,5 +386,13 @@ NumericVector logodds(
   Rcpp::XPtr< DEFM > ptr(m);
 
   return wrap(ptr->logodds(par, i, j));
+
+}
+
+// [[Rcpp::export(rng = false)]]
+LogicalVector is_motif(SEXP m) {
+  Rcpp::XPtr< DEFM > ptr(m);
+
+  return wrap(ptr->is_motif());
 
 }

@@ -404,6 +404,17 @@ d_model_formula
 #>  - Num. of ones
 #> Model rules (1)     :
 #>  - Markov model of order 1
+#> Model Y variables (10):
+#>   0) y0
+#>   1) y1
+#>   2) y2
+#>   3) y3
+#>   4) y4
+#>   5) y5
+#>   6) y6
+#>   7) y7
+#>   8) y8
+#>   9) y9
 
 # Simulating
 Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))

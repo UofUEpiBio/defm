@@ -143,6 +143,10 @@ logodds <- function(m, par, i, j) {
     .Call(`_defm_logodds`, m, par, i, j)
 }
 
+is_motif <- function(m) {
+    .Call(`_defm_is_motif`, m)
+}
+
 #' Model specification for DEFM
 #'
 #' @param m An object of class [DEFM].

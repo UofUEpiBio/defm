@@ -166,7 +166,6 @@ NumericMatrix get_stats(SEXP m);
 RcppExport SEXP _defm_get_stats(SEXP mSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     rcpp_result_gen = Rcpp::wrap(get_stats(m));
     return rcpp_result_gen;
@@ -177,7 +176,6 @@ NumericMatrix motif_census(SEXP m, std::vector<size_t> locs);
 RcppExport SEXP _defm_motif_census(SEXP mSEXP, SEXP locsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type locs(locsSEXP);
     rcpp_result_gen = Rcpp::wrap(motif_census(m, locs));
@@ -189,12 +187,21 @@ NumericVector logodds(SEXP m, const std::vector<double>& par, int i, int j);
 RcppExport SEXP _defm_logodds(SEXP mSEXP, SEXP parSEXP, SEXP iSEXP, SEXP jSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< const std::vector<double>& >::type par(parSEXP);
     Rcpp::traits::input_parameter< int >::type i(iSEXP);
     Rcpp::traits::input_parameter< int >::type j(jSEXP);
     rcpp_result_gen = Rcpp::wrap(logodds(m, par, i, j));
+    return rcpp_result_gen;
+END_RCPP
+}
+// is_motif
+LogicalVector is_motif(SEXP m);
+RcppExport SEXP _defm_is_motif(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(is_motif(m));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -292,6 +299,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_get_stats", (DL_FUNC) &_defm_get_stats, 1},
     {"_defm_motif_census", (DL_FUNC) &_defm_motif_census, 2},
     {"_defm_logodds", (DL_FUNC) &_defm_logodds, 4},
+    {"_defm_is_motif", (DL_FUNC) &_defm_is_motif, 1},
     {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 3},
     {"_defm_term_defm_fe", (DL_FUNC) &_defm_term_defm_fe, 4},
     {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 4},

@@ -59,7 +59,9 @@ public:
         size_t m_order
     );
 
-    ~DEFM() {};
+    // ~DEFM() {
+    //     defmcounters::DEFMModel::~Model();
+    // };
 
     defmcounters::DEFMModel & get_model() {
         return *this;
@@ -99,6 +101,8 @@ public:
     const std::vector< std::string > & get_X_names() const;
 
     void print() const;
+
+    std::vector< bool > is_motif();
 
 };
 
@@ -499,13 +503,24 @@ inline const std::vector<std::string > & DEFM::get_X_names() const {
 inline void DEFM::print() const
 {
     defmcounters::DEFMModel::print();
-    printf_barry("Model Y variables:\n");
+    printf_barry("Model Y variables (%i):\n", static_cast<int>(get_n_y()));
+    int ny = 0;
     for (const auto & y : get_Y_names())
     {
 
-        printf_barry(" - %s\n", y.c_str());
+        printf_barry(" % 2i) %s\n", ny++, y.c_str());
 
     }
+}
+
+inline std::vector< bool > DEFM::is_motif()
+{
+    std::vector< bool > res(0u);
+    auto * counterss = defmcounters::DEFMModel::get_counters();
+    for (size_t i = 0u; i < counters->size(); ++i)
+        res.push_back(counterss->operator[](i).data.is_motif);
+
+    return res;
 }
 
 #undef DEFM_RANGES
