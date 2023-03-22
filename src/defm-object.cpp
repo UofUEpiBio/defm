@@ -74,6 +74,34 @@ SEXP set_names(
 
 }
 
+//' Access to the names of a model's datasets
+//'
+//' Retrieve the column names of the dependent variable (`y`) and independent
+//' variable (`x`.)
+//'
+//' @param m An object of class [DEFM].
+//' @name defm-names
+//' @returns A character vector.
+//' @export
+// [[Rcpp::export(rng = false)]]
+CharacterVector get_Y_names(
+    SEXP m
+) {
+  Rcpp::XPtr< DEFM > ptr(m);
+  return wrap(ptr->get_Y_names());
+}
+
+//' @rdname defm-names
+//' @export
+// [[Rcpp::export(rng = false)]]
+CharacterVector get_X_names(
+    SEXP m
+) {
+  Rcpp::XPtr< DEFM > ptr(m);
+  return wrap(ptr->get_X_names());
+}
+
+
 //' @rdname DEFM
 //' @param m An object of class `DEFM`.
 //' @export
@@ -334,13 +362,8 @@ NumericMatrix get_stats(SEXP m)
 
 }
 
-//' Motif census
-//' @param m An object of class [DEFM].
-//' @param locs Idx (starting from zero) with the variables that will be
-//' included in the census.
-//' @export
 // [[Rcpp::export(rng = false)]]
-NumericMatrix motif_census(SEXP m, std::vector<size_t> locs)
+NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 {
 
   Rcpp::XPtr< DEFM > ptr(m);
@@ -396,3 +419,5 @@ LogicalVector is_motif(SEXP m) {
   return wrap(ptr->is_motif());
 
 }
+
+

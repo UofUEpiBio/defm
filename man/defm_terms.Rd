@@ -37,7 +37,7 @@ used to weight the term.}
 \item{mat}{Integer matrix. The matrix specifies the type of motif to capture
 (see details.)}
 
-\item{e1, e2}{e1 An object of class \link{DEFM} (e1) and a formula (e2).}
+\item{e1, e2}{e1 An object of class \link{DEFM} (e1) and a character (e2).}
 }
 \value{
 Invisible 0.

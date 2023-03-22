@@ -35,6 +35,26 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_Y_names
+CharacterVector get_Y_names(SEXP m);
+RcppExport SEXP _defm_get_Y_names(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_Y_names(m));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_X_names
+CharacterVector get_X_names(SEXP m);
+RcppExport SEXP _defm_get_X_names(SEXP mSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_X_names(m));
+    return rcpp_result_gen;
+END_RCPP
+}
 // init_defm
 SEXP init_defm(SEXP m);
 RcppExport SEXP _defm_init_defm(SEXP mSEXP) {
@@ -171,14 +191,14 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// motif_census
-NumericMatrix motif_census(SEXP m, std::vector<size_t> locs);
-RcppExport SEXP _defm_motif_census(SEXP mSEXP, SEXP locsSEXP) {
+// motif_census_cpp
+NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs);
+RcppExport SEXP _defm_motif_census_cpp(SEXP mSEXP, SEXP locsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector<size_t> >::type locs(locsSEXP);
-    rcpp_result_gen = Rcpp::wrap(motif_census(m, locs));
+    rcpp_result_gen = Rcpp::wrap(motif_census_cpp(m, locs));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -284,6 +304,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
     {"_defm_set_names", (DL_FUNC) &_defm_set_names, 3},
+    {"_defm_get_Y_names", (DL_FUNC) &_defm_get_Y_names, 1},
+    {"_defm_get_X_names", (DL_FUNC) &_defm_get_X_names, 1},
     {"_defm_init_defm", (DL_FUNC) &_defm_init_defm, 1},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
@@ -297,7 +319,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_nobs_defm", (DL_FUNC) &_defm_nobs_defm, 1},
     {"_defm_morder_defm", (DL_FUNC) &_defm_morder_defm, 1},
     {"_defm_get_stats", (DL_FUNC) &_defm_get_stats, 1},
-    {"_defm_motif_census", (DL_FUNC) &_defm_motif_census, 2},
+    {"_defm_motif_census_cpp", (DL_FUNC) &_defm_motif_census_cpp, 2},
     {"_defm_logodds", (DL_FUNC) &_defm_logodds, 4},
     {"_defm_is_motif", (DL_FUNC) &_defm_is_motif, 1},
     {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 3},

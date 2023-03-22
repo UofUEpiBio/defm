@@ -40,15 +40,16 @@ new_defm <- function(
 
 #' @export
 #' @rdname defm_terms
-#' @param e1,e2 e1 An object of class [DEFM] (e1) and a formula (e2).
+#' @param e1,e2 e1 An object of class [DEFM] (e1) and a character (e2).
 #' @details The `+` method is a shortcut for term_formula
 `+.DEFM` <- function(e1, e2) {
-  if (!inherits(e2, "formula"))
-    stop("The RHS should be a formula.")
 
-  res <- strsplit(gsub("^\\s*~", "", deparse(e2)), split = "\\s*[+]\\s*")
+  if (!inherits(e2, "character"))
+    stop("The RHS should be a character")
+
+  res <- strsplit(e2, split = "\\s*[+]\\s*")
   for (r in res)
-    term_defm_transition_formula(e1, r)
+    invisible(term_defm_transition_formula(e1, r))
 
   invisible(e1)
 

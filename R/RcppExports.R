@@ -25,6 +25,25 @@ set_names <- function(m, ynames, xnames) {
     invisible(.Call(`_defm_set_names`, m, ynames, xnames))
 }
 
+#' Access to the names of a model's datasets
+#'
+#' Retrieve the column names of the dependent variable (`y`) and independent
+#' variable (`x`.)
+#'
+#' @param m An object of class [DEFM].
+#' @name defm-names
+#' @returns A character vector.
+#' @export
+get_Y_names <- function(m) {
+    .Call(`_defm_get_Y_names`, m)
+}
+
+#' @rdname defm-names
+#' @export
+get_X_names <- function(m) {
+    .Call(`_defm_get_X_names`, m)
+}
+
 #' @rdname DEFM
 #' @param m An object of class `DEFM`.
 #' @export
@@ -128,13 +147,8 @@ get_stats <- function(m) {
     .Call(`_defm_get_stats`, m)
 }
 
-#' Motif census
-#' @param m An object of class [DEFM].
-#' @param locs Idx (starting from zero) with the variables that will be
-#' included in the census.
-#' @export
-motif_census <- function(m, locs) {
-    .Call(`_defm_motif_census`, m, locs)
+motif_census_cpp <- function(m, locs) {
+    .Call(`_defm_motif_census_cpp`, m, locs)
 }
 
 #' Log odds (aka conditional prob, aka gibbs sampler)

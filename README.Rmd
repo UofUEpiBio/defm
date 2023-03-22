@@ -320,18 +320,18 @@ specifying the transitions:
 d_model_formula2 <- new_defm(id = id, Y = Y, X = X, order = 1)
 
 d_model_formula2 +
-  ~ {y0, 0y1} > {0y0, y1} +
-    {y1, 0y2} > {0y1, y2} +
-    {y2, 0y3} > {0y2, y3} +
-    {y3, 0y4} > {0y3, y4} +
-    {y4, 0y5} > {0y4, y5} +
-    {y5, 0y6} > {0y5, y6} +
-    {y6, 0y7} > {0y6, y7} +
-    {y7, 0y8} > {0y7, y8} +
-    {y8, 0y9} > {0y8, y9} +
-    {0y0, y9} > {y0, 0y9}
+  "{y0, 0y1} > {0y0, y1}" +
+  "{y1, 0y2} > {0y1, y2}" +
+  "{y2, 0y3} > {0y2, y3}" +
+  "{y3, 0y4} > {0y3, y4}" +
+  "{y4, 0y5} > {0y4, y5}" +
+  "{y5, 0y6} > {0y5, y6}" +
+  "{y6, 0y7} > {0y6, y7}" +
+  "{y7, 0y8} > {0y7, y8}" +
+  "{y8, 0y9} > {0y8, y9}" +
+  "{0y0, y9} > {y0, 0y9}"
 
-d_model_formula |> 
+d_model_formula2 |> 
   term_defm_ones() |>
   init_defm()
 
