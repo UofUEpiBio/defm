@@ -32,14 +32,13 @@ as.data.frame.defm_motif_census <- function(x, row.names = NULL, optional = FALS
   colidx <- list((1:k) + 1, (k + 2):ncol(x))
 
   tmp <- NULL
-  for (i in 1L:nrow(x)) {
+  for (i in ord) {
+
+    from <- paste(x[i, colidx[[1]]], collapse = ", ")
+    to   <- paste(x[i, colidx[[2]]], collapse = ", ")
 
     tmp <- rbind(tmp, data.frame(
-      Motif = sprintf(
-        "{%s} > {%s}",
-        paste(x[i, colidx[[1]]], collapse = ", "),
-        paste(x[i, colidx[[2]]], collapse = ", ")
-      ),
+      Motif = sprintf("{%s} > {%s}%s", from, to, ifelse(from == to, " *", "")),
       Total = x[i, 1L]
     ))
 
@@ -64,6 +63,7 @@ print.defm_motif_census <- function(x, ...) {
 
   cat(sprintf("Motif census for variable set: %s\n", lab))
   print(as.data.frame(x))
+  cat("(*): No change\n")
 
   return(x)
 
