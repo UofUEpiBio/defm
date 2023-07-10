@@ -8,7 +8,6 @@
 \alias{init_defm}
 \alias{print_stats}
 \alias{nterms_defm}
-\alias{names.DEFM}
 \alias{nrow_defm}
 \alias{ncol_defm_y}
 \alias{ncol_defm_x}
@@ -23,8 +22,6 @@ init_defm(m)
 print_stats(m, i = 0L)
 
 nterms_defm(m)
-
-\method{names}{DEFM}(m)
 
 nrow_defm(m)
 
@@ -48,6 +45,8 @@ new_defm(id, Y, X, order = 1)
 \item{order}{Integer. Order of the markov process, by default, 1.}
 
 \item{m}{An object of class \code{DEFM}.}
+
+\item{i}{An integer scalar indicating which set of statistics to print (see details.)}
 }
 \value{
 An external pointer of class \code{DEFM.}
@@ -57,4 +56,8 @@ Discrete Exponential Family Models (DEFMs) are models from the exponential
 family that deal with discrete data. Here, we deal with binary arrays which
 can be used to represent, among other things, networks and multinomial binary
 Markov processes.
+}
+\details{
+The \code{print_stats} function prints the supportset of the ith type
+of array in the model.
 }

@@ -6,6 +6,16 @@
 \usage{
 logodds(m, par, i, j)
 }
+\arguments{
+\item{m}{An object of class \link{DEFM}.}
+
+\item{par}{The parameters of the model.}
+
+\item{i, j}{The row and column of the array to turn on for the log odds.}
+}
+\value{
+A numeric vector with the log-odds for each observation in the data.
+}
 \description{
 Log odds (aka conditional prob, aka gibbs sampler)
 }

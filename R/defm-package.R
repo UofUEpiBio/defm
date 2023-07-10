@@ -8,6 +8,11 @@ NULL
 ## usethis namespace: end
 NULL
 
+#' @export
+print.DEFM <- function(x, ...) {
+  print_defm_cpp(x)
+}
+
 #' @rdname DEFM
 #' @export
 new_defm <- function(

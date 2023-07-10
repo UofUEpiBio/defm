@@ -6,6 +6,7 @@
 #' @param ... Further arguments passed to [stats4::mle].
 #' @export
 #' @import stats4
+#' @importFrom stats pnorm
 defm_mle <- function(
   object,
   start,

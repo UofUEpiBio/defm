@@ -162,6 +162,9 @@ SEXP term_defm_transition(
 //' Transition effects can be specified using two sets of curly brackets and
 //' an greater-than symbol, i.e., `{...} > {...}`. The first set of brackets,
 //' which we call LHS, can only hold `row id` that are less than `m_order`.
+//' @param formula Character scalar (see details).
+//' @param idx Character scalar. Name of the variable to include in the term.
+//' @param vname Character scalar. Name to be assigned for the new term.
 //' @export
 //' @rdname defm_terms
 // [[Rcpp::export(invisible = true, rng = false)]]
@@ -198,6 +201,7 @@ SEXP term_defm_transition_formula(
 //' intercept in a logistic regression. When `coords` is specified, then the
 //' function will add one intercept per outcome. These can be weighted by
 //' a covariate.
+//' @param coords Integer vector with the coordinates to include in the term.
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP term_defm_logit_intercept(
   SEXP m,
@@ -237,6 +241,9 @@ SEXP term_defm_logit_intercept(
 
 //' Add rule for avoiding switching a one to zero in a Markov process
 //' @export
+//' @param m A DEFM object.
+//' @param idx Integer vector with the positions (starting from zero) of the
+//'   elements to avoid switching from one to zero.
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP rule_not_one_to_zero(
   SEXP m,

@@ -2,8 +2,9 @@ Package: defm
 Type: Package
 Title: Fit and simulate binary exponential family models
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Authors@R: c(
+    person("George", "Vega Yon", role=c("aut", "cre"),
+    email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")))
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
@@ -16,4 +17,6 @@ LinkingTo:
 Imports: 
     Rcpp
 Depends:
-  stats4
+    stats4
+Suggests:
+    texreg

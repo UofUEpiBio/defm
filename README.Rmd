@@ -46,7 +46,7 @@ devtools::install_github("UofUEpi/defm")
 ## Example 1: Four outcomes
 
 In this example, we will simulate a dataset that contains 1,000 individuals with
-four different outcomes. The outcomes, which are 0/1 vectors, will be modeled
+four different outcomes. The outcomes, 0/1 vectors, will be modeled
 as Markov processes of order one. Future states of this 0/1 vector
 are a function of the previous point in time. The following lines
 simulate the baseline data:
@@ -106,7 +106,7 @@ which in `R` is
 # [2,]    1    1   NA
 ```
 
-The `NA` entries in the matrix mean that those can be either zero or one. In other words, only values different from `NA` will be taken into account for specifying the terms. Here is the factory function:
+The `NA` entries in the matrix mean that those can be either zero or one. In other words, only values different from `NA` will be considered for specifying the terms. Here is the factory function:
 
 ```{r factory-function}
 # Creating the model and adding a couple of terms
@@ -179,8 +179,7 @@ cbind(id, simulated_Y, X, obs_stats) |>
   head(n = 10) |> knitr::kable(row.names = FALSE, digits = 2L)
 ```
 
-Finally, we can also take a look at the distribution of the log-odds. The way we
-calculate this is by looking at changes in a single entry of the array. For example,
+Finally, we can also take a look at the distribution of the log-odds. We calculate this by looking at changes in a single entry of the array. For example,
 the log-odds of having $y_{12}: 0\to 1$, which are equivalent to
 
 \renewcommand{\Pr}[1]{\mbox{Pr}\left(#1\right)}
@@ -207,8 +206,8 @@ moves sequentially through a set of states. In this example, there are
 ten different `y` variables, but the person can only have one of them as
 active (equal to one.) We can simulate such data using DEFM.
 
-We first need to generate the baseline data we will use for the simulation.
-This involves creating a matrix of size 20x10 (so we have 20 time-points,)
+We first need to generate the baseline data for the simulation.
+This involves creating a matrix of size 20x10 (so we have 20 time points,)
 filled with zeros in all but the first entry:
 
 ```{r example2-sim}
@@ -267,7 +266,7 @@ init_defm(d_model)
 Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
 ```
 
-The simulation should produce a nice looking figure:
+The simulation should produce a nice-looking figure:
 
 ```{r chain1fig, echo = FALSE}
 library(Matrix)
@@ -282,44 +281,8 @@ specifying the transitions:
 ```{r}
 d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 
-d_model_formula |>
-  term_defm_transition_formula("{y0, 0y1} > {0y0, y1}") |>
-  term_defm_transition_formula("{y1, 0y2} > {0y1, y2}") |>
-  term_defm_transition_formula("{y2, 0y3} > {0y2, y3}") |>
-  term_defm_transition_formula("{y3, 0y4} > {0y3, y4}") |>
-  term_defm_transition_formula("{y4, 0y5} > {0y4, y5}") |>
-  term_defm_transition_formula("{y5, 0y6} > {0y5, y6}") |>
-  term_defm_transition_formula("{y6, 0y7} > {0y6, y7}") |>
-  term_defm_transition_formula("{y7, 0y8} > {0y7, y8}") |>
-  term_defm_transition_formula("{y8, 0y9} > {0y8, y9}") |>
-  term_defm_transition_formula("{0y0, y9} > {y0, 0y9}") |>
-  term_defm_ones() |>
-  init_defm()
-
-# Inspecting
-d_model_formula
-
-# Simulating
-Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
-```
-
-The new simulation...
-
-```{r chain2fig, echo = FALSE}
-library(Matrix)
-Matrix::image(as(Y_sim_formula, "dgCMatrix"))
-```
-
-
-## Example 3: Using formulas for transitions (real)
-
-In this example, we will redo the previous model, but now using formulas for
-specifying the transitions:
-
-```{r}
-d_model_formula2 <- new_defm(id = id, Y = Y, X = X, order = 1)
-
-d_model_formula2 +
+# We can use text formulas to add transition terms
+d_model_formula <- d_model_formula + 
   "{y0, 0y1} > {0y0, y1}" +
   "{y1, 0y2} > {0y1, y2}" +
   "{y2, 0y3} > {0y2, y3}" +
@@ -329,25 +292,27 @@ d_model_formula2 +
   "{y6, 0y7} > {0y6, y7}" +
   "{y7, 0y8} > {0y7, y8}" +
   "{y8, 0y9} > {0y8, y9}" +
-  "{0y0, y9} > {y0, 0y9}"
+  "{0y0, y9} > {y0, 0y9}" 
 
-d_model_formula2 |> 
-  term_defm_ones() |>
-  init_defm()
+d_model_formula |>
+  term_defm_ones()
+  
+init_defm(d_model_formula)
 
 # Inspecting
 d_model_formula
 
 # Simulating
-Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(20, n_y), -10)))
 ```
 
 The new simulation...
 
 ```{r chain2fig, echo = FALSE}
-library(Matrix)
-Matrix::image(as(Y_sim_formula, "dgCMatrix"))
+image(as(Y_sim_formula, "dgCMatrix"))
 ```
+
+
 
 # Acknowledgement
 

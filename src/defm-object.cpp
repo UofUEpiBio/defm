@@ -114,9 +114,7 @@ SEXP init_defm(SEXP m)
 }
 
 
-//' @export
-//' @rdname defm_terms
-// [[Rcpp::export(invisible = true, rng = false, name = "print.DEFM")]]
+// [[Rcpp::export(invisible = true, rng = false, name = "print_defm_cpp")]]
 SEXP print_defm(SEXP x)
 {
 
@@ -221,6 +219,10 @@ IntegerMatrix sim_defm(
 
 //' @export
 //' @rdname DEFM
+//' @param i An integer scalar indicating which set of statistics to print (see details.)
+//' @details
+//' The `print_stats` function prints the supportset of the ith type
+//' of array in the model. 
 // [[Rcpp::export(rng = false, invisible = true)]]
 int print_stats(SEXP m, int i = 0)
 {
@@ -240,13 +242,11 @@ int nterms_defm(SEXP m)
   return ptr->nterms();
 }
 
-//' @export
-//' @rdname DEFM
 // [[Rcpp::export(rng = false, name = "names.DEFM")]]
-CharacterVector names_defm(SEXP m)
+CharacterVector names_defm(SEXP x)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< DEFM > ptr(x);
   return wrap(ptr->colnames());
 }
 
@@ -397,6 +397,11 @@ NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 
 //' Log odds (aka conditional prob, aka gibbs sampler)
 //' @export
+//' @param i,j The row and column of the array to turn on for the log odds.
+//' @param par The parameters of the model.
+//' @param m An object of class [DEFM].
+//' @return A numeric vector with the log-odds for each observation in the data.
+//' 
 // [[Rcpp::export(rng = false)]]
 NumericVector logodds(
     SEXP m,

@@ -6,6 +6,12 @@
 \usage{
 rule_not_one_to_zero(m, idx)
 }
+\arguments{
+\item{m}{A DEFM object.}
+
+\item{idx}{Integer vector with the positions (starting from zero) of the
+elements to avoid switching from one to zero.}
+}
 \description{
 Add rule for avoiding switching a one to zero in a Markov process
 }

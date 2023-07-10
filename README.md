@@ -28,10 +28,10 @@ devtools::install_github("UofUEpi/defm")
 ## Example 1: Four outcomes
 
 In this example, we will simulate a dataset that contains 1,000
-individuals with four different outcomes. The outcomes, which are 0/1
-vectors, will be modeled as Markov processes of order one. Future states
-of this 0/1 vector are a function of the previous point in time. The
-following lines simulate the baseline data:
+individuals with four different outcomes. The outcomes, 0/1 vectors,
+will be modeled as Markov processes of order one. Future states of this
+0/1 vector are a function of the previous point in time. The following
+lines simulate the baseline data:
 
 ``` r
 library(defm)
@@ -90,7 +90,7 @@ For this example, we will simulate a model with the following features:
 In `defm`, transition statistics can be represented using matrices. In
 this case, the transition can be written as:
 
-![\begin{array}{c}t\\\t+1\end{array}\left\[\begin{array}{ccc}1 & \cdot & \cdot \\\\ 1 & 1 & \cdot\end{array}\right\]](https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D "\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]")
+![\begin{array}{c}t\\t+1\end{array}\left\[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right\]](https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D "\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]")
 
 which in `R` is
 
@@ -102,8 +102,8 @@ which in `R` is
 ```
 
 The `NA` entries in the matrix mean that those can be either zero or
-one. In other words, only values different from `NA` will be taken into
-account for specifying the terms. Here is the factory function:
+one. In other words, only values different from `NA` will be considered
+for specifying the terms. Here is the factory function:
 
 ``` r
 # Creating the model and adding a couple of terms
@@ -169,9 +169,9 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                                 Estimate Std. Error
-#> Num. of ones                   -1.966198 0.01401447
-#> Num. of ones x x1               1.957017 0.01548505
-#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516842
+#> Num. of ones                   -1.966198 0.01401444
+#> Num. of ones x x1               1.957017 0.01548504
+#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516844
 #> 
 #> -2 log L: 56154.07
 ```
@@ -268,13 +268,13 @@ We can also see the counts
 |   2 |   1 |   1 |   0 |  0.76 |  1.45 |            2 |              2.90 |                                                                                                                                                    0 |
 |   2 |   0 |   0 |   0 | -0.68 | -1.34 |            0 |              0.00 |                                                                                                                                                    0 |
 
-Finally, we can also take a look at the distribution of the log-odds.
-The way we calculate this is by looking at changes in a single entry of
-the array. For example, the log-odds of having
+Finally, we can also take a look at the distribution of the log-odds. We
+calculate this by looking at changes in a single entry of the array. For
+example, the log-odds of having
 ![y\_{12}: 0\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
 which are equivalent to
 
-![\log{\frac{\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)}{\mbox{Pr}\left(\left.y\_{12} = 0\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\;\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)\right)](https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29 "\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)")
+![\log{\frac{\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)}{\mbox{Pr}\left(\left.y\_{12} = 0\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)\right)](https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29 "\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)")
 
 We can use the `logodds` function for this:
 
@@ -294,9 +294,9 @@ individual moves sequentially through a set of states. In this example,
 there are ten different `y` variables, but the person can only have one
 of them as active (equal to one.) We can simulate such data using DEFM.
 
-We first need to generate the baseline data we will use for the
-simulation. This involves creating a matrix of size 20x10 (so we have 20
-time-points,) filled with zeros in all but the first entry:
+We first need to generate the baseline data for the simulation. This
+involves creating a matrix of size 20x10 (so we have 20 time points,)
+filled with zeros in all but the first entry:
 
 ``` r
 n   <- 20L
@@ -358,7 +358,7 @@ init_defm(d_model)
 Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
 ```
 
-The simulation should produce a nice looking figure:
+The simulation should produce a nice-looking figure:
 
 <img src="man/figures/README-chain1fig-1.png" width="100%" />
 
@@ -370,19 +370,23 @@ for specifying the transitions:
 ``` r
 d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 
+# We can use text formulas to add transition terms
+d_model_formula <- d_model_formula + 
+  "{y0, 0y1} > {0y0, y1}" +
+  "{y1, 0y2} > {0y1, y2}" +
+  "{y2, 0y3} > {0y2, y3}" +
+  "{y3, 0y4} > {0y3, y4}" +
+  "{y4, 0y5} > {0y4, y5}" +
+  "{y5, 0y6} > {0y5, y6}" +
+  "{y6, 0y7} > {0y6, y7}" +
+  "{y7, 0y8} > {0y7, y8}" +
+  "{y8, 0y9} > {0y8, y9}" +
+  "{0y0, y9} > {y0, 0y9}" 
+
 d_model_formula |>
-  term_defm_transition_formula("{y0, 0y1} > {0y0, y1}") |>
-  term_defm_transition_formula("{y1, 0y2} > {0y1, y2}") |>
-  term_defm_transition_formula("{y2, 0y3} > {0y2, y3}") |>
-  term_defm_transition_formula("{y3, 0y4} > {0y3, y4}") |>
-  term_defm_transition_formula("{y4, 0y5} > {0y4, y5}") |>
-  term_defm_transition_formula("{y5, 0y6} > {0y5, y6}") |>
-  term_defm_transition_formula("{y6, 0y7} > {0y6, y7}") |>
-  term_defm_transition_formula("{y7, 0y8} > {0y7, y8}") |>
-  term_defm_transition_formula("{y8, 0y9} > {0y8, y9}") |>
-  term_defm_transition_formula("{0y0, y9} > {y0, 0y9}") |>
-  term_defm_ones() |>
-  init_defm()
+  term_defm_ones()
+  
+init_defm(d_model_formula)
 
 # Inspecting
 d_model_formula
@@ -417,7 +421,28 @@ d_model_formula
 #>   9) y9
 
 # Simulating
-Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(100, n_y), -10))
+(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(20, n_y), -10)))
+#>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#>  [1,]    1    0    0    0    0    0    0    0    0     0
+#>  [2,]    0    1    0    0    0    0    0    0    0     0
+#>  [3,]    0    0    1    0    0    0    0    0    0     0
+#>  [4,]    0    0    0    1    0    0    0    0    0     0
+#>  [5,]    0    0    0    0    1    0    0    0    0     0
+#>  [6,]    0    0    0    0    0    1    0    0    0     0
+#>  [7,]    0    0    0    0    0    0    1    0    0     0
+#>  [8,]    0    0    0    0    0    0    0    1    0     0
+#>  [9,]    0    0    0    0    0    0    0    0    1     0
+#> [10,]    0    0    0    0    0    0    0    0    0     1
+#> [11,]    1    0    0    0    0    0    0    0    0     0
+#> [12,]    0    1    0    0    0    0    0    0    0     0
+#> [13,]    0    0    1    0    0    0    0    0    0     0
+#> [14,]    0    0    0    1    0    0    0    0    0     0
+#> [15,]    0    0    0    0    1    0    0    0    0     0
+#> [16,]    0    0    0    0    0    1    0    0    0     0
+#> [17,]    0    0    0    0    0    0    1    0    0     0
+#> [18,]    0    0    0    0    0    0    0    1    0     0
+#> [19,]    0    0    0    0    0    0    0    0    1     0
+#> [20,]    0    0    0    0    0    0    0    0    0     1
 ```
 
 The new simulation…

@@ -51,9 +51,7 @@ init_defm <- function(m) {
     invisible(.Call(`_defm_init_defm`, m))
 }
 
-#' @export
-#' @rdname defm_terms
-print.DEFM <- function(x) {
+print_defm_cpp <- function(x) {
     invisible(.Call(`_defm_print_defm`, x))
 }
 
@@ -94,6 +92,10 @@ sim_defm <- function(m, par, fill_t0 = TRUE) {
 
 #' @export
 #' @rdname DEFM
+#' @param i An integer scalar indicating which set of statistics to print (see details.)
+#' @details
+#' The `print_stats` function prints the supportset of the ith type
+#' of array in the model. 
 print_stats <- function(m, i = 0L) {
     invisible(.Call(`_defm_print_stats`, m, i))
 }
@@ -104,10 +106,8 @@ nterms_defm <- function(m) {
     .Call(`_defm_nterms_defm`, m)
 }
 
-#' @export
-#' @rdname DEFM
-names.DEFM <- function(m) {
-    .Call(`_defm_names_defm`, m)
+names.DEFM <- function(x) {
+    .Call(`_defm_names_defm`, x)
 }
 
 #' @export
@@ -153,6 +153,11 @@ motif_census_cpp <- function(m, locs) {
 
 #' Log odds (aka conditional prob, aka gibbs sampler)
 #' @export
+#' @param i,j The row and column of the array to turn on for the log odds.
+#' @param par The parameters of the model.
+#' @param m An object of class [DEFM].
+#' @return A numeric vector with the log-odds for each observation in the data.
+#' 
 logodds <- function(m, par, i, j) {
     .Call(`_defm_logodds`, m, par, i, j)
 }
@@ -234,6 +239,9 @@ term_defm_transition <- function(m, mat, idx = "", vname = "") {
 #' Transition effects can be specified using two sets of curly brackets and
 #' an greater-than symbol, i.e., `{...} > {...}`. The first set of brackets,
 #' which we call LHS, can only hold `row id` that are less than `m_order`.
+#' @param formula Character scalar (see details).
+#' @param idx Character scalar. Name of the variable to include in the term.
+#' @param vname Character scalar. Name to be assigned for the new term.
 #' @export
 #' @rdname defm_terms
 term_defm_transition_formula <- function(m, formula, idx = "", vname = "") {
@@ -246,12 +254,16 @@ term_defm_transition_formula <- function(m, formula, idx = "", vname = "") {
 #' intercept in a logistic regression. When `coords` is specified, then the
 #' function will add one intercept per outcome. These can be weighted by
 #' a covariate.
+#' @param coords Integer vector with the coordinates to include in the term.
 term_defm_logit_intercept <- function(m, coords = as.integer( c()), idx = "", vname = "") {
     invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, idx, vname))
 }
 
 #' Add rule for avoiding switching a one to zero in a Markov process
 #' @export
+#' @param m A DEFM object.
+#' @param idx Integer vector with the positions (starting from zero) of the
+#'   elements to avoid switching from one to zero.
 rule_not_one_to_zero <- function(m, idx) {
     invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
 }

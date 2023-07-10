@@ -122,12 +122,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // names_defm
-CharacterVector names_defm(SEXP m);
-RcppExport SEXP _defm_names_defm(SEXP mSEXP) {
+CharacterVector names_defm(SEXP x);
+RcppExport SEXP _defm_names_defm(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    rcpp_result_gen = Rcpp::wrap(names_defm(m));
+    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(names_defm(x));
     return rcpp_result_gen;
 END_RCPP
 }
