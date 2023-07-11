@@ -61,3 +61,6 @@ Markov processes.
 The \code{print_stats} function prints the supportset of the ith type
 of array in the model.
 }
+\examples{
+# simulate data
+}

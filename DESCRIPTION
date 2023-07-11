@@ -1,12 +1,15 @@
 Package: defm
 Type: Package
-Title: Fit and simulate binary exponential family models
+Title: Estimation and simulation of Multi-binary response models
 Version: 0.1.0
 Authors@R: c(
     person("George", "Vega Yon", role=c("aut", "cre"),
     email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")))
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Multi-binary response models are a class of models that
+    allow for the estimation of multiple binary outcomes simultaneously.
+    This package provides functions to estimate and simulate these models using
+    the Discrete Exponential-Family Models [DEFM] framework. In it, we implement
+    the models described in Vega Yon et al. (2023) <arXiv:2211.00627>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -17,6 +20,7 @@ LinkingTo:
 Imports: 
     Rcpp
 Depends:
+    R (>= 2.10),
     stats4
 Suggests:
     texreg

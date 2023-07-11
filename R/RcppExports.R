@@ -17,6 +17,8 @@
 #'
 #' @name DEFM
 #' @aliases new_defm defm
+#' @examples
+#' # simulate data
 new_defm_cpp <- function(id, Y, X, order = 1L) {
     .Call(`_defm_new_defm`, id, Y, X, order)
 }
@@ -95,7 +97,7 @@ sim_defm <- function(m, par, fill_t0 = TRUE) {
 #' @param i An integer scalar indicating which set of statistics to print (see details.)
 #' @details
 #' The `print_stats` function prints the supportset of the ith type
-#' of array in the model. 
+#' of array in the model.
 print_stats <- function(m, i = 0L) {
     invisible(.Call(`_defm_print_stats`, m, i))
 }
@@ -157,7 +159,7 @@ motif_census_cpp <- function(m, locs) {
 #' @param par The parameters of the model.
 #' @param m An object of class [DEFM].
 #' @return A numeric vector with the log-odds for each observation in the data.
-#' 
+#'
 logodds <- function(m, par, i, j) {
     .Call(`_defm_logodds`, m, par, i, j)
 }

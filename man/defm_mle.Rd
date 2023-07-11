@@ -21,11 +21,47 @@ summary_table(object, as_texreg = FALSE, ...)
 
 \item{as_texreg}{When \code{TRUE}, wraps the result in a texreg object}
 }
+\value{
+An object of class \link[stats4:mle]{stats4::mle}.
+}
 \description{
-Maximum Likelihood Estimation of DEFM
+Fits a Discrete Exponential-Family Model using Maximum Likelihood.
 }
 \details{
 The function \code{summary_table} computes pvalues and returns a table
 with the estimates, se, and pvalues. If \code{as_texreg = TRUE}, then it will
 return a texreg object.
+}
+\examples{
+#' Using Valente's SNS data
+data(valentesns)
+
+# Creating the DEFM object
+logit_0 <- new_defm(
+  id = valentesnsList$id,
+  X = valentesnsList$X,
+  Y = valentesnsList$Y[,1,drop=FALSE],
+  order = 0
+)
+
+# Building the model
+term_defm_logit_intercept(logit_0)
+term_defm_logit_intercept(logit_0, idx = "Hispanic")
+term_defm_logit_intercept(logit_0, idx = "exposure_smoke", vname = "Smoke Exp")
+term_defm_logit_intercept(logit_0, idx = "Grades")
+init_defm(logit_0) # Needs to be initialized
+
+# Fitting the model
+res_0 <- defm_mle(logit_0)
+
+# Refitting the model using GLM
+res_glm <- with(
+  valentesnsList,
+  glm(Y[,1] ~ X[,1] + X[,3] + X[,7], family = binomial())
+  )
+
+# Comparing results
+summary_table(res_0)
+summary(res_glm)
+
 }

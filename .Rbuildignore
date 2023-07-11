@@ -10,3 +10,4 @@ src/^\.gitignore
 \.Rproj\.user
 ^\.git
 ^\.github
+^data-raw$

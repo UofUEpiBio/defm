@@ -1,4 +1,7 @@
 #' Maximum Likelihood Estimation of DEFM
+#'
+#' Fits a Discrete Exponential-Family Model using Maximum Likelihood.
+#'
 #' @param object An object of class [DEFM].
 #' @param start Double vector. Starting point for the MLE.
 #' @param lower,upper Lower and upper limits for the optimization (passed to
@@ -7,6 +10,39 @@
 #' @export
 #' @import stats4
 #' @importFrom stats pnorm
+#' @return An object of class [stats4::mle].
+#' @examples
+#' #' Using Valente's SNS data
+#' data(valentesns)
+#' 
+#' # Creating the DEFM object
+#' logit_0 <- new_defm(
+#'   id = valentesnsList$id,
+#'   X = valentesnsList$X,
+#'   Y = valentesnsList$Y[,1,drop=FALSE],
+#'   order = 0
+#' )
+#' 
+#' # Building the model
+#' term_defm_logit_intercept(logit_0)
+#' term_defm_logit_intercept(logit_0, idx = "Hispanic")
+#' term_defm_logit_intercept(logit_0, idx = "exposure_smoke", vname = "Smoke Exp")
+#' term_defm_logit_intercept(logit_0, idx = "Grades")
+#' init_defm(logit_0) # Needs to be initialized
+#' 
+#' # Fitting the model
+#' res_0 <- defm_mle(logit_0)
+#' 
+#' # Refitting the model using GLM
+#' res_glm <- with(
+#'   valentesnsList,
+#'   glm(Y[,1] ~ X[,1] + X[,3] + X[,7], family = binomial())
+#'   )
+#' 
+#' # Comparing results
+#' summary_table(res_0)
+#' summary(res_glm)
+#' 
 defm_mle <- function(
   object,
   start,

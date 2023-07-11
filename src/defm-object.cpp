@@ -20,6 +20,8 @@ using namespace Rcpp;
 //'
 //' @name DEFM
 //' @aliases new_defm defm
+//' @examples
+//' # simulate data
 // [[Rcpp::export(rng = false, name = 'new_defm_cpp')]]
 SEXP new_defm(
     const SEXP & id,
@@ -222,7 +224,7 @@ IntegerMatrix sim_defm(
 //' @param i An integer scalar indicating which set of statistics to print (see details.)
 //' @details
 //' The `print_stats` function prints the supportset of the ith type
-//' of array in the model. 
+//' of array in the model.
 // [[Rcpp::export(rng = false, invisible = true)]]
 int print_stats(SEXP m, int i = 0)
 {
@@ -401,7 +403,7 @@ NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 //' @param par The parameters of the model.
 //' @param m An object of class [DEFM].
 //' @return A numeric vector with the log-odds for each observation in the data.
-//' 
+//'
 // [[Rcpp::export(rng = false)]]
 NumericVector logodds(
     SEXP m,
