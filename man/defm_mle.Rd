@@ -34,7 +34,7 @@ return a texreg object.
 }
 \examples{
 #' Using Valente's SNS data
-data(valentesns)
+data(valentesnsList)
 
 # Creating the DEFM object
 logit_0 <- new_defm(

@@ -13,7 +13,7 @@
 #' @return An object of class [stats4::mle].
 #' @examples
 #' #' Using Valente's SNS data
-#' data(valentesns)
+#' data(valentesnsList)
 #' 
 #' # Creating the DEFM object
 #' logit_0 <- new_defm(
