@@ -94,7 +94,7 @@ print.defm_motif_census <- function(x, ...) {
   print(as.data.frame(x))
   cat("(*): No change\n")
 
-  return(x)
+  invisible(x)
 
 }
 
