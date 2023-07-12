@@ -11,3 +11,5 @@ src/^\.gitignore
 ^\.git
 ^\.github
 ^data-raw$
+Makefile
+defm\.code-workspace

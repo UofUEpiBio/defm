@@ -53,6 +53,8 @@ person id.}
 \item{i}{An integer scalar indicating which set of statistics to print (see details.)}
 
 \item{object}{An object of class \link{DEFM}.}
+
+\item{...}{Not used.}
 }
 \value{
 An external pointer of class \code{DEFM.}
@@ -108,7 +110,7 @@ of array in the model.
 # simulate data
 }
 \references{
-Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{arXiv:2211.00627}
+Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{http://arxiv.org/abs/2211.00627}
 }
 \seealso{
 \code{\link[=defm_mle]{defm_mle()}} for maximum likelihood estimation and \code{\link[=loglike_defm]{loglike_defm()}}
