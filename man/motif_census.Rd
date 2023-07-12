@@ -2,6 +2,7 @@
 % Please edit documentation in R/motif_census.R
 \name{motif_census}
 \alias{motif_census}
+\alias{defm_motif_census}
 \title{Motif census}
 \usage{
 motif_census(m, locs)

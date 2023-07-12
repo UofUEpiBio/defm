@@ -13,6 +13,7 @@
 \alias{ncol_defm_x}
 \alias{nobs_defm}
 \alias{morder_defm}
+\alias{nobs.DEFM}
 \title{Discrete Exponential Family Model (DEFM)}
 \usage{
 new_defm_cpp(id, Y, X, order = 1L)
@@ -34,6 +35,8 @@ nobs_defm(m)
 morder_defm(m)
 
 new_defm(id, Y, X, order = 1)
+
+nobs.DEFM(object, ...)
 }
 \arguments{
 \item{id}{Integer vector of length \code{n}. Observation ids, for example,
@@ -48,6 +51,8 @@ person id.}
 \item{m}{An object of class \code{DEFM}.}
 
 \item{i}{An integer scalar indicating which set of statistics to print (see details.)}
+
+\item{object}{An object of class \link{DEFM}.}
 }
 \value{
 An external pointer of class \code{DEFM.}
@@ -79,6 +84,10 @@ model.
 }
 
 An external pointer of class \code{DEFM.}
+
+\itemize{
+\item \code{nobs} is an alias for \code{nobs_defm()}.
+}
 }
 \description{
 Discrete Exponential Family Models (DEFMs) are models from the exponential

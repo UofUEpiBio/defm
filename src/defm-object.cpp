@@ -450,6 +450,7 @@ NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 //' @param m An object of class [DEFM].
 //' @return - `logodds` returns a numeric vector with the log-odds for each observation in the data.
 //' @rdname defm_mle
+//' @export
 // [[Rcpp::export(rng = false)]]
 NumericVector logodds(
     SEXP m,

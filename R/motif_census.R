@@ -28,6 +28,7 @@
 #' # Motif counts featuring only the first two variables
 #' motif_census(mymodel, locs = 0:1)
 #' @name motif_census
+#' @aliases defm_motif_census
 #' @references
 #' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. <arXiv:2211.00627>
 motif_census <- function(m, locs) {

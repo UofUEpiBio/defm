@@ -206,6 +206,7 @@ motif_census_cpp <- function(m, locs) {
 #' @param m An object of class [DEFM].
 #' @return - `logodds` returns a numeric vector with the log-odds for each observation in the data.
 #' @rdname defm_mle
+#' @export
 logodds <- function(m, par, i, j) {
     .Call(`_defm_logodds`, m, par, i, j)
 }
