@@ -9,6 +9,30 @@ get_stats(m)
 \arguments{
 \item{m}{An object of class \link{DEFM}.}
 }
+\value{
+A matrix with the counts of the sufficient statistics.
+}
 \description{
-Get sufficient statistics counts
+This function computes the individual counts of the sufficient statistics
+included in the model.
+}
+\examples{
+data(valentesnsList)
+
+mymodel <- new_defm(
+  id = valentesnsList$id,
+  Y = valentesnsList$Y,
+  X = valentesnsList$X,
+  order = 1
+)
+
+# Adding the intercept terms and a motif from tobacco to mj
+term_defm_logit_intercept(mymodel)
+term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+
+# Initialize the model
+init_defm(mymodel)
+
+# Get the counts
+get_stats(mymodel)
 }

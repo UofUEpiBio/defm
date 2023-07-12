@@ -52,6 +52,32 @@ person id.}
 \value{
 An external pointer of class \code{DEFM.}
 
+\itemize{
+\item \code{nterms_defm} returns the number of terms in the model.
+}
+
+\itemize{
+\item \code{nrow_defm} returns the number of rows in the model.
+}
+
+\itemize{
+\item \code{ncol_defm_y} returns the number of output variables in
+the model.
+}
+
+\itemize{
+\item \code{ncol_defm_x} returns the number of covariates in the model.
+}
+
+\itemize{
+\item \code{nobs_defm} returns the number of observations (events) in the
+model.
+}
+
+\itemize{
+\item \code{morder_defm} returns the order of the Markov process.
+}
+
 An external pointer of class \code{DEFM.}
 }
 \description{

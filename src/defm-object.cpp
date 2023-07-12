@@ -253,6 +253,7 @@ int print_stats(SEXP m, int i = 0)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `nterms_defm` returns the number of terms in the model.
 // [[Rcpp::export(rng = false)]]
 int nterms_defm(SEXP m)
 {
@@ -271,6 +272,7 @@ CharacterVector names_defm(SEXP x)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `nrow_defm` returns the number of rows in the model.
 // [[Rcpp::export(rng = false)]]
 int nrow_defm(SEXP m)
 {
@@ -280,6 +282,8 @@ int nrow_defm(SEXP m)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `ncol_defm_y` returns the number of output variables in 
+//' the model.
 // [[Rcpp::export(rng = false)]]
 int ncol_defm_y(SEXP m)
 {
@@ -292,6 +296,7 @@ int ncol_defm_y(SEXP m)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `ncol_defm_x` returns the number of covariates in the model.
 // [[Rcpp::export(rng = false)]]
 int ncol_defm_x(SEXP m)
 {
@@ -304,6 +309,8 @@ int ncol_defm_x(SEXP m)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `nobs_defm` returns the number of observations (events) in the
+//' model.
 // [[Rcpp::export(rng = false)]]
 int nobs_defm(SEXP m)
 {
@@ -316,6 +323,7 @@ int nobs_defm(SEXP m)
 
 //' @export
 //' @rdname DEFM
+//' @returns - `morder_defm` returns the order of the Markov process.
 // [[Rcpp::export(rng = false)]]
 int morder_defm(SEXP m)
 {
@@ -327,8 +335,31 @@ int morder_defm(SEXP m)
 }
 
 //' Get sufficient statistics counts
+//' 
+//' This function computes the individual counts of the sufficient statistics
+//' included in the model. 
 //' @param m An object of class [DEFM].
 //' @export
+//' @return A matrix with the counts of the sufficient statistics.
+//' @examples
+//' data(valentesnsList)
+//' 
+//' mymodel <- new_defm(
+//'   id = valentesnsList$id,
+//'   Y = valentesnsList$Y,
+//'   X = valentesnsList$X,
+//'   order = 1
+//' )
+//' 
+//' # Adding the intercept terms and a motif from tobacco to mj
+//' term_defm_logit_intercept(mymodel)
+//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' 
+//' # Initialize the model
+//' init_defm(mymodel)
+//' 
+//' # Get the counts
+//' get_stats(mymodel)
 // [[Rcpp::export(rng = false)]]
 NumericMatrix get_stats(SEXP m)
 {
@@ -414,13 +445,11 @@ NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 
 }
 
-//' Log odds (aka conditional prob, aka gibbs sampler)
-//' @export
 //' @param i,j The row and column of the array to turn on for the log odds.
 //' @param par The parameters of the model.
 //' @param m An object of class [DEFM].
-//' @return A numeric vector with the log-odds for each observation in the data.
-//'
+//' @return - `logodds` returns a numeric vector with the log-odds for each observation in the data.
+//' @rdname defm_mle
 // [[Rcpp::export(rng = false)]]
 NumericVector logodds(
     SEXP m,

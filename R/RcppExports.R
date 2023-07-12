@@ -121,6 +121,7 @@ print_stats <- function(m, i = 0L) {
 
 #' @export
 #' @rdname DEFM
+#' @returns - `nterms_defm` returns the number of terms in the model.
 nterms_defm <- function(m) {
     .Call(`_defm_nterms_defm`, m)
 }
@@ -131,37 +132,67 @@ names.DEFM <- function(x) {
 
 #' @export
 #' @rdname DEFM
+#' @returns - `nrow_defm` returns the number of rows in the model.
 nrow_defm <- function(m) {
     .Call(`_defm_nrow_defm`, m)
 }
 
 #' @export
 #' @rdname DEFM
+#' @returns - `ncol_defm_y` returns the number of output variables in 
+#' the model.
 ncol_defm_y <- function(m) {
     .Call(`_defm_ncol_defm_y`, m)
 }
 
 #' @export
 #' @rdname DEFM
+#' @returns - `ncol_defm_x` returns the number of covariates in the model.
 ncol_defm_x <- function(m) {
     .Call(`_defm_ncol_defm_x`, m)
 }
 
 #' @export
 #' @rdname DEFM
+#' @returns - `nobs_defm` returns the number of observations (events) in the
+#' model.
 nobs_defm <- function(m) {
     .Call(`_defm_nobs_defm`, m)
 }
 
 #' @export
 #' @rdname DEFM
+#' @returns - `morder_defm` returns the order of the Markov process.
 morder_defm <- function(m) {
     .Call(`_defm_morder_defm`, m)
 }
 
 #' Get sufficient statistics counts
+#' 
+#' This function computes the individual counts of the sufficient statistics
+#' included in the model. 
 #' @param m An object of class [DEFM].
 #' @export
+#' @return A matrix with the counts of the sufficient statistics.
+#' @examples
+#' data(valentesnsList)
+#' 
+#' mymodel <- new_defm(
+#'   id = valentesnsList$id,
+#'   Y = valentesnsList$Y,
+#'   X = valentesnsList$X,
+#'   order = 1
+#' )
+#' 
+#' # Adding the intercept terms and a motif from tobacco to mj
+#' term_defm_logit_intercept(mymodel)
+#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' 
+#' # Initialize the model
+#' init_defm(mymodel)
+#' 
+#' # Get the counts
+#' get_stats(mymodel)
 get_stats <- function(m) {
     .Call(`_defm_get_stats`, m)
 }
@@ -170,13 +201,11 @@ motif_census_cpp <- function(m, locs) {
     .Call(`_defm_motif_census_cpp`, m, locs)
 }
 
-#' Log odds (aka conditional prob, aka gibbs sampler)
-#' @export
 #' @param i,j The row and column of the array to turn on for the log odds.
 #' @param par The parameters of the model.
 #' @param m An object of class [DEFM].
-#' @return A numeric vector with the log-odds for each observation in the data.
-#'
+#' @return - `logodds` returns a numeric vector with the log-odds for each observation in the data.
+#' @rdname defm_mle
 logodds <- function(m, par, i, j) {
     .Call(`_defm_logodds`, m, par, i, j)
 }

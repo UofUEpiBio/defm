@@ -1,4 +1,4 @@
-docs: clean
+docs: 
 	Rscript -e 'devtools::document()'
 
 build:
