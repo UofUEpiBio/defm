@@ -79,12 +79,29 @@ SEXP set_names(
 //' Access to the names of a model's datasets
 //'
 //' Retrieve the column names of the dependent variable (`y`) and independent
-//' variable (`x`.)
+//' variable (`x`) of an object of class [DEFM].
 //'
 //' @param m An object of class [DEFM].
 //' @name defm-names
 //' @returns A character vector.
 //' @export
+//' @return A character vector with the names of the dependent or independent
+//' variables.
+//' @examples
+//' #' Using Valente's SNS data
+//' data(valentesnsList)
+//' 
+//' # Creating the DEFM object
+//' mymodel <- new_defm(
+//'   id = valentesnsList$id,
+//'   X = valentesnsList$X,
+//'   Y = valentesnsList$Y,
+//'   order = 0
+//' )
+//' 
+//' # Getting the names
+//' get_X_names(mymodel)
+//' get_Y_names(mymodel)
 // [[Rcpp::export(rng = false)]]
 CharacterVector get_Y_names(
     SEXP m

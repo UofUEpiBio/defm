@@ -15,8 +15,27 @@ get_X_names(m)
 }
 \value{
 A character vector.
+
+A character vector with the names of the dependent or independent
+variables.
 }
 \description{
 Retrieve the column names of the dependent variable (\code{y}) and independent
-variable (\code{x}.)
+variable (\code{x}) of an object of class \link{DEFM}.
+}
+\examples{
+#' Using Valente's SNS data
+data(valentesnsList)
+
+# Creating the DEFM object
+mymodel <- new_defm(
+  id = valentesnsList$id,
+  X = valentesnsList$X,
+  Y = valentesnsList$Y,
+  order = 0
+)
+
+# Getting the names
+get_X_names(mymodel)
+get_Y_names(mymodel)
 }

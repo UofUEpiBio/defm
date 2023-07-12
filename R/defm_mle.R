@@ -10,6 +10,18 @@
 #' @export
 #' @import stats4
 #' @importFrom stats pnorm
+#' @details 
+#' The likelihood function of the DEFM is closely-related to the 
+#' Exponential-Family Random Graph Model \[ERGM\]. Furthermore, the DEFM can 
+#' be treated as a generalization of the ERGM. The model implemented here
+#' can be viewed as an ERGM for a bipartite network, where the actors are
+#' individuals and the events are the binary outputs.
+#' 
+#' If the model features no markov terms, i.e., terms that depend on more than
+#' one output, then the model is equivalent to a logistic regression. The 
+#' example below shows this equivalence.
+#' 
+#'  
 #' @return An object of class [stats4::mle].
 #' @examples
 #' #' Using Valente's SNS data
@@ -26,7 +38,10 @@
 #' # Building the model
 #' term_defm_logit_intercept(logit_0)
 #' term_defm_logit_intercept(logit_0, idx = "Hispanic")
-#' term_defm_logit_intercept(logit_0, idx = "exposure_smoke", vname = "Smoke Exp")
+#' term_defm_logit_intercept(
+#'  logit_0, idx = "exposure_smoke",
+#'  vname = "Smoke Exp"
+#' )
 #' term_defm_logit_intercept(logit_0, idx = "Grades")
 #' init_defm(logit_0) # Needs to be initialized
 #' 
@@ -43,6 +58,13 @@
 #' summary_table(res_0)
 #' summary(res_glm)
 #' 
+#' # Comparing the logodds
+#' head(logodds(logit_0, par = coef(res_0), i = 0, j = 0))
+#' 
+#' @seealso [DEFM] for objects of class DEFM and [loglike_defm()] for the
+#' log-likelihood function of DEFMs.
+#' @references 
+#' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. <arXiv:2211.00627>
 defm_mle <- function(
   object,
   start,
