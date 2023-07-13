@@ -31,7 +31,7 @@
 #' @name motif_census
 #' @aliases defm_motif_census
 #' @references
-#' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{http://arxiv.org/abs/2211.00627}
+#' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}
 motif_census <- function(m, locs) {
 
   # No repeated values

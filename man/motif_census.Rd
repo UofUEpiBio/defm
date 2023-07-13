@@ -42,5 +42,5 @@ init_defm(mymodel)
 motif_census(mymodel, locs = 0:1)
 }
 \references{
-Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{http://arxiv.org/abs/2211.00627}
+Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}
 }

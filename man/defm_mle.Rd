@@ -95,7 +95,7 @@ head(logodds(logit_0, par = coef(res_0), i = 0, j = 0))
 
 }
 \references{
-Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{http://arxiv.org/abs/2211.00627}
+Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}
 }
 \seealso{
 \link{DEFM} for objects of class DEFM and \code{\link[=loglike_defm]{loglike_defm()}} for the

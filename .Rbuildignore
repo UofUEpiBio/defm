@@ -13,3 +13,4 @@ src/^\.gitignore
 ^data-raw$
 Makefile
 defm\.code-workspace
+README\.html
