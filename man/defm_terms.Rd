@@ -8,6 +8,7 @@
 \alias{term_defm_transition}
 \alias{term_defm_transition_formula}
 \alias{term_defm_logit_intercept}
+\alias{rule_not_one_to_zero}
 \alias{+.DEFM}
 \title{Model specification for DEFM}
 \usage{
@@ -20,6 +21,8 @@ term_defm_transition(m, mat, idx = "", vname = "")
 term_defm_transition_formula(m, formula, idx = "", vname = "")
 
 term_defm_logit_intercept(m, coords = as.integer(c()), idx = "", vname = "")
+
+rule_not_one_to_zero(m, idx)
 
 \method{+}{DEFM}(e1, e2)
 }
@@ -99,5 +102,25 @@ intercept in a logistic regression. When \code{coords} is specified, then the
 function will add one intercept per outcome. These can be weighted by
 a covariate.
 
+The function \code{rule_not_one_to_zero} will avoid the transition one to zero in a Markov process.
+
 The \code{+} method is a shortcut for term_formula
+}
+\examples{
+# Loading Valtente's SNS data
+data(valentesnsList)
+
+mymodel <- new_defm(
+  id    = valentesnsList$id,
+  Y     = valentesnsList$Y,
+  X     = valentesnsList$X,
+  order = 1
+)
+
+# Adding the intercept terms and a motif from tobacco to mj
+term_defm_logit_intercept(mymodel)
+term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+
+Inspecting the model
+mymodel
 }

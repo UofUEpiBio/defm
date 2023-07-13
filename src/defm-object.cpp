@@ -21,7 +21,26 @@ using namespace Rcpp;
 //' @name DEFM
 //' @aliases new_defm defm
 //' @examples
-//' # simulate data
+//' # Loading Valente's SNS data
+//' data(valentesnsList)
+//' 
+//' mymodel <- new_defm(
+//'   id = valentesnsList$id,
+//'   Y = valentesnsList$Y,
+//'   X = valentesnsList$X,
+//'   order = 1
+//' )
+//' 
+//' # Adding the intercept terms and a motif from tobacco to mj
+//' term_defm_logit_intercept(mymodel)
+//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' 
+//' # Initialize the model
+//' init_defm(mymodel)
+//' 
+//' # Fitting the MLE
+/// defm_mle(mymodel)
+//' 
 // [[Rcpp::export(rng = false, name = 'new_defm_cpp')]]
 SEXP new_defm(
     const SEXP & id,
@@ -155,7 +174,23 @@ SEXP print_defm(SEXP x)
 //' @return
 //' Numeric, the computed likelihood or log-likelihood of the model.
 //' @export
+//' @examples
+//' # Loading Valtente's SNS data
+//' data(valentesnsList)
+//' 
+//' mymodel <- new_defm(
+//'   id    = valentesnsList$id,
+//'   Y     = valentesnsList$Y,
+//'   X     = valentesnsList$X,
+//'   order = 1
+//' )
+//' 
+//' # Adding the intercept terms and a motif from tobacco to mj
+//' term_defm_logit_intercept(mymodel)
+//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 //'
+//' Computing the log-likelihood
+//' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
 // [[Rcpp::export(rng = false)]]
 double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
 {
@@ -359,7 +394,7 @@ int morder_defm(SEXP m)
 //' init_defm(mymodel)
 //' 
 //' # Get the counts
-//' get_stats(mymodel)
+//' head(get_stats(mymodel))
 // [[Rcpp::export(rng = false)]]
 NumericMatrix get_stats(SEXP m)
 {

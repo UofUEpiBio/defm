@@ -34,5 +34,5 @@ term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 init_defm(mymodel)
 
 # Get the counts
-get_stats(mymodel)
+head(get_stats(mymodel))
 }

@@ -18,7 +18,27 @@
 #' @name DEFM
 #' @aliases new_defm defm
 #' @examples
-#' # simulate data
+#' # Loading Valente's SNS data
+#' data(valentesnsList)
+#' 
+#' mymodel <- new_defm(
+#'   id = valentesnsList$id,
+#'   Y = valentesnsList$Y,
+#'   X = valentesnsList$X,
+#'   order = 1
+#' )
+#' 
+#' # Adding the intercept terms and a motif from tobacco to mj
+#' term_defm_logit_intercept(mymodel)
+#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' 
+#' # Initialize the model
+#' init_defm(mymodel)
+#' 
+#' # Fitting the MLE
+NULL
+
+#' 
 new_defm_cpp <- function(id, Y, X, order = 1L) {
     .Call(`_defm_new_defm`, id, Y, X, order)
 }
@@ -83,7 +103,23 @@ print_defm_cpp <- function(x) {
 #' @return
 #' Numeric, the computed likelihood or log-likelihood of the model.
 #' @export
+#' @examples
+#' # Loading Valtente's SNS data
+#' data(valentesnsList)
+#' 
+#' mymodel <- new_defm(
+#'   id    = valentesnsList$id,
+#'   Y     = valentesnsList$Y,
+#'   X     = valentesnsList$X,
+#'   order = 1
+#' )
+#' 
+#' # Adding the intercept terms and a motif from tobacco to mj
+#' term_defm_logit_intercept(mymodel)
+#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #'
+#' Computing the log-likelihood
+#' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
 loglike_defm <- function(m, par, as_log = TRUE) {
     .Call(`_defm_loglike_defm`, m, par, as_log)
 }
@@ -192,7 +228,7 @@ morder_defm <- function(m) {
 #' init_defm(mymodel)
 #' 
 #' # Get the counts
-#' get_stats(mymodel)
+#' head(get_stats(mymodel))
 get_stats <- function(m) {
     .Call(`_defm_get_stats`, m)
 }
@@ -226,6 +262,23 @@ is_motif <- function(m) {
 #'
 #' @name defm_terms
 #' @aliases terms_defm
+#' @examples
+#' # Loading Valtente's SNS data
+#' data(valentesnsList)
+#' 
+#' mymodel <- new_defm(
+#'   id    = valentesnsList$id,
+#'   Y     = valentesnsList$Y,
+#'   X     = valentesnsList$X,
+#'   order = 1
+#' )
+#' 
+#' # Adding the intercept terms and a motif from tobacco to mj
+#' term_defm_logit_intercept(mymodel)
+#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#'
+#' Inspecting the model
+#' mymodel
 term_defm_ones <- function(m, idx = "", vname = "") {
     invisible(.Call(`_defm_term_defm_ones`, m, idx, vname))
 }
@@ -308,11 +361,9 @@ term_defm_logit_intercept <- function(m, coords = as.integer( c()), idx = "", vn
     invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, idx, vname))
 }
 
-#' Add rule for avoiding switching a one to zero in a Markov process
+#' @details The function `rule_not_one_to_zero` will avoid the transition one to zero in a Markov process.
 #' @export
-#' @param m A DEFM object.
-#' @param idx Integer vector with the positions (starting from zero) of the
-#'   elements to avoid switching from one to zero.
+#' @rdname defm_terms
 rule_not_one_to_zero <- function(m, idx) {
     invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
 }

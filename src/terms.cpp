@@ -16,6 +16,23 @@ using namespace Rcpp;
 //'
 //' @name defm_terms
 //' @aliases terms_defm
+//' @examples
+//' # Loading Valtente's SNS data
+//' data(valentesnsList)
+//' 
+//' mymodel <- new_defm(
+//'   id    = valentesnsList$id,
+//'   Y     = valentesnsList$Y,
+//'   X     = valentesnsList$X,
+//'   order = 1
+//' )
+//' 
+//' # Adding the intercept terms and a motif from tobacco to mj
+//' term_defm_logit_intercept(mymodel)
+//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//'
+//' Inspecting the model
+//' mymodel
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 {
@@ -239,11 +256,9 @@ SEXP term_defm_logit_intercept(
 }
 
 
-//' Add rule for avoiding switching a one to zero in a Markov process
+//' @details The function `rule_not_one_to_zero` will avoid the transition one to zero in a Markov process.
 //' @export
-//' @param m A DEFM object.
-//' @param idx Integer vector with the positions (starting from zero) of the
-//'   elements to avoid switching from one to zero.
+//' @rdname defm_terms
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP rule_not_one_to_zero(
   SEXP m,

@@ -21,6 +21,7 @@ Calculates the total motif counts for a given model, in terms
 of the number of times each motif appears in the data.
 }
 \examples{
+# Loading Valente's SNS data
 data(valentesnsList)
 
 mymodel <- new_defm(

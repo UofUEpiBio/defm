@@ -2,7 +2,6 @@
 % Please edit documentation in R/RcppExports.R, R/defm-package.R
 \name{DEFM}
 \alias{DEFM}
-\alias{new_defm_cpp}
 \alias{new_defm}
 \alias{defm}
 \alias{init_defm}
@@ -16,8 +15,6 @@
 \alias{nobs.DEFM}
 \title{Discrete Exponential Family Model (DEFM)}
 \usage{
-new_defm_cpp(id, Y, X, order = 1L)
-
 init_defm(m)
 
 print_stats(m, i = 0L)
@@ -39,6 +36,10 @@ new_defm(id, Y, X, order = 1)
 nobs.DEFM(object, ...)
 }
 \arguments{
+\item{m}{An object of class \code{DEFM}.}
+
+\item{i}{An integer scalar indicating which set of statistics to print (see details.)}
+
 \item{id}{Integer vector of length \code{n}. Observation ids, for example,
 person id.}
 
@@ -47,10 +48,6 @@ person id.}
 \item{X}{Numeric matrix of covariates of size \code{n_x} by \code{n}.}
 
 \item{order}{Integer. Order of the markov process, by default, 1.}
-
-\item{m}{An object of class \code{DEFM}.}
-
-\item{i}{An integer scalar indicating which set of statistics to print (see details.)}
 
 \item{object}{An object of class \link{DEFM}.}
 
@@ -107,7 +104,24 @@ The \code{print_stats} function prints the supportset of the ith type
 of array in the model.
 }
 \examples{
-# simulate data
+# Loading Valente's SNS data
+data(valentesnsList)
+
+mymodel <- new_defm(
+  id = valentesnsList$id,
+  Y = valentesnsList$Y,
+  X = valentesnsList$X,
+  order = 1
+)
+
+# Adding the intercept terms and a motif from tobacco to mj
+term_defm_logit_intercept(mymodel)
+term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+
+# Initialize the model
+init_defm(mymodel)
+
+# Fitting the MLE
 }
 \references{
 Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{http://arxiv.org/abs/2211.00627}

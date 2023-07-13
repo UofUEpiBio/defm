@@ -4,7 +4,12 @@ Title: Estimation and simulation of Multi-binary response models
 Version: 0.1.0
 Authors@R: c(
     person("George", "Vega Yon", role=c("aut", "cre"),
-    email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")))
+    email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
+    person(
+        "Department of Defense",
+        role = "fnd",
+        comment = "Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443"
+        ))
 Description: Multi-binary response models are a class of models that
     allow for the estimation of multiple binary outcomes simultaneously.
     This package provides functions to estimate and simulate these models using

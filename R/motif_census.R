@@ -9,6 +9,7 @@
 #' @export
 #' @returns A matrix of class [defm_motif_census] with the motif counts.
 #' @examples
+#' # Loading Valente's SNS data
 #' data(valentesnsList)
 #' 
 #' mymodel <- new_defm(
