@@ -54,6 +54,8 @@ term_defm_transition_formula(m, formula, idx = "", vname = "")
 
 term_defm_logit_intercept(m, coords = as.integer(c()), idx = "", vname = "")
 
+rule_not_one_to_zero(m, idx)
+
 # S3 method for DEFM
 +(e1, e2)</code></pre></div>
     </div>
@@ -141,9 +143,14 @@ which we call LHS, can only hold <code>row id</code> that are less than <code>m_
 intercept in a logistic regression. When <code>coords</code> is specified, then the
 function will add one intercept per outcome. These can be weighted by
 a covariate.</p>
+<p>The function <code>rule_not_one_to_zero</code> will avoid the transition one to zero in a Markov process.</p>
 <p>The <code>+</code> method is a shortcut for term_formula</p>
     </div>
 
+    <div id="ref-examples">
+    <h2>Examples</h2>
+    
+    </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
@@ -152,7 +159,7 @@ a covariate.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by George Vega Yon.</p>
+  <p></p><p>Developed by George Vega Yon, Department of Defense.</p>
 </div>
 
 <div class="pkgdown">
