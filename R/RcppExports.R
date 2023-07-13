@@ -118,7 +118,7 @@ print_defm_cpp <- function(x) {
 #' term_defm_logit_intercept(mymodel)
 #' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #'
-#' Computing the log-likelihood
+#' # Computing the log-likelihood
 #' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
 loglike_defm <- function(m, par, as_log = TRUE) {
     .Call(`_defm_loglike_defm`, m, par, as_log)
