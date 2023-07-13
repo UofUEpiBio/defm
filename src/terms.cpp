@@ -31,7 +31,7 @@ using namespace Rcpp;
 //' term_defm_logit_intercept(mymodel)
 //' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 //'
-//' Inspecting the model
+//' # Inspecting the model
 //' mymodel
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")

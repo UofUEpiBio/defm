@@ -277,7 +277,7 @@ is_motif <- function(m) {
 #' term_defm_logit_intercept(mymodel)
 #' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #'
-#' Inspecting the model
+#' # Inspecting the model
 #' mymodel
 term_defm_ones <- function(m, idx = "", vname = "") {
     invisible(.Call(`_defm_term_defm_ones`, m, idx, vname))
