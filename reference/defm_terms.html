@@ -149,7 +149,36 @@ a covariate.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Loading Valtente's SNS data</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">valentesnsList</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">mymodel</span> <span class="op">&lt;-</span> <span class="fu"><a href="DEFM.html">new_defm</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  id    <span class="op">=</span> <span class="va">valentesnsList</span><span class="op">$</span><span class="va">id</span>,</span></span>
+<span class="r-in"><span>  Y     <span class="op">=</span> <span class="va">valentesnsList</span><span class="op">$</span><span class="va">Y</span>,</span></span>
+<span class="r-in"><span>  X     <span class="op">=</span> <span class="va">valentesnsList</span><span class="op">$</span><span class="va">X</span>,</span></span>
+<span class="r-in"><span>  order <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Adding the intercept terms and a motif from tobacco to mj</span></span></span>
+<span class="r-in"><span><span class="fu">term_defm_logit_intercept</span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">term_defm_transition_formula</span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2}"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Inspecting the model</span></span></span>
+<span class="r-in"><span><span class="va">mymodel</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Num. of Arrays       : 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Support size         : 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Support size range   : [429496729, 0]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Transform. Fun.      : no</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model terms (4)     :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept alcohol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept tobacco</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept mj</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Motif $(tobacco^+, mj^-) -&gt; (tobacco^+, mj^+)$</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model Y variables (3):</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0) alcohol</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1) tobacco</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2) mj</span>
+</code></pre></div>
     </div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
