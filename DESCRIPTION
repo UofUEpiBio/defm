@@ -6,7 +6,7 @@ Authors@R: c(
     person("George", "Vega Yon", role=c("aut", "cre"),
     email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
     person(
-        "Department of Defense",
+        "Department of Veterans Affairs - Rehabilitation, Research, and Development Service",
         role = "fnd",
         comment = "Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443"
         ))
