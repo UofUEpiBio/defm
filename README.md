@@ -255,20 +255,20 @@ N
 
 We can also see the counts
 
-|  id |  y0 |  y1 |  y2 |    x0 |    x1 | Num. of ones | Num. of ones x x1 | Motif ![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)") |
-|----:|----:|----:|----:|------:|------:|-------------:|------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------:|
-|   1 |   0 |   0 |   0 |  0.51 |  0.95 |           NA |                NA |                                                                                                                                                   NA |
-|   1 |   0 |   0 |   0 |  0.16 |  0.25 |            0 |              0.00 |                                                                                                                                                    0 |
-|   1 |   0 |   0 |   0 |  1.20 | -1.72 |            0 |              0.00 |                                                                                                                                                    0 |
-|   1 |   0 |   1 |   1 | -0.20 |  1.55 |            2 |              3.11 |                                                                                                                                                    0 |
-|   2 |   0 |   1 |   0 | -0.15 | -0.68 |           NA |                NA |                                                                                                                                                   NA |
-|   2 |   0 |   1 |   0 |  1.19 |  0.92 |            1 |              0.92 |                                                                                                                                                    0 |
-|   2 |   1 |   0 |   0 | -0.65 |  1.16 |            1 |              1.16 |                                                                                                                                                    0 |
-|   2 |   0 |   0 |   0 | -0.99 |  0.21 |            0 |              0.00 |                                                                                                                                                    0 |
-|   2 |   1 |   1 |   0 |  0.76 |  1.45 |            2 |              2.90 |                                                                                                                                                    0 |
-|   2 |   0 |   0 |   0 | -0.68 | -1.34 |            0 |              0.00 |                                                                                                                                                    0 |
+|  id |  y0 |  y1 |  y2 |    x0 |    x1 |     |      |     |
+|----:|----:|----:|----:|------:|------:|----:|-----:|----:|
+|   1 |   0 |   0 |   0 |  0.51 |  0.95 |  NA |   NA |  NA |
+|   1 |   0 |   0 |   0 |  0.16 |  0.25 |   0 | 0.00 |   0 |
+|   1 |   0 |   0 |   0 |  1.20 | -1.72 |   0 | 0.00 |   0 |
+|   1 |   0 |   1 |   1 | -0.20 |  1.55 |   2 | 3.11 |   0 |
+|   2 |   0 |   1 |   0 | -0.15 | -0.68 |  NA |   NA |  NA |
+|   2 |   0 |   1 |   0 |  1.19 |  0.92 |   1 | 0.92 |   0 |
+|   2 |   1 |   0 |   0 | -0.65 |  1.16 |   1 | 1.16 |   0 |
+|   2 |   0 |   0 |   0 | -0.99 |  0.21 |   0 | 0.00 |   0 |
+|   2 |   1 |   1 |   0 |  0.76 |  1.45 |   2 | 2.90 |   0 |
+|   2 |   0 |   0 |   0 | -0.68 | -1.34 |   0 | 0.00 |   0 |
 
-Finally, we can also take a look at the distribution of the log-odds. We
+Finally, we can also take a look at the distribution of the log odds. We
 calculate this by looking at changes in a single entry of the array. For
 example, the log-odds of having
 ![y\_{12}: 0\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
@@ -364,7 +364,7 @@ The simulation should produce a nice-looking figure:
 
 ## Example 3: Using formulas for transitions
 
-In this example, we will redo the previous model, but now using formulas
+In this example, we will redo the previous model, but now use formulas
 for specifying the transitions:
 
 ``` r
@@ -460,7 +460,7 @@ Army Medical Research Acquisition Activity, 839 Chandler Street, Fort
 Detrick MD 21702-5014 is the awarding and administering acquisition
 office. Opinions, interpretations, conclusions and recommendations are
 those of the author and are not necessarily endorsed by the Department
-of Defense. Any opinions, findings, conclusions recommendations
+of Defense. Any opinions, findings, conclusions, or recommendations
 expressed in this publication are those of the author(s) and do not
 necessarily reflect the views of the U.S. Government, the U.S.
 Department of Veterans Affairs or the Department of Defense and no
@@ -468,7 +468,7 @@ official endorsement should be inferred.
 
 # Code of Conduct
 
-Please note that the defm project is released with a [Contributor Code
+Please note that the `defm` project is released with a [Contributor Code
 of
 Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.

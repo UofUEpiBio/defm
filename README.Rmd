@@ -179,7 +179,7 @@ cbind(id, simulated_Y, X, obs_stats) |>
   head(n = 10) |> knitr::kable(row.names = FALSE, digits = 2L)
 ```
 
-Finally, we can also take a look at the distribution of the log-odds. We calculate this by looking at changes in a single entry of the array. For example,
+Finally, we can also take a look at the distribution of the log odds. We calculate this by looking at changes in a single entry of the array. For example,
 the log-odds of having $y_{12}: 0\to 1$, which are equivalent to
 
 \renewcommand{\Pr}[1]{\mbox{Pr}\left(#1\right)}
@@ -275,7 +275,7 @@ Matrix::image(as(Y_sim, "dgCMatrix"))
 
 ## Example 3: Using formulas for transitions
 
-In this example, we will redo the previous model, but now using formulas for
+In this example, we will redo the previous model, but now use formulas for
 specifying the transitions:
 
 ```{r}
@@ -316,8 +316,8 @@ image(as(Y_sim_formula, "dgCMatrix"))
 
 # Acknowledgement
 
-This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.
+This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions, or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.
 
 # Code of Conduct
   
-  Please note that the defm project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+  Please note that the `defm` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
