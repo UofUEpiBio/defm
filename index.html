@@ -355,17 +355,6 @@ N
 </table>
 <p>We can also see the counts</p>
 <table class="table">
-<colgroup>
-<col width="2%">
-<col width="2%">
-<col width="2%">
-<col width="2%">
-<col width="3%">
-<col width="3%">
-<col width="6%">
-<col width="8%">
-<col width="69%">
-</colgroup>
 <thead><tr class="header">
 <th align="right">id</th>
 <th align="right">y0</th>
@@ -373,10 +362,9 @@ N
 <th align="right">y2</th>
 <th align="right">x0</th>
 <th align="right">x1</th>
-<th align="right">Num. of ones</th>
-<th align="right">Num. of ones x x1</th>
-<th align="right">Motif <img src="https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29" title="(y0^+) -&gt; (y0^+, y1^+)" alt="(y0^+) -&gt; (y0^+, y1^+)">
-</th>
+<th align="right"></th>
+<th align="right"></th>
+<th align="right"></th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -491,7 +479,7 @@ N
 </tr>
 </tbody>
 </table>
-<p>Finally, we can also take a look at the distribution of the log-odds. We calculate this by looking at changes in a single entry of the array. For example, the log-odds of having <img src="https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201" title="y_{12}: 0\to 1" alt="y_{12}: 0">, which are equivalent to</p>
+<p>Finally, we can also take a look at the distribution of the log odds. We calculate this by looking at changes in a single entry of the array. For example, the log-odds of having <img src="https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201" title="y_{12}: 0\to 1" alt="y_{12}: 0">, which are equivalent to</p>
 <div class="figure">
 <img src="https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)" alt=""><p class="caption"> = ((.y_{12} = 1\|_{-12}))</p>
 </div>
@@ -562,7 +550,7 @@ $$ -->
 <div class="section level2">
 <h2 id="example-3-using-formulas-for-transitions">Example 3: Using formulas for transitions<a class="anchor" aria-label="anchor" href="#example-3-using-formulas-for-transitions"></a>
 </h2>
-<p>In this example, we will redo the previous model, but now using formulas for specifying the transitions:</p>
+<p>In this example, we will redo the previous model, but now use formulas for specifying the transitions:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_model_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/DEFM.html">new_defm</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -646,12 +634,12 @@ $$ -->
 <div class="section level1">
 <h1 id="acknowledgement">Acknowledgement<a class="anchor" aria-label="anchor" href="#acknowledgement"></a>
 </h1>
-<p>This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.</p>
+<p>This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions, or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.</p>
 </div>
 <div class="section level1">
 <h1 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h1>
-<p>Please note that the defm project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the <code>defm</code> project is released with a <a href="https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 
   </div>
