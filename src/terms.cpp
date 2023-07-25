@@ -122,7 +122,7 @@ SEXP term_defm_transition(
       if (mat(i,j) == R_NaInt)
         continue;
 
-      if ((mat(i,j) != 1) & (mat(i,j) != 0))
+      if ((mat(i,j) != 1) && (mat(i,j) != 0))
         stop("Valid values for -mat- are NA, 0, or 1");
 
       coords.push_back(static_cast< size_t >(loc));

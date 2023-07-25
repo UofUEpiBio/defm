@@ -1495,7 +1495,7 @@ BARRAY_TEMPLATE(,BArray) (
     for (uint i = 0u; i < source.size(); ++i) {
       
         // Checking range
-        if ((source[i] >= N_) | (target[i] >= M_))
+        if ((source[i] >= N_) || (target[i] >= M_))
             throw std::range_error("Either source or target point to an element outside of the range by (N,M).");
         
         // Checking if it exists
@@ -6236,8 +6236,6 @@ SUPPORT_TEMPLATE(void, calc_backend_sparse)(
     {
         #ifdef __OPENMP
         #pragma omp simd
-        #else
-        #pragma GCC ivdep
         #endif
         for (uint n = 0u; n < n_counters; ++n) 
             current_stats[n] -= change_stats[pos * n_counters + n];
@@ -6353,8 +6351,6 @@ SUPPORT_TEMPLATE(void, calc_backend_dense)(
     {
         #ifdef __OPENMP
         #pragma omp simd
-        #else
-        #pragma GCC ivdep
         #endif
         for (uint n = 0u; n < n_counters; ++n) 
             current_stats[n] -= change_stats[pos * n_counters + n];
@@ -8153,8 +8149,6 @@ MODEL_TEMPLATE(double, likelihood_total)(
         
         #ifdef __OPENM 
         #pragma omp simd reduction(-:res)
-        #else
-        #pragma GCC ivdep
         #endif
         for (unsigned int i = 0u; i < params_last_size; ++i)
             res -= (std::log(normalizing_constants[i]) * this->stats_support_n_arrays[i]);
@@ -8165,8 +8159,6 @@ MODEL_TEMPLATE(double, likelihood_total)(
         size_t stats_target_size = stats_target.size();
         #ifdef __OPENM 
         #pragma omp simd reduction(*:res)
-        #else
-        #pragma GCC ivdep
         #endif
         for (unsigned int i = 0; i < stats_target_size; ++i)
             res *= std::exp(
@@ -9875,8 +9867,6 @@ inline void counter_ctriads(NetCounters<NetworkDense> * counters)
         double ans = 0.0;
         #ifdef __OPENM 
         #pragma omp simd reduction(+:ans)
-        #else
-        #pragma GCC ivdep
         #endif
         for (unsigned int k = 0u; k < Array.nrow(); ++k)
         {
@@ -11730,7 +11720,7 @@ inline void counter_preserve_pseudogene(
 
         // At the beginning, all offspring are zero, so we need to
         // find at least one state = true.
-        if (Array.D_ptr()->states[data[1u]] | Array.D_ptr()->states[data[2u]])
+        if (Array.D_ptr()->states[data[1u]] || Array.D_ptr()->states[data[2u]])
             return 0.0;
 
         double n = static_cast<double>(Array.ncol());
@@ -11752,7 +11742,7 @@ inline void counter_preserve_pseudogene(
         if ((i != nfunA) & (i != nfunB))
             return 0.0;
 
-        if (Array.D_ptr()->states[data[1u]] | Array.D_ptr()->states[data[2u]])
+        if (Array.D_ptr()->states[data[1u]] || Array.D_ptr()->states[data[2u]])
             return 0.0;
 
         unsigned int k = (i == nfunA) ? nfunB : nfunA;
@@ -12140,7 +12130,7 @@ inline void counter_subfun(
             return 0.0;
         
         // Are A and B existant? if not, no change
-        if (!Array.D_ptr()->states[funA] | !Array.D_ptr()->states[funB])
+        if (!Array.D_ptr()->states[funA] || !Array.D_ptr()->states[funB])
             return 0.0;
         
         // Figuring out which is the first (reference) function
@@ -12601,7 +12591,7 @@ inline void counter_neofun_a2b(
             return 0.0;
         
         // Checking the parent doesn't have funA or has funB
-        if (!Array.D_ptr()->states[funA] | Array.D_ptr()->states[funB]) 
+        if (!Array.D_ptr()->states[funA] || Array.D_ptr()->states[funB]) 
             return 0.0;
 
         double res = 0.0;
@@ -12733,7 +12723,7 @@ inline void counter_co_opt(
             return 0.0;
 
         // If the parent does not have the initial state, then it makes no sense
-        if ((!Array.D_ptr()->states[funA]) | Array.D_ptr()->states[funB])
+        if ((!Array.D_ptr()->states[funA]) || Array.D_ptr()->states[funB])
             return 0.0;
 
         // Checking whether function A or function B changed
@@ -14331,7 +14321,7 @@ inline void counter_transition(
                 baseline_value = sgn[e];
             }
 
-            if ((sgn[e] & (array[dat[e]] == 1)) | (!sgn[e] & (array[dat[e]] == 0)))
+            if ((sgn[e] && (array[dat[e]] == 1)) || (!sgn[e] && (array[dat[e]] == 0)))
                 n_now++;
             
         }
@@ -14706,7 +14696,7 @@ inline void rules_dont_become_zero(
 
         // This is now one, is the next different zero? If so,
         // we can include it (1->1)
-        return (Array(i - 1, j) != 1) | (Array(i, j) != 1);
+        return (Array(i - 1, j) != 1) || (Array(i, j) != 1);
 
     };
     
