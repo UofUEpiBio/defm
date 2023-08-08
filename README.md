@@ -4,6 +4,12 @@
 # defm: Fit and simulate discrete binary exponential family models
 
 <!-- badges: start -->
+
+[![CRAN
+status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
+[![Grand
+total](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://CRAN.R-project.org/package=defm)
+[![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with
