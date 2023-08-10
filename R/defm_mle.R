@@ -8,8 +8,6 @@
 #' [stats4::mle].)
 #' @param ... Further arguments passed to [stats4::mle].
 #' @export
-#' @import stats4
-#' @importFrom stats pnorm
 #' @details 
 #' The likelihood function of the DEFM is closely-related to the 
 #' Exponential-Family Random Graph Model \[ERGM\]. Furthermore, the DEFM can 
