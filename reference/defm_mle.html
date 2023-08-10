@@ -154,7 +154,11 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing results</span></span></span>
 <span class="r-in"><span><span class="fu">summary_table</span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in object$coefficients:</span> $ operator not defined for this S4 class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                           coef         se      pvalues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol             -0.2734108 0.31600741 3.869270e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   1.3351257 0.13263120 7.773099e-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.6812040 0.10420811 6.278270e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.2840092 0.06962002 4.514831e-05</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_glm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -180,7 +184,7 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing the logodds</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">logodds</span><span class="op">(</span><span class="va">logit_0</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span>, i <span class="op">=</span> <span class="fl">0</span>, j <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2.3746610 -1.4094477 -1.5514524 -0.3295123  1.3169050 -0.3295123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -2.3746610 -1.4094477 -1.5514524 -0.3295122  1.3169051 -0.3295122</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
