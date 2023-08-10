@@ -33,7 +33,7 @@ morder_defm(m)
 
 new_defm(id, Y, X, order = 1)
 
-nobs.DEFM(object, ...)
+\method{nobs}{DEFM}(object, ...)
 }
 \arguments{
 \item{m}{An object of class \code{DEFM}.}

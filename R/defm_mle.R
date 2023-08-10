@@ -111,8 +111,7 @@ defm_mle <- function(
 }
 
 pval_calc <- function(obj) {
-  pvals <- -abs(coef(obj)/sqrt(diag(vcov(obj)))) |> pnorm()
-  pvals * 2
+  stats::pnorm(-abs(stats::coef(obj)/sqrt(diag(vcov(obj))))) * 2
 }
 
 #' @export
@@ -121,15 +120,16 @@ pval_calc <- function(obj) {
 #' with the estimates, se, and pvalues. If `as_texreg = TRUE`, then it will
 #' return a texreg object.
 #' @rdname defm_mle
+#' @importFrom stats AIC BIC coef vcov
 summary_table <- function(object, as_texreg = FALSE, ...) {
 
   # Generating the output table
   tab <- list(
-    coef.names  = names(coef(object)),
-    coef        = coef(object),
-    se          = sqrt(diag(vcov(object))),
+    coef.names  = names(stats::coef(object)),
+    coef        = stats::coef(object),
+    se          = sqrt(diag(stats::vcov(object))),
     gof.names   = c("AIC", "BIC", "N"),
-    gof         = c(AIC(object), BIC(object), nobs(object)),
+    gof         = c(stats::AIC(object), stats::BIC(object), stats::nobs(object)),
     gof.decimal = c(T,T,F),
     pvalues     = pval_calc(object)
   )

@@ -26,3 +26,7 @@ README.md: README.Rmd
 	Rscript --vanilla -e 'rmarkdown::render("README.Rmd")'
 
 .PHONY: build update clean
+
+inst/NEWS: NEWS.md
+	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')" && \
+		head -n 80 inst/NEWS

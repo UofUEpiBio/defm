@@ -1,7 +1,7 @@
 Package: defm
 Type: Package
 Title: Estimation and Simulation of Multi-Binary Response Models
-Version: 0.1-0
+Version: 0.1-1
 Authors@R: c(
     person("George", "Vega Yon", role=c("aut", "cre"),
     email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
