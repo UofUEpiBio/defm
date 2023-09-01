@@ -62,7 +62,7 @@ SEXP new_defm(
   if (n_id != Rf_nrows(X))
     stop("The number of rows in X does not match the length of id.");
 
-  Rcpp::XPtr< DEFM > model(new DEFM(
+  Rcpp::XPtr< defm::DEFM > model(new defm::DEFM(
     &(INTEGER(id)[0u]),
     &(INTEGER(Y)[0u]),
     &(REAL(X)[0u]),
@@ -85,7 +85,7 @@ SEXP set_names(
   const std::vector< std::string > & xnames
 ) {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   ptr->set_names(
     ynames,
     xnames
@@ -125,7 +125,7 @@ SEXP set_names(
 CharacterVector get_Y_names(
     SEXP m
 ) {
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   return wrap(ptr->get_Y_names());
 }
 
@@ -135,7 +135,7 @@ CharacterVector get_Y_names(
 CharacterVector get_X_names(
     SEXP m
 ) {
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   return wrap(ptr->get_X_names());
 }
 
@@ -146,7 +146,7 @@ CharacterVector get_X_names(
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP init_defm(SEXP m)
 {
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   ptr->init();
   return m;
 }
@@ -156,7 +156,7 @@ SEXP init_defm(SEXP m)
 SEXP print_defm(SEXP x)
 {
 
-  Rcpp::XPtr< DEFM > ptr(x);
+  Rcpp::XPtr< defm::DEFM > ptr(x);
 
   ptr->print();
 
@@ -195,7 +195,7 @@ SEXP print_defm(SEXP x)
 double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   double res = ptr->likelihood_total(par, as_log);
 
@@ -231,12 +231,12 @@ IntegerMatrix sim_defm(
   )
 {
 
-  unsigned int seed = static_cast<unsigned int>(
-    R::unif_rand() * std::numeric_limits<unsigned int>::max()
+  size_t seed = static_cast<size_t>(
+    R::unif_rand() * std::numeric_limits<size_t>::max()
   );
 
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   ptr->set_seed(seed);
 
@@ -280,8 +280,8 @@ IntegerMatrix sim_defm(
 // [[Rcpp::export(rng = false, invisible = true)]]
 int print_stats(SEXP m, int i = 0)
 {
-  Rcpp::XPtr< DEFM > ptr(m);
-  ptr->print_stats(static_cast< unsigned int >(i));
+  Rcpp::XPtr< defm::DEFM > ptr(m);
+  ptr->print_stats(static_cast< size_t >(i));
 
   return 0;
 }
@@ -293,7 +293,7 @@ int print_stats(SEXP m, int i = 0)
 int nterms_defm(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   return ptr->nterms();
 }
 
@@ -301,7 +301,7 @@ int nterms_defm(SEXP m)
 CharacterVector names_defm(SEXP x)
 {
 
-  Rcpp::XPtr< DEFM > ptr(x);
+  Rcpp::XPtr< defm::DEFM > ptr(x);
   return wrap(ptr->colnames());
 }
 
@@ -311,7 +311,7 @@ CharacterVector names_defm(SEXP x)
 // [[Rcpp::export(rng = false)]]
 int nrow_defm(SEXP m)
 {
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   return ptr->get_n_rows();
 }
 
@@ -323,7 +323,7 @@ int nrow_defm(SEXP m)
 int ncol_defm_y(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return ptr->get_n_y();
 
@@ -336,7 +336,7 @@ int ncol_defm_y(SEXP m)
 int ncol_defm_x(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return ptr->get_n_covars();
 
@@ -350,7 +350,7 @@ int ncol_defm_x(SEXP m)
 int nobs_defm(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return ptr->get_n_obs();
 
@@ -363,7 +363,7 @@ int nobs_defm(SEXP m)
 int morder_defm(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return ptr->get_m_order();
 
@@ -399,7 +399,7 @@ int morder_defm(SEXP m)
 NumericMatrix get_stats(SEXP m)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   auto model = ptr->get_model();
 
@@ -451,7 +451,7 @@ NumericMatrix get_stats(SEXP m)
 NumericMatrix motif_census_cpp(SEXP m, std::vector<size_t> locs)
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   barry::FreqTable<int> res = ptr->motif_census(locs);
   auto dat = res.get_data();
@@ -495,7 +495,7 @@ NumericVector logodds(
 ) {
 
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return wrap(ptr->logodds(par, i, j));
 
@@ -503,7 +503,7 @@ NumericVector logodds(
 
 // [[Rcpp::export(rng = false)]]
 LogicalVector is_motif(SEXP m) {
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   return wrap(ptr->is_motif());
 

@@ -38,12 +38,12 @@ SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 {
 
   int idx_ = -1;
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   // This will set the covar index, if needed
   check_covar(idx_, idx, ptr);
 
-  defmcounters::counter_ones(
+  defm::counter_ones(
     ptr->get_counters(), idx_, vname,
     &ptr->get_X_names()
     );
@@ -59,13 +59,13 @@ SEXP term_defm_ones(SEXP m, std::string idx = "", std::string vname = "")
 SEXP term_defm_fe(SEXP m, std::string idx = "", double k = 1.0, std::string vname = "")
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   int idx_ = -1;
 
   // This will set the covar index, if needed
   check_covar(idx_, idx, ptr);
 
-  defmcounters::counter_fixed_effect(ptr->get_counters(), idx_, k, vname);
+  defm::counter_fixed_effect(ptr->get_counters(), idx_, k, vname);
 
   return m;
 }
@@ -94,7 +94,7 @@ SEXP term_defm_transition(
 )
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   int idx_ = -1;
 
   // This will set the covar index, if needed
@@ -134,7 +134,7 @@ SEXP term_defm_transition(
 
   }
 
-    defmcounters::counter_transition(
+    defm::counter_transition(
       ptr->get_counters(), coords, signs,
       ptr->get_m_order(), ptr->get_n_y(),
       idx_, vname,
@@ -193,14 +193,14 @@ SEXP term_defm_transition_formula(
 )
 {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
   int idx_ = -1;
 
   // This will set the covar index, if needed
   check_covar(idx_, idx, ptr);
 
-  defmcounters::counter_transition_formula(
+  defm::counter_transition_formula(
     ptr->get_counters(), formula,
     ptr->get_m_order(), ptr->get_n_y(),
     idx_, vname,
@@ -227,7 +227,7 @@ SEXP term_defm_logit_intercept(
   std::string vname = ""
 ) {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
   int idx_ = -1;
 
   // This will set the covar index, if needed
@@ -241,7 +241,7 @@ SEXP term_defm_logit_intercept(
     coords_.push_back(c);
   }
 
-  defmcounters::counter_logit_intercept(
+  defm::counter_logit_intercept(
     ptr->get_counters(),
     ptr->get_n_y(),
     coords_,
@@ -265,9 +265,9 @@ SEXP rule_not_one_to_zero(
   std::vector< size_t > idx
 ) {
 
-  Rcpp::XPtr< DEFM > ptr(m);
+  Rcpp::XPtr< defm::DEFM > ptr(m);
 
-  defmcounters::rules_dont_become_zero(
+  defm::rules_dont_become_zero(
     ptr->get_support_fun(),
     idx
   );

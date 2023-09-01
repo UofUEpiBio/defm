@@ -16,7 +16,7 @@ update:
 
 debug:
 	$(MAKE) clean && \
-		DEFM_CONFIG="-DBARRY_DEBUG" R CMD INSTALL .
+		DEFM_CONFIG="-DBARRY_DEBUG -fsanitize=address" R CMD INSTALL .
 
 clean:
 	Rscript --vanilla -e 'devtools::clean_dll()'; \
@@ -30,3 +30,16 @@ README.md: README.Rmd
 inst/NEWS: NEWS.md
 	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')" && \
 		head -n 80 inst/NEWS
+
+# Thanls to Dirk Eddelbuettel for the Dockerfile
+# https://dirk.eddelbuettel.com/blog/2015/01/18/
+docker-check: clean build
+	docker run --rm -ti -v $(PWD):/mnt -w/mnt \
+		--cap-add=SYS_PTRACE \
+		rocker/r-devel-san \
+	 	make littler-install-deps
+
+littler-install-deps:
+	apt update && apt install --no-install-suggests -y libssl-dev && \
+		RDscript --vanilla -e 'install.packages(c("Rcpp", "texreg"), repos = "https://cloud.r-project.org")' && \
+		RD CMD check --as-cran defm_0.1-1.tar.gz

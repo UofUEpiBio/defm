@@ -4,7 +4,7 @@
 void check_covar(
   int & idx_,
   std::string & idx,
-  Rcpp::XPtr< DEFM > & ptr
+  Rcpp::XPtr< defm::DEFM > & ptr
 ) {
 
   // Retrieving the matching covariate
