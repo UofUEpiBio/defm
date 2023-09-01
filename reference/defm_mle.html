@@ -154,11 +154,11 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing results</span></span></span>
 <span class="r-in"><span><span class="fu">summary_table</span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                            coef         se      pvalues</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol              0.02284086 0.30245240 9.398019e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   0.81987173 0.11933415 6.402826e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.51748908 0.09850195 1.491609e-07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.22797352 0.06693583 6.595796e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                           coef         se      pvalues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol              0.1304444 0.30196869 6.657560e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   0.8765920 0.11925664 1.975150e-13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.3952261 0.09736786 4.926180e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.2620335 0.06690621 8.987005e-05</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_glm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -184,7 +184,7 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing the logodds</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">logodds</span><span class="op">(</span><span class="va">logit_0</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span>, i <span class="op">=</span> <span class="fl">0</span>, j <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.6345158 -0.8890532 -1.0030400 -0.2447103  1.0182414 -0.2447103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.57494899 -0.91768946 -1.04870620 -0.04327329  1.00921230 -0.04327329</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
