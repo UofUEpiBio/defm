@@ -1,4 +1,0 @@
-PKG_LIBS=$(SHLIB_OPENMP_CXXFLAGS)
-
-PKG_CXXFLAGS= -I../inst/include/ -Dprintf_barry=Rprintf -DBARRY_USE_LATEX \
-  $(DEFM_CONFIG) $(SHLIB_OPENMP_CXXFLAGS) 
