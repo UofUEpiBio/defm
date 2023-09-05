@@ -155,10 +155,10 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span><span class="co"># Comparing results</span></span></span>
 <span class="r-in"><span><span class="fu">summary_table</span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>                                           coef         se      pvalues</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol              0.1304444 0.30196869 6.657560e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   0.8765920 0.11925664 1.975150e-13</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.3952261 0.09736786 4.926180e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.2620335 0.06690621 8.987005e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol              0.1873280 0.30598183 5.403926e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   0.9358252 0.12237985 2.058992e-14</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.5451757 0.10004983 5.064195e-08</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.3030208 0.06784486 7.955474e-06</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_glm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
@@ -184,7 +184,7 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing the logodds</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu">logodds</span><span class="op">(</span><span class="va">logit_0</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span>, i <span class="op">=</span> <span class="fl">0</span>, j <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.57494899 -0.91768946 -1.04870620 -0.04327329  1.00921230 -0.04327329</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1.8729519 -1.0247554 -1.1762658 -0.1795746  1.2137976 -0.1795746</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
