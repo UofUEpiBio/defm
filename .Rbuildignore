@@ -16,3 +16,4 @@ defm\.code-workspace
 README\.html
 paper/
 \.vscode
+^docker$

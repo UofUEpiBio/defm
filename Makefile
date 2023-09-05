@@ -33,13 +33,13 @@ inst/NEWS: NEWS.md
 
 # Thanls to Dirk Eddelbuettel for the Dockerfile
 # https://dirk.eddelbuettel.com/blog/2015/01/18/
-docker-check: clean build
-	docker run --rm -ti -v $(PWD):/mnt -w/mnt \
-		--cap-add=SYS_PTRACE \
-		rocker/r-devel-san \
-	 	make littler-install-deps
+docker-check:
+	docker run --rm -ti -v $(PWD):/mnt -w/mnt gvegayon/defm:latest make docker-check-all
 
-littler-install-deps:
-	apt update && apt install --no-install-suggests -y libssl-dev && \
-		RDscript --vanilla -e 'install.packages(c("Rcpp", "texreg"), repos = "https://cloud.r-project.org")' && \
-		RD CMD check --as-cran defm_0.1-1.tar.gz
+
+# -fno-sanitize=float-divide-by-zero,vptr \
+		\ # -fno-sanitize-recover"
+docker-check-all: 
+	RD CMD build . && \
+		DEFM_CONFIG="-DBARRY_DEBUG -std=c++11 -fsanitize=address -L/usr/local/lib" \
+		RD CMD check defm_*.tar.gz
