@@ -164,12 +164,8 @@ summary(ans)
 Or better, we can use `texreg` to generate a pretty output:
 
 ```{r mle-out, echo=FALSE, results='asis'}
-texreg::createTexreg(
-  coef.names = names(coef(ans)),
-  coef = coef(ans),
-  se = sqrt(diag(vcov(ans))),
-  gof.names = c("AIC", "BIC", "N"), gof = c(AIC(ans), BIC(ans), nobs(ans)), gof.decimal = c(T,T,F)
-) |> texreg::knitreg(single.row = TRUE)
+summary_table(ans, as_texreg=TRUE) |>
+  texreg::knitreg(single.row = TRUE)
 ```
 
 We can also see the counts

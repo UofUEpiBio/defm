@@ -152,11 +152,11 @@ simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
 #>      id      
 #> [1,]  1 0 0 0
-#> [2,]  1 0 0 0
+#> [2,]  1 0 0 1
 #> [3,]  1 0 0 0
-#> [4,]  1 0 1 1
+#> [4,]  1 1 1 1
 #> [5,]  2 0 1 0
-#> [6,]  2 0 1 0
+#> [6,]  2 1 1 0
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -174,12 +174,12 @@ summary(ans)
 #>         -nobs_defm(object), 0L), lower = lower, upper = upper)
 #> 
 #> Coefficients:
-#>                                 Estimate Std. Error
-#> Num. of ones                   -1.966198 0.01401444
-#> Num. of ones x x1               1.957017 0.01548504
-#> Motif $(y0^+) -> (y0^+, y1^+)$  4.905981 0.04516844
+#>                           Estimate Std. Error
+#> Num. of ones             -2.009506 0.01435074
+#> Num. of ones x x1         2.020209 0.01592269
+#> Motif {y0⁺} ⇨ {y0⁺, y1⁺}  5.051076 0.04649995
 #> 
-#> -2 log L: 56154.07
+#> -2 log L: 54960.47
 ```
 
 Or better, we can use `texreg` to generate a pretty output:
@@ -204,7 +204,7 @@ Model 1
 Num. of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
--1.97 (0.01)
+-2.01 (0.01)<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
@@ -212,16 +212,15 @@ Num. of ones
 Num. of ones x x1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-1.96 (0.02)
+2.02 (0.02)<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif
-![(y0^+) -\> (y0^+, y1^+)](https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29 "(y0^+) -> (y0^+, y1^+)")
+Motif {y0⁺} ⇨ {y0⁺, y1⁺}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-4.91 (0.05)
+5.05 (0.05)<sup>\*\*\*</sup>
 </td>
 </tr>
 <tr style="border-top: 1px solid #000000;">
@@ -229,7 +228,7 @@ Motif
 AIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-56160.07
+54966.47
 </td>
 </tr>
 <tr>
@@ -237,7 +236,7 @@ AIC
 BIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-56184.76
+54991.16
 </td>
 </tr>
 <tr style="border-bottom: 2px solid #000000;">
@@ -264,14 +263,14 @@ We can also see the counts
 |  id |  y0 |  y1 |  y2 |    x0 |    x1 |     |      |     |
 |----:|----:|----:|----:|------:|------:|----:|-----:|----:|
 |   1 |   0 |   0 |   0 |  0.51 |  0.95 |  NA |   NA |  NA |
-|   1 |   0 |   0 |   0 |  0.16 |  0.25 |   0 | 0.00 |   0 |
+|   1 |   0 |   0 |   1 |  0.16 |  0.25 |   1 | 0.25 |   0 |
 |   1 |   0 |   0 |   0 |  1.20 | -1.72 |   0 | 0.00 |   0 |
-|   1 |   0 |   1 |   1 | -0.20 |  1.55 |   2 | 3.11 |   0 |
+|   1 |   1 |   1 |   1 | -0.20 |  1.55 |   3 | 4.66 |   0 |
 |   2 |   0 |   1 |   0 | -0.15 | -0.68 |  NA |   NA |  NA |
-|   2 |   0 |   1 |   0 |  1.19 |  0.92 |   1 | 0.92 |   0 |
-|   2 |   1 |   0 |   0 | -0.65 |  1.16 |   1 | 1.16 |   0 |
-|   2 |   0 |   0 |   0 | -0.99 |  0.21 |   0 | 0.00 |   0 |
-|   2 |   1 |   1 |   0 |  0.76 |  1.45 |   2 | 2.90 |   0 |
+|   2 |   1 |   1 |   0 |  1.19 |  0.92 |   2 | 1.84 |   0 |
+|   2 |   1 |   1 |   1 | -0.65 |  1.16 |   3 | 3.48 |   1 |
+|   2 |   1 |   1 |   0 | -0.99 |  0.21 |   2 | 0.43 |   1 |
+|   2 |   1 |   1 |   1 |  0.76 |  1.45 |   3 | 4.35 |   1 |
 |   2 |   0 |   0 |   0 | -0.68 | -1.34 |   0 | 0.00 |   0 |
 
 Finally, we can also take a look at the distribution of the log odds. We
@@ -400,17 +399,17 @@ d_model_formula
 #> Support size         : 19
 #> Support size range   : [11, 20]
 #> Transform. Fun.      : no
-#> Model terms (11)     :
-#>  - Motif $(y0^+, y1^-) -> (y0^-, y1^+)$
-#>  - Motif $(y1^+, y2^-) -> (y1^-, y2^+)$
-#>  - Motif $(y2^+, y3^-) -> (y2^-, y3^+)$
-#>  - Motif $(y3^+, y4^-) -> (y3^-, y4^+)$
-#>  - Motif $(y4^+, y5^-) -> (y4^-, y5^+)$
-#>  - Motif $(y5^+, y6^-) -> (y5^-, y6^+)$
-#>  - Motif $(y6^+, y7^-) -> (y6^-, y7^+)$
-#>  - Motif $(y7^+, y8^-) -> (y7^-, y8^+)$
-#>  - Motif $(y8^+, y9^-) -> (y8^-, y9^+)$
-#>  - Motif $(y0^-, y9^+) -> (y0^+, y9^-)$
+#> Model terms (11)    :
+#>  - Motif {y0⁺, y1⁻} ⇨ {y0⁻, y1⁺}
+#>  - Motif {y1⁺, y2⁻} ⇨ {y1⁻, y2⁺}
+#>  - Motif {y2⁺, y3⁻} ⇨ {y2⁻, y3⁺}
+#>  - Motif {y3⁺, y4⁻} ⇨ {y3⁻, y4⁺}
+#>  - Motif {y4⁺, y5⁻} ⇨ {y4⁻, y5⁺}
+#>  - Motif {y5⁺, y6⁻} ⇨ {y5⁻, y6⁺}
+#>  - Motif {y6⁺, y7⁻} ⇨ {y6⁻, y7⁺}
+#>  - Motif {y7⁺, y8⁻} ⇨ {y7⁻, y8⁺}
+#>  - Motif {y8⁺, y9⁻} ⇨ {y8⁻, y9⁺}
+#>  - Motif {y0⁻, y9⁺} ⇨ {y0⁺, y9⁻}
 #>  - Num. of ones
 #> Model rules (1)     :
 #>  - Markov model of order 1
