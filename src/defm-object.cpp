@@ -43,10 +43,11 @@ using namespace Rcpp;
 //' 
 // [[Rcpp::export(rng = false, name = 'new_defm_cpp')]]
 SEXP new_defm(
-    const SEXP & id,
-    const SEXP & Y,
-    const SEXP & X,
-    int order = 1
+    SEXP & id,
+    SEXP & Y,
+    SEXP & X,
+    int order = 1,
+    bool copy_data = true
   ) {
 
   int n_id = LENGTH(id);
@@ -69,7 +70,8 @@ SEXP new_defm(
     static_cast< size_t >(n_id),
     static_cast< size_t >(n_y),
     static_cast< size_t >(n_x),
-    order
+    order,
+    copy_data
   ), true);
 
   model.attr("class") = "DEFM";
@@ -232,7 +234,7 @@ IntegerMatrix sim_defm(
 {
 
   size_t seed = static_cast<size_t>(
-    R::unif_rand() * std::numeric_limits<size_t>::max()
+    R::unif_rand() * static_cast<double>(std::numeric_limits< size_t >::max())
   );
 
 

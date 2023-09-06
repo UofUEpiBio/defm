@@ -11,15 +11,16 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // new_defm
-SEXP new_defm(const SEXP& id, const SEXP& Y, const SEXP& X, int order);
-RcppExport SEXP _defm_new_defm(SEXP idSEXP, SEXP YSEXP, SEXP XSEXP, SEXP orderSEXP) {
+SEXP new_defm(SEXP& id, SEXP& Y, SEXP& X, int order, bool copy_data);
+RcppExport SEXP _defm_new_defm(SEXP idSEXP, SEXP YSEXP, SEXP XSEXP, SEXP orderSEXP, SEXP copy_dataSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type id(idSEXP);
-    Rcpp::traits::input_parameter< const SEXP& >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< const SEXP& >::type X(XSEXP);
+    Rcpp::traits::input_parameter< SEXP& >::type id(idSEXP);
+    Rcpp::traits::input_parameter< SEXP& >::type Y(YSEXP);
+    Rcpp::traits::input_parameter< SEXP& >::type X(XSEXP);
     Rcpp::traits::input_parameter< int >::type order(orderSEXP);
-    rcpp_result_gen = Rcpp::wrap(new_defm(id, Y, X, order));
+    Rcpp::traits::input_parameter< bool >::type copy_data(copy_dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(new_defm(id, Y, X, order, copy_data));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -302,7 +303,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 4},
+    {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 5},
     {"_defm_set_names", (DL_FUNC) &_defm_set_names, 3},
     {"_defm_get_Y_names", (DL_FUNC) &_defm_get_Y_names, 1},
     {"_defm_get_X_names", (DL_FUNC) &_defm_get_X_names, 1},

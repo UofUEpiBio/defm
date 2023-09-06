@@ -39,8 +39,8 @@
 NULL
 
 #' 
-new_defm_cpp <- function(id, Y, X, order = 1L) {
-    .Call(`_defm_new_defm`, id, Y, X, order)
+new_defm_cpp <- function(id, Y, X, order = 1L, copy_data = TRUE) {
+    .Call(`_defm_new_defm`, id, Y, X, order, copy_data)
 }
 
 set_names <- function(m, ynames, xnames) {

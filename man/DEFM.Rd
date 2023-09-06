@@ -12,7 +12,6 @@
 \alias{ncol_defm_x}
 \alias{nobs_defm}
 \alias{morder_defm}
-\alias{nobs.DEFM}
 \title{Discrete Exponential Family Model (DEFM)}
 \usage{
 init_defm(m)
@@ -32,8 +31,6 @@ nobs_defm(m)
 morder_defm(m)
 
 new_defm(id, Y, X, order = 1)
-
-nobs.DEFM(object, ...)
 }
 \arguments{
 \item{m}{An object of class \code{DEFM}.}
@@ -48,10 +45,6 @@ person id.}
 \item{X}{Numeric matrix of covariates of size \code{n_x} by \code{n}.}
 
 \item{order}{Integer. Order of the markov process, by default, 1.}
-
-\item{object}{An object of class \link{DEFM}.}
-
-\item{...}{Not used.}
 }
 \value{
 An external pointer of class \code{DEFM.}
@@ -83,10 +76,6 @@ model.
 }
 
 An external pointer of class \code{DEFM.}
-
-\itemize{
-\item \code{nobs} is an alias for \code{nobs_defm()}.
-}
 }
 \description{
 Discrete Exponential Family Models (DEFMs) are models from the exponential
