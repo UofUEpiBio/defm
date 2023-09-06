@@ -269,11 +269,11 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">simulated_Y</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      id      </span></span>
 <span><span class="co">#&gt; [1,]  1 0 0 0</span></span>
-<span><span class="co">#&gt; [2,]  1 0 0 0</span></span>
+<span><span class="co">#&gt; [2,]  1 0 0 1</span></span>
 <span><span class="co">#&gt; [3,]  1 0 0 0</span></span>
-<span><span class="co">#&gt; [4,]  1 0 1 1</span></span>
+<span><span class="co">#&gt; [4,]  1 1 1 1</span></span>
 <span><span class="co">#&gt; [5,]  2 0 1 0</span></span>
-<span><span class="co">#&gt; [6,]  2 0 1 0</span></span></code></pre></div>
+<span><span class="co">#&gt; [6,]  2 1 1 0</span></span></code></pre></div>
 <p>Now, let’s see if we can recover the parameters using MLE:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_model_sim</span> <span class="op">&lt;-</span> <span class="fu">build_model</span><span class="op">(</span><span class="va">id</span>, <span class="va">simulated_Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span>, par. <span class="op">=</span> <span class="va">sim_par</span><span class="op">)</span></span>
@@ -288,12 +288,12 @@
 <span><span class="co">#&gt;         -nobs_defm(object), 0L), lower = lower, upper = upper)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;                                 Estimate Std. Error</span></span>
-<span><span class="co">#&gt; Num. of ones                   -1.966198 0.01401444</span></span>
-<span><span class="co">#&gt; Num. of ones x x1               1.957017 0.01548504</span></span>
-<span><span class="co">#&gt; Motif $(y0^+) -&gt; (y0^+, y1^+)$  4.905981 0.04516844</span></span>
+<span><span class="co">#&gt;                           Estimate Std. Error</span></span>
+<span><span class="co">#&gt; Num. of ones             -2.009506 0.01435074</span></span>
+<span><span class="co">#&gt; Num. of ones x x1         2.020209 0.01592269</span></span>
+<span><span class="co">#&gt; Motif {y0⁺} ⇨ {y0⁺, y1⁺}  5.051076 0.04649995</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -2 log L: 56154.07</span></span></code></pre></div>
+<span><span class="co">#&gt; -2 log L: 54960.47</span></span></code></pre></div>
 <p>Or better, we can use <code>texreg</code> to generate a pretty output:</p>
 <table class="table texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
@@ -313,7 +313,7 @@ Model 1
 Num. of ones
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
--1.97 (0.01)
+-2.01 (0.01)<sup>***</sup>
 </td>
 </tr>
 <tr>
@@ -321,15 +321,15 @@ Num. of ones
 Num. of ones x x1
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-1.96 (0.02)
+2.02 (0.02)<sup>***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif <img src="https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28y0%5E%2B%2C%20y1%5E%2B%29" title="(y0^+) -&gt; (y0^+, y1^+)" alt="(y0^+) -&gt; (y0^+, y1^+)">
+Motif {y0⁺} ⇨ {y0⁺, y1⁺}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-4.91 (0.05)
+5.05 (0.05)<sup>***</sup>
 </td>
 </tr>
 <tr style="border-top: 1px solid #000000;">
@@ -337,7 +337,7 @@ Motif <img src="https://latex.codecogs.com/gif.image?%28y0%5E%2B%29%20-%3E%20%28
 AIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-56160.07
+54966.47
 </td>
 </tr>
 <tr>
@@ -345,7 +345,7 @@ AIC
 BIC
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
-56184.76
+54991.16
 </td>
 </tr>
 <tr style="border-bottom: 2px solid #000000;">
@@ -392,11 +392,11 @@ N
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0.16</td>
 <td align="right">0.25</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
+<td align="right">1</td>
+<td align="right">0.25</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -412,13 +412,13 @@ N
 </tr>
 <tr class="even">
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">1</td>
 <td align="right">1</td>
 <td align="right">-0.20</td>
 <td align="right">1.55</td>
-<td align="right">2</td>
-<td align="right">3.11</td>
+<td align="right">3</td>
+<td align="right">4.66</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
@@ -434,47 +434,47 @@ N
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">1</td>
 <td align="right">0</td>
 <td align="right">1.19</td>
 <td align="right">0.92</td>
-<td align="right">1</td>
-<td align="right">0.92</td>
+<td align="right">2</td>
+<td align="right">1.84</td>
 <td align="right">0</td>
 </tr>
 <tr class="odd">
 <td align="right">2</td>
 <td align="right">1</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
 <td align="right">-0.65</td>
 <td align="right">1.16</td>
+<td align="right">3</td>
+<td align="right">3.48</td>
 <td align="right">1</td>
-<td align="right">1.16</td>
-<td align="right">0</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
-<td align="right">0</td>
-<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">1</td>
 <td align="right">0</td>
 <td align="right">-0.99</td>
 <td align="right">0.21</td>
-<td align="right">0</td>
-<td align="right">0.00</td>
-<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0.43</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td align="right">2</td>
 <td align="right">1</td>
 <td align="right">1</td>
-<td align="right">0</td>
+<td align="right">1</td>
 <td align="right">0.76</td>
 <td align="right">1.45</td>
-<td align="right">2</td>
-<td align="right">2.90</td>
-<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">4.35</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td align="right">2</td>
@@ -588,17 +588,17 @@ $$ -->
 <span><span class="co">#&gt; Support size         : 19</span></span>
 <span><span class="co">#&gt; Support size range   : [11, 20]</span></span>
 <span><span class="co">#&gt; Transform. Fun.      : no</span></span>
-<span><span class="co">#&gt; Model terms (11)     :</span></span>
-<span><span class="co">#&gt;  - Motif $(y0^+, y1^-) -&gt; (y0^-, y1^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y1^+, y2^-) -&gt; (y1^-, y2^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y2^+, y3^-) -&gt; (y2^-, y3^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y3^+, y4^-) -&gt; (y3^-, y4^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y4^+, y5^-) -&gt; (y4^-, y5^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y5^+, y6^-) -&gt; (y5^-, y6^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y6^+, y7^-) -&gt; (y6^-, y7^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y7^+, y8^-) -&gt; (y7^-, y8^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y8^+, y9^-) -&gt; (y8^-, y9^+)$</span></span>
-<span><span class="co">#&gt;  - Motif $(y0^-, y9^+) -&gt; (y0^+, y9^-)$</span></span>
+<span><span class="co">#&gt; Model terms (11)    :</span></span>
+<span><span class="co">#&gt;  - Motif {y0⁺, y1⁻} ⇨ {y0⁻, y1⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y1⁺, y2⁻} ⇨ {y1⁻, y2⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y2⁺, y3⁻} ⇨ {y2⁻, y3⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y3⁺, y4⁻} ⇨ {y3⁻, y4⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y4⁺, y5⁻} ⇨ {y4⁻, y5⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y5⁺, y6⁻} ⇨ {y5⁻, y6⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y6⁺, y7⁻} ⇨ {y6⁻, y7⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y7⁺, y8⁻} ⇨ {y7⁻, y8⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y8⁺, y9⁻} ⇨ {y8⁻, y9⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y0⁻, y9⁺} ⇨ {y0⁺, y9⁻}</span></span>
 <span><span class="co">#&gt;  - Num. of ones</span></span>
 <span><span class="co">#&gt; Model rules (1)     :</span></span>
 <span><span class="co">#&gt;  - Markov model of order 1</span></span>
