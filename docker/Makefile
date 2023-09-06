@@ -13,3 +13,6 @@ run:
 
 run-address:
 	docker run --rm -ti -v $(PWD)/..:/mnt -w/mnt gvegayon/defm:address bash
+
+push:
+	docker push gvegayon/defm:clang
