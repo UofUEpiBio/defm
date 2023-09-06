@@ -1,6 +1,6 @@
 #include <Rcpp.h>
-#include "barry.hpp"
-#include "defm.hpp"
+#include "barry/barry.hpp"
+#include "barry/models/defm.hpp"
 
 using namespace Rcpp;
 
@@ -494,10 +494,13 @@ NumericVector logodds(
     int j
 ) {
 
+  // Error if i or j are negative
+  if (i < 0 || j < 0)
+    stop("i and j must be positive.");
 
   Rcpp::XPtr< defm::DEFM > ptr(m);
 
-  return wrap(ptr->logodds(par, i, j));
+  return wrap(ptr->logodds(par, static_cast<size_t>(i), static_cast<size_t>(j)));
 
 }
 
