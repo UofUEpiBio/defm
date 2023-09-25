@@ -4,24 +4,63 @@
 // n: Net size, 
 // s: Start of the i-th network
 // e: end of the i-th network
+// ego_id: Ego of the cell (i, j)
 #define CSS_SIZE() \
-    size_t n = data.indices[0u]; \
-    size_t s = data.indices[1u]; \
-    size_t e = data.indices[2u];
+    size_t n      = data.indices[0u]; \
+    size_t s      = data.indices[1u]; \
+    size_t e      = data.indices[2u]; \
+    size_t ctype  = data.indices[3u]; \
+    size_t ego_id = data.indices[4u]; \
+    if (ctype > 2) \
+        throw std::range_error("Counter type should be 0, 1, or 2.");
+
+// Check whether ego_id is involved in the current cell
+// ctype: Type of counter
+// 0: All cells
+// 1: Only if perceiver
+// 2: Only if not perceiver
+#define CSS_MATCH_TYPE() \
+    if (ctype != 0u) { /* all counts */ \
+        if (ctype == 1u) { /* Only if perceiver */ \
+            if ((i_ != ego_id) && (j_ != ego_id)) return 0.0; \
+        } else if (ctype == 2u) { /* Only if not perceiver */ \
+            if ((i_ == ego_id) || (j_ == ego_id)) return 0.0; \
+        } \
+    };
 
 // Variables in case that the current cell corresponds to the True
 #define CSS_CASE_TRUTH() if ((i < n) && (j < n)) 
+
+// i_: i-th index of the cell
+// j_: j-th index of the cell
+// tji: True value of the cell (i, j)
+// pij: Perceived value of the cell (i, j)
+// pji: Perceived value of the cell (j, i)
 #define CSS_TRUE_CELLS() \
+    size_t i_ = i; \
+    size_t j_ = j; \
+    CSS_MATCH_TYPE() \
     double tji = static_cast<double>(Array(j, i, false)); \
     double pij = static_cast<double>(Array(i + s, j + s, false)); \
     double pji = static_cast<double>(Array(j + s, i + s, false));
 
 // Variables in case that the current cell corresponds to the Perceived
 #define CSS_CASE_PERCEIVED() else if (((i >= s) && (i < e)) & ((j >= s) && (j < e)))
+
+// i_: i-th index of the cell
+// j_: j-th index of the cell
+// tji: True value of the cell (i, j)
+// pji: Perceived value of the cell (i, j)
+// tij: True value of the cell (j, i)
 #define CSS_PERCEIVED_CELLS() \
+    size_t i_ = i - s; \
+    size_t j_ = j - s; \
+    CSS_MATCH_TYPE() \
     double tji = static_cast<double>(Array(j - s, i - s, false)); \
     double pji = static_cast<double>(Array(j, i, false)); \
     double tij = static_cast<double>(Array(i - s, j - s, false));
+
+
 
 // Nothing for else (for now)
 #define CSS_CASE_ELSE()
@@ -41,9 +80,10 @@
 
 #define CSS_APPEND(name) std::string name_ = (name);\
     for (size_t i = 0u; i < end_.size(); ++i) { \
-    std::string tmpname = name_ + " (" + std::to_string(i) + ")";\
+    std::string tmpname = name_ + " (" + std::to_string(i) + ")" + \
+    ((counter_type == 1u) ? " (only perceiver)" : ((counter_type == 2u)? " (only alters)": ""));\
     counters->add_counter(tmp_count, tmp_init, nullptr, \
-            NetCounterData({netsize, i == 0u ? netsize : end_[i-1], end_[i]}, {}),\
+            NetCounterData({netsize, i == 0u ? netsize : end_[i-1], end_[i], counter_type, i}, {}),\
             tmpname);}
 
 #define CSS_NET_COUNTER_LAMBDA_INIT() NETWORK_COUNTER_LAMBDA(tmp_init) {\
@@ -52,9 +92,13 @@
     };
 
 
-/** @brief Counts errors of commission 
+/**
+ * @brief Counts errors of commission 
  * @param netsize Size of the reference (true) network 
  * @param end_ Vector indicating one past the ending index of each network. (see details)
+ * @param counter_type Size_t indicating the type of counter to use. Possible
+ *  values are: 0: Count all, 1: Only count if perceiver is involved, and 
+ *  2: Only count if perceiver is not involved.
  * @details 
  * The `end_` parameter should be of length `N of networks` - 1. It is
  * assumed that the first network ends at `netsize`.
@@ -63,7 +107,8 @@ template<typename Tnet = Network>
 inline void counter_css_partially_false_recip_commi(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
     
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -110,7 +155,8 @@ template<typename Tnet = Network>
 inline void counter_css_partially_false_recip_omiss(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
     
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -154,7 +200,8 @@ template<typename Tnet = Network>
 inline void counter_css_completely_false_recip_comiss(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
     
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -194,7 +241,8 @@ template<typename Tnet = Network>
 inline void counter_css_completely_false_recip_omiss(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
     
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -234,7 +282,8 @@ template<typename Tnet = Network>
 inline void counter_css_mixed_recip(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
     
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -275,7 +324,8 @@ template<typename Tnet = Network>
 inline void counter_css_census01(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count)
@@ -308,8 +358,22 @@ inline void counter_css_census01(
         CSS_CHECK_SIZE_INIT()
         double n_dbl = static_cast<double>(data.indices[0u]);
 
+        // Discount in case of the type of counter
+        size_t ctype = data.indices[3u];
+
+        if (ctype == 1u) /* Only perceiver */
+        {
+
+            return (n_dbl - 1.0); // * (Array.D().directed ? 2.0 : 1.0);
+
+        } else if (ctype == 2u) /* All but the perceiver */
+        {
+            // We remove the perceiver from the eq.
+            n_dbl -= 1.0;
+        }
+
         // At the beginning is all zero
-        return n_dbl * (n_dbl - 1.0)/2.0;
+        return n_dbl * (n_dbl - 1.0) / 2.0; // / (Array.D().directed ? 1.0 : 2.0);
 
     };
     
@@ -325,7 +389,8 @@ template<typename Tnet = Network>
 inline void counter_css_census02(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -364,7 +429,8 @@ template<typename Tnet = Network>
 inline void counter_css_census03(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -403,7 +469,8 @@ template<typename Tnet = Network>
 inline void counter_css_census04(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -442,7 +509,8 @@ template<typename Tnet = Network>
 inline void counter_css_census05(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -481,7 +549,8 @@ template<typename Tnet = Network>
 inline void counter_css_census06(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -520,7 +589,8 @@ template<typename Tnet = Network>
 inline void counter_css_census07(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -559,7 +629,8 @@ template<typename Tnet = Network>
 inline void counter_css_census08(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -598,7 +669,8 @@ template<typename Tnet = Network>
 inline void counter_css_census09(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -637,7 +709,8 @@ template<typename Tnet = Network>
 inline void counter_css_census10(
     NetCounters<Tnet> * counters,
     size_t netsize,
-    const std::vector< size_t > & end_
+    const std::vector< size_t > & end_,
+    size_t counter_type = 0u
 ) {
 
     NETWORK_COUNTER_LAMBDA(tmp_count) {
@@ -672,6 +745,7 @@ inline void counter_css_census10(
 
 }
 
+#undef CSS_APPEND
 #undef CSS_CASE_TRUTH
 #undef CSS_TRUE_CELLS
 #undef CSS_CASE_PERCEIVED
@@ -680,4 +754,6 @@ inline void counter_css_census10(
 #undef CSS_CHECK_SIZE_INIT
 #undef CSS_CHECK_SIZE
 #undef CSS_NET_COUNTER_LAMBDA_INIT
+#undef CSS_MATCH_TYPE
+#undef CSS_SIZE
 #endif
