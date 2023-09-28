@@ -13,6 +13,7 @@ authors:
 affiliations:
   - index: 1
     name: Division of Epidemiology, University of Utah, Salt Lake City, UT, United States of America
+bibliography: bibliography.bib
 ---
 
 # Introduction
