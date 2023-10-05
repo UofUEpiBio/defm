@@ -41,21 +41,31 @@ inline std::vector< double > keygen_full(
     // Baseline data: nrows and columns
     std::vector< double > dat = {
         static_cast<double>(array.nrow()) * 100000 +
-         static_cast<double>(array.ncol())
+         static_cast<double>(array.ncol()),
+         // state of the parent
+         1000000.0, 
+         // type of the parent
+         array.D_ptr()->duplication ? 1.0 : 0.0, 
+         // Annotations with zeros
+         0.0 
     };
 
     // State of the parent
-    dat.push_back(1000000.0);
-    size_t count = 0u;
+    double pow10 = 1.0;
     for (bool i : array.D_ptr()->states) {
-        dat[dat.size() - 1u] += (i ? 1.0 : 0.0) * pow(10, static_cast<double>(count));
-        count++;
+        dat[1u] += (i ? 1.0 : 0.0) * pow10;
+        pow10 *= 10.0;
     }
 
-    // Type of the parent
-    dat.push_back(array.D_ptr()->duplication ? 1.0 : 0.0);
+    // // Annotations with zeros
+    // pow10 = 1.0;
+    // for (const auto & cell: array.get_data()) {
+    //     dat[3u] += (cell == 9u ? 2.0 : static_cast<double>(cell)) * pow10;
+    //     pow10 *= 10.0;
+    // }
 
     return dat;
+    
 }
 
 inline bool vec_diff(
@@ -117,7 +127,7 @@ private:
      */
     ///@{
     std::mt19937 *                     rengine = nullptr;
-    PhyloModel *        model   = nullptr;
+    PhyloModel * model   = nullptr;
     std::vector< std::vector< bool > > states;
     size_t n_zeros       = 0u; ///< Number of zeros
     size_t n_ones        = 0u; ///< Number of ones
@@ -216,7 +226,9 @@ public:
     double likelihood(
         const std::vector< double > & par,
         bool as_log = false,
-        bool use_reduced_sequence = true
+        bool use_reduced_sequence = true,
+        size_t ncores = 1u,
+        bool no_update_pset_probs = false
         );
 
     double likelihood_exhaust(const std::vector< double > & par);

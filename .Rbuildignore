@@ -20,3 +20,4 @@ bibliography\.bib
 \.vscode
 ^docker$
 \.gitattributes$
+playground/

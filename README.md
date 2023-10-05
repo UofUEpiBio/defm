@@ -174,10 +174,10 @@ summary(ans)
 #>         -nobs_defm(object), 0L), lower = lower, upper = upper)
 #> 
 #> Coefficients:
-#>                           Estimate Std. Error
-#> Num. of ones             -2.009506 0.01435074
-#> Num. of ones x x1         2.020209 0.01592269
-#> Motif {y0⁺} ⇨ {y0⁺, y1⁺}  5.051076 0.04649995
+#>                         Estimate Std. Error
+#> Num. of ones           -2.009506 0.01435063
+#> Num. of ones x x1       2.020209 0.01592262
+#> Motif {y0⁺}⇨{y0⁺, y1⁺}  5.051076 0.04649922
 #> 
 #> -2 log L: 54960.47
 ```
@@ -217,7 +217,7 @@ Num. of ones x x1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif {y0⁺} ⇨ {y0⁺, y1⁺}
+Motif {y0⁺}⇨{y0⁺, y1⁺}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 5.05 (0.05)<sup>\*\*\*</sup>
@@ -397,22 +397,21 @@ init_defm(d_model_formula)
 d_model_formula
 #> Num. of Arrays       : 19
 #> Support size         : 19
-#> Support size range   : [11, 20]
+#> Support size range   : [0, 1]
 #> Transform. Fun.      : no
 #> Model terms (11)    :
-#>  - Motif {y0⁺, y1⁻} ⇨ {y0⁻, y1⁺}
-#>  - Motif {y1⁺, y2⁻} ⇨ {y1⁻, y2⁺}
-#>  - Motif {y2⁺, y3⁻} ⇨ {y2⁻, y3⁺}
-#>  - Motif {y3⁺, y4⁻} ⇨ {y3⁻, y4⁺}
-#>  - Motif {y4⁺, y5⁻} ⇨ {y4⁻, y5⁺}
-#>  - Motif {y5⁺, y6⁻} ⇨ {y5⁻, y6⁺}
-#>  - Motif {y6⁺, y7⁻} ⇨ {y6⁻, y7⁺}
-#>  - Motif {y7⁺, y8⁻} ⇨ {y7⁻, y8⁺}
-#>  - Motif {y8⁺, y9⁻} ⇨ {y8⁻, y9⁺}
-#>  - Motif {y0⁻, y9⁺} ⇨ {y0⁺, y9⁻}
+#>  - Motif {y0⁺, y1⁻}⇨{y0⁻, y1⁺}
+#>  - Motif {y1⁺, y2⁻}⇨{y1⁻, y2⁺}
+#>  - Motif {y2⁺, y3⁻}⇨{y2⁻, y3⁺}
+#>  - Motif {y3⁺, y4⁻}⇨{y3⁻, y4⁺}
+#>  - Motif {y4⁺, y5⁻}⇨{y4⁻, y5⁺}
+#>  - Motif {y5⁺, y6⁻}⇨{y5⁻, y6⁺}
+#>  - Motif {y6⁺, y7⁻}⇨{y6⁻, y7⁺}
+#>  - Motif {y7⁺, y8⁻}⇨{y7⁻, y8⁺}
+#>  - Motif {y8⁺, y9⁻}⇨{y8⁻, y9⁺}
+#>  - Motif {y0⁻, y9⁺}⇨{y0⁺, y9⁻}
 #>  - Num. of ones
 #> Model rules (1)     :
-#>  - Markov model of order 1
 #> Model Y variables (10):
 #>   0) y0
 #>   1) y1

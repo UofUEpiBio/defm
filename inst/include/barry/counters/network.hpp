@@ -61,8 +61,8 @@ public:
     
     NetCounterData() : indices(0u), numbers(0u) {};
     NetCounterData(
-        const std::vector< size_t > indices_,
-        const std::vector< double > numbers_
+        const std::vector< size_t > & indices_,
+        const std::vector< double > & numbers_
     ): indices(indices_), numbers(numbers_) {};
     
     ~NetCounterData() {};
@@ -673,7 +673,7 @@ inline void counter_ctriads(NetCounters<NetworkDense> * counters)
         
         // i->j->k->i
         double ans = 0.0;
-        #ifdef __OPENM 
+        #if defined(__OPENMP) || defined(_OPENMP) 
         #pragma omp simd reduction(+:ans)
         #endif
         for (size_t k = 0u; k < Array.nrow(); ++k)

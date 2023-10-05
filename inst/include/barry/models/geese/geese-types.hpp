@@ -1,5 +1,8 @@
 #ifndef GEESE_TYPES_HPP
 #define GEESE_TYPES_HPP
+
+#define POS(a,b) (b)*N + (a)
+
 /**
  * @name Convenient typedefs for Node objects.
  * */
@@ -22,18 +25,17 @@ public:
      */
     std::vector< bool > states = {};
     
-    /**
-     * 
-     */
-    bool duplication = true;
+    bool duplication = true; ///< Whether the node is a duplication.
+    bool has_leaf = false;   ///< Whether the node has a leaf as offspring.
     
-    // NodeData() : blengths(0u), states(0u) {};
     
     NodeData(
         const std::vector< double > & blengths_,
         const std::vector< bool > & states_,
-        bool duplication_ = true
-    ) : blengths(blengths_), states(states_), duplication(duplication_) {};
+        bool duplication_ = true,
+        bool has_leaf_ = false
+    ) : blengths(blengths_), states(states_), duplication(duplication_),
+        has_leaf(has_leaf_) {};
     
     // ~NodeData() {};
   
@@ -113,5 +115,42 @@ typedef barry::StatsCounter<PhyloArray, PhyloCounterData> PhyloStatsCounter;
 typedef barry::Model<PhyloArray, PhyloCounterData, PhyloRuleData, PhyloRuleDynData > PhyloModel;
 typedef barry::PowerSet<PhyloArray, PhyloRuleData> PhyloPowerSet;
 ///@}
+
+// template<> 
+// inline void PhyloArray::insert_cell(
+//     size_t i,
+//     size_t j,
+//     const Cell< size_t > & v,
+//     bool check_bounds,
+//     bool
+// ) {
+
+//     if (check_bounds)
+//         out_of_range(i,j); 
+
+//     auto & elptr = el[POS(i,j)];
+
+//     if (elptr == 0u)
+//     {
+
+//         el_rowsums[i] += v.value;
+//         el_colsums[j] += v.value;
+        
+//     } 
+//     else
+//     {
+
+//         el_rowsums[i] += (v.value - elptr);
+//         el_colsums[j] += (v.value - elptr);
+
+//     }
+
+//     elptr = v.value;
+
+//     return;
+
+// }
+
+#undef POS
 
 #endif

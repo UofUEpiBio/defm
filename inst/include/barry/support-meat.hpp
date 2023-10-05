@@ -244,7 +244,7 @@ inline void Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_T
     
     if (change_stats_different > 0u)
     {
-        #ifdef __OPENMP
+        #if defined(__OPENMP) || defined(_OPENMP)
         #pragma omp simd
         #endif
         for (size_t n = 0u; n < n_counters; ++n) 
@@ -367,7 +367,7 @@ inline void Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_T
     
     if (change_stats_different > 0u)
     {
-        #ifdef __OPENMP
+        #if defined(__OPENMP) || defined(_OPENMP)
         #pragma omp simd
         #endif
         for (size_t n = 0u; n < n_counters; ++n) 
@@ -379,10 +379,11 @@ inline void Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_T
 }
 
 template <typename Array_Type, typename Data_Counter_Type, typename Data_Rule_Type, typename Data_Rule_Dyn_Type>
-inline void Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_Type>::calc(
-        std::vector< Array_Type > * array_bank,
-        std::vector< double > * stats_bank,
-        size_t max_num_elements_
+inline void
+Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_Type>::calc(
+    std::vector< Array_Type > * array_bank,
+    std::vector< double > * stats_bank,
+    size_t max_num_elements_
 ) {
 
     if (max_num_elements_ != 0u)
@@ -552,9 +553,8 @@ inline bool Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_T
 // }
 
 //////////////////////////
-
 template <typename Array_Type, typename Data_Counter_Type, typename Data_Rule_Type, typename Data_Rule_Dyn_Type>
-inline std::vector< double > Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_Type>::get_counts() const {
+inline const std::vector< double > & Support<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_Type>::get_counts() const {
     
     return data.get_data(); 
     

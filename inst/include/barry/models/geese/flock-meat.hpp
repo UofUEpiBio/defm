@@ -30,7 +30,7 @@ inline size_t Flock::add_data(
     }
 
     // Generating the Geese object
-    dat.push_back(Geese(annotations, geneid, parent, duplication));
+    dat.emplace_back(Geese(annotations, geneid, parent, duplication));
 
     if (dat.size() == 1u)
         this->nfunctions = dat[0].nfuns();
@@ -114,7 +114,7 @@ inline PhyloSupport *  Flock::get_support_fun()
 
 }
 
-inline std::vector< std::vector< double > > *  Flock::get_stats_support()
+inline std::vector< double > *  Flock::get_stats_support()
 {
 
     return this->model.get_stats_support();
@@ -138,7 +138,8 @@ inline PhyloModel *  Flock::get_model()
 inline double Flock::likelihood_joint(
     const std::vector< double > & par,
     bool as_log,
-    bool use_reduced_sequence
+    bool use_reduced_sequence,
+    size_t ncores
 )
 {
 
@@ -146,17 +147,38 @@ inline double Flock::likelihood_joint(
 
     double ans = as_log ? 0.0: 1.0;
 
+    std::vector< double > par0(par.begin(), par.end() - nfunctions);
+    model.update_pset_probs(par0, ncores);
+
     if (as_log) {
 
-        for (auto& d : this->dat) 
-            ans += d.likelihood(par, as_log, use_reduced_sequence);
+        if (ncores > 1u)
+        {
+            #if defined(_OPENMP) || defined(__OPENMP)
+            #pragma omp parallel for reduction(+:ans) num_threads(ncores)
+            #endif
+            for (auto& d : this->dat) 
+                ans += d.likelihood(par, as_log, use_reduced_sequence, 1u, true);
+        } else {
+            for (auto& d : this->dat) 
+                ans += d.likelihood(par, as_log, use_reduced_sequence, 1u, true);
+        }
 
     }
     else
     {
 
-        for (auto& d : this->dat) 
-            ans *= d.likelihood(par, as_log, use_reduced_sequence);
+        if (ncores > 1u) 
+        {
+            #if defined(_OPENMP) || defined(__OPENMP)
+            #pragma omp parallel for reduction(*:ans) num_threads(ncores)
+            #endif
+            for (auto& d : this->dat) 
+                ans *= d.likelihood(par, as_log, use_reduced_sequence, 1u, true);
+        } else {
+            for (auto& d : this->dat) 
+                ans *= d.likelihood(par, as_log, use_reduced_sequence, 1u, true);
+        }
             
     }
     

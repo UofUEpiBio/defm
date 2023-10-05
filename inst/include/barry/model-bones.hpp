@@ -59,10 +59,13 @@ protected:
      * - term k
      */
     ///@{
-    std::vector< std::vector< double > > stats_support;          ///< Sufficient statistics of the model (support)
-    std::vector< size_t >                  stats_support_n_arrays; ///< Number of arrays included per support.
-    std::vector< std::vector< double > > stats_target;           ///< Target statistics of the model
-    std::vector< size_t >                  arrays2support;
+    std::vector< double >                stats_support;           ///< Sufficient statistics of the model (support)
+    std::vector< size_t >                stats_support_sizes;     ///< Number of vectors included in the support.
+    std::vector< size_t >                stats_support_sizes_acc; ///< Accumulated number of vectors included in the support.
+    std::vector< size_t >                stats_support_n_arrays;  ///< Number of arrays included per support.
+    std::vector< std::vector< double > > stats_target;            ///< Target statistics of the model
+    std::vector< double >                stats_likelihood;
+    std::vector< size_t >                arrays2support;
     ///@}
 
     /**
@@ -79,8 +82,10 @@ protected:
     ///@{
     bool with_pset = false;
     std::vector< std::vector< Array_Type > > pset_arrays; ///< Arrays of the support(s)
-    std::vector< std::vector<double> >       pset_stats;  ///< Statistics of the support(s)
-    std::vector< std::vector<double> >       pset_probs;  ///< Probabilities of the support(s)
+    std::vector< double > pset_stats;     ///< Statistics of the support(s)
+    std::vector< double > pset_probs;     ///< Probabilities of the support(s)
+    std::vector< size_t > pset_sizes;     ///< Number of vectors included in the support.
+    std::vector< size_t > pset_locations; ///< Accumulated number of vectors included in the support.
     ///@}
     
     /**
@@ -125,6 +130,29 @@ protected:
     std::vector< std::string > transform_model_term_names;
     
 public:
+
+    /**
+     * @brief Computes the normalizing constant for a given set of parameters
+     * @details This function will compute the normalizing constant for a given
+     * set of parameters. It will also update the `normalizing_constants` member
+     * variable.
+    */
+    void update_normalizing_constants(
+        const std::vector< double > & params,
+        BARRY_NCORES_ARG(=1),
+        int i = -1
+        );
+
+    void update_likelihoods(
+        const std::vector< double > & params,
+        BARRY_NCORES_ARG(=1)
+        );
+
+    void update_pset_probs(
+        const std::vector< double > & params,
+        BARRY_NCORES_ARG(=1),
+        int i = -1
+        );
     
     void set_rengine(std::mt19937 * rengine_, bool delete_ = false) {
 
@@ -240,33 +268,39 @@ public:
     double likelihood(
         const std::vector<double> & params,
         const size_t & i,
-        bool as_log = false
+        bool as_log = false,
+        bool no_update_normconst = false
     );
     
     double likelihood(
         const std::vector<double> & params,
         const Array_Type & Array_,
         int i = -1,
-        bool as_log = false
+        bool as_log = false,
+        bool no_update_normconst = false
     );
     
     double likelihood(
         const std::vector<double> & params,
         const std::vector<double> & target_,
         const size_t & i,
-        bool as_log = false
+        bool as_log = false,
+        bool no_update_normconst = false
     );
 
     double likelihood(
         const std::vector<double> & params,
         const double * target_,
         const size_t & i,
-        bool as_log = false
+        bool as_log = false,
+        bool no_update_normconst = false
     );
     
     double likelihood_total(
         const std::vector<double> & params,
-        bool as_log = false
+        bool as_log = false,
+        BARRY_NCORES_ARG(=2),
+        bool no_update_normconst = false
     );
     ///@}
 
@@ -279,17 +313,14 @@ public:
      * constant.
      */
     ///@{
-    double get_norm_const(
-        const std::vector< double > & params,
-        const size_t & i,
-        bool as_log = false
-    );
+    const std::vector< double > & get_normalizing_constants() const;
+    const std::vector< double > & get_likelihoods() const;
 
     const std::vector< Array_Type > * get_pset(
         const size_t & i
     );
 
-    const std::vector< double > * get_pset_stats(
+    const double * get_pset_stats(
         const size_t & i
     );
     ///@}
@@ -365,11 +396,15 @@ public:
      */
     ///@{
     std::vector< std::vector< double > > * get_stats_target();
-    std::vector< std::vector< double > > * get_stats_support();
+    std::vector< double > * get_stats_support(); ///< Sufficient statistics of the support(s)
+    std::vector< size_t > * get_stats_support_sizes(); ///< Number of vectors included in the support.
+    std::vector< size_t > * get_stats_support_sizes_acc(); ///< Accumulated number of vectors included in the support.
     std::vector< size_t > * get_arrays2support();
     std::vector< std::vector< Array_Type > > * get_pset_arrays();
-    std::vector< std::vector<double> > * get_pset_stats();  ///< Statistics of the support(s)
-    std::vector< std::vector<double> > * get_pset_probs(); 
+    std::vector< double > * get_pset_stats();  ///< Statistics of the support(s)
+    std::vector< double > * get_pset_probs(); 
+    std::vector< size_t > * get_pset_sizes();
+    std::vector< size_t > * get_pset_locations();
     ///@}
 
     /**
