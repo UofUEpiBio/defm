@@ -295,10 +295,10 @@
 <span><span class="co">#&gt;         -nobs_defm(object), 0L), lower = lower, upper = upper)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Coefficients:</span></span>
-<span><span class="co">#&gt;                           Estimate Std. Error</span></span>
-<span><span class="co">#&gt; Num. of ones             -2.009506 0.01435074</span></span>
-<span><span class="co">#&gt; Num. of ones x x1         2.020209 0.01592269</span></span>
-<span><span class="co">#&gt; Motif {y0⁺} ⇨ {y0⁺, y1⁺}  5.051076 0.04649995</span></span>
+<span><span class="co">#&gt;                         Estimate Std. Error</span></span>
+<span><span class="co">#&gt; Num. of ones           -2.009506 0.01435063</span></span>
+<span><span class="co">#&gt; Num. of ones x x1       2.020209 0.01592262</span></span>
+<span><span class="co">#&gt; Motif {y0⁺}⇨{y0⁺, y1⁺}  5.051076 0.04649922</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -2 log L: 54960.47</span></span></code></pre></div>
 <p>Or better, we can use <code>texreg</code> to generate a pretty output:</p>
@@ -333,7 +333,7 @@ Num. of ones x x1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif {y0⁺} ⇨ {y0⁺, y1⁺}
+Motif {y0⁺}⇨{y0⁺, y1⁺}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 5.05 (0.05)<sup>***</sup>
@@ -593,22 +593,21 @@ $$ -->
 <span><span class="va">d_model_formula</span></span>
 <span><span class="co">#&gt; Num. of Arrays       : 19</span></span>
 <span><span class="co">#&gt; Support size         : 19</span></span>
-<span><span class="co">#&gt; Support size range   : [11, 20]</span></span>
+<span><span class="co">#&gt; Support size range   : [0, 1]</span></span>
 <span><span class="co">#&gt; Transform. Fun.      : no</span></span>
 <span><span class="co">#&gt; Model terms (11)    :</span></span>
-<span><span class="co">#&gt;  - Motif {y0⁺, y1⁻} ⇨ {y0⁻, y1⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y1⁺, y2⁻} ⇨ {y1⁻, y2⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y2⁺, y3⁻} ⇨ {y2⁻, y3⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y3⁺, y4⁻} ⇨ {y3⁻, y4⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y4⁺, y5⁻} ⇨ {y4⁻, y5⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y5⁺, y6⁻} ⇨ {y5⁻, y6⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y6⁺, y7⁻} ⇨ {y6⁻, y7⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y7⁺, y8⁻} ⇨ {y7⁻, y8⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y8⁺, y9⁻} ⇨ {y8⁻, y9⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y0⁻, y9⁺} ⇨ {y0⁺, y9⁻}</span></span>
+<span><span class="co">#&gt;  - Motif {y0⁺, y1⁻}⇨{y0⁻, y1⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y1⁺, y2⁻}⇨{y1⁻, y2⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y2⁺, y3⁻}⇨{y2⁻, y3⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y3⁺, y4⁻}⇨{y3⁻, y4⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y4⁺, y5⁻}⇨{y4⁻, y5⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y5⁺, y6⁻}⇨{y5⁻, y6⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y6⁺, y7⁻}⇨{y6⁻, y7⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y7⁺, y8⁻}⇨{y7⁻, y8⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y8⁺, y9⁻}⇨{y8⁻, y9⁺}</span></span>
+<span><span class="co">#&gt;  - Motif {y0⁻, y9⁺}⇨{y0⁺, y9⁻}</span></span>
 <span><span class="co">#&gt;  - Num. of ones</span></span>
 <span><span class="co">#&gt; Model rules (1)     :</span></span>
-<span><span class="co">#&gt;  - Markov model of order 1</span></span>
 <span><span class="co">#&gt; Model Y variables (10):</span></span>
 <span><span class="co">#&gt;   0) y0</span></span>
 <span><span class="co">#&gt;   1) y1</span></span>
