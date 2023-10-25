@@ -82,7 +82,9 @@ inline double likelihood_(
     double numerator = 0.0;
     
     // Computing the numerator
+    #ifdef __INTEL_LLVM_COMPILER
     #pragma code_align 32
+    #endif
     #if defined(__OPENMP) || defined(_OPENMP)
     #pragma omp simd reduction(+:numerator)
     #endif
@@ -1270,12 +1272,19 @@ inline void Model<Array_Type,Data_Counter_Type,Data_Rule_Type, Data_Rule_Dyn_Typ
     }  
 
     // The vectors in the support reflec the size of nterms x entries
-    max_v /= static_cast<int>(nterms() + 1);
-    min_v /= static_cast<int>(nterms() + 1);
+    // max_v /= static_cast<int>(nterms() + 1);
+    // min_v /= static_cast<int>(nterms() + 1);
 
     printf_barry("Num. of Arrays       : %li\n", this->size());
     printf_barry("Support size         : %li\n", this->size_unique());
     printf_barry("Support size range   : [%i, %i]\n", min_v, max_v);
+
+    if (with_pset)
+    {
+        printf_barry("Arrays in powerset   : %li\n",
+            static_cast<size_t>(std::accumulate(pset_sizes.begin(), pset_sizes.end(), 0u))
+        );
+    }
     printf_barry("Transform. Fun.      : %s\n", transform_model_fun ? "yes": "no");
     printf_barry("Model terms (%li)    :\n", this->nterms());
     for (auto & cn : this->colnames())
