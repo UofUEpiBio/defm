@@ -198,7 +198,7 @@ SEXP term_defm_transition_formula(
   int idx_ = -1;
 
   // This will set the covar index, if needed
-  check_covar(idx_, idx, ptr);
+  // check_covar(idx_, idx, ptr);
 
   defm::counter_transition_formula(
     ptr->get_counters(), formula,
