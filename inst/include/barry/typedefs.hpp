@@ -256,7 +256,7 @@ inline bool vec_equal_approx(
 }
 ///@}
 
-#ifdef __OPENM
+#if defined(__OPENMP) || defined(_OPENMP)
 #pragma omp declare simd
 #endif
 template <typename T>
@@ -267,14 +267,10 @@ inline T vec_inner_prod(
 ) {
     
     double res = 0.0;
-    #ifdef __OPENM 
+    #if defined(__OPENMP) || defined(_OPENMP) 
     #pragma omp simd reduction(+:res)
-    #else
-        #ifdef __GNUC__
-            #ifndef __clang__
-            #pragma GCC ivdep
-            #endif
-        #endif
+    #elif defined(__GNUC__) && !defined(__clang__)
+        #pragma GCC ivdep
     #endif
     for (size_t i = 0u; i < n; ++i)
         res += (*(a + i) * *(b + i));
@@ -283,7 +279,7 @@ inline T vec_inner_prod(
 
 }
 
-#ifdef __OPENM
+#if defined(__OPENMP) || defined(_OPENMP)
 #pragma omp declare simd
 #endif
 template <>
@@ -294,14 +290,10 @@ inline double vec_inner_prod(
 ) {
     
     double res = 0.0;
-    #ifdef __OPENMP
+    #if defined(__OPENMP) || defined(_OPENMP)
     #pragma omp simd reduction(+:res)
-    #else
-        #ifdef __GNUC__
-            #ifndef __clang__
-            #pragma GCC ivdep
-            #endif
-        #endif
+    #elif defined(__GNUC__) && !defined(__clang__)
+        #pragma GCC ivdep
     #endif
     for (size_t i = 0u; i < n; ++i)
         res += (*(a + i) * *(b + i));
