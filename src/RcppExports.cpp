@@ -301,6 +301,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rule_constrain_support
+SEXP rule_constrain_support(SEXP m, int idx, double lb, double ub);
+RcppExport SEXP _defm_rule_constrain_support(SEXP mSEXP, SEXP idxSEXP, SEXP lbSEXP, SEXP ubSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< double >::type lb(lbSEXP);
+    Rcpp::traits::input_parameter< double >::type ub(ubSEXP);
+    rcpp_result_gen = Rcpp::wrap(rule_constrain_support(m, idx, lb, ub));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 5},
@@ -329,6 +342,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
     {"_defm_term_defm_logit_intercept", (DL_FUNC) &_defm_term_defm_logit_intercept, 4},
     {"_defm_rule_not_one_to_zero", (DL_FUNC) &_defm_rule_not_one_to_zero, 2},
+    {"_defm_rule_constrain_support", (DL_FUNC) &_defm_rule_constrain_support, 4},
     {NULL, NULL, 0}
 };
 

@@ -275,3 +275,32 @@ SEXP rule_not_one_to_zero(
   return m;
 }
 
+//' @details The function `rule_constrain_support` will constrain the support of the model
+//' by specifying a lower and upper bound for a given statistic.
+//' @param lb,ub Numeric scalars. Lower and upper bounds.
+//' @rdname defm_terms
+// [[Rcpp::export(invisible = true, rng = false)]]
+SEXP rule_constrain_support(
+  SEXP m,
+  int idx,
+  double lb,
+  double ub
+) {
+
+  if (idx < 0)
+    stop("idx must be greater than or equal to zero");
+
+  Rcpp::XPtr< defm::DEFM > ptr(m);
+
+  defm::rule_constrain_support(
+    ptr->get_support_fun(),
+    static_cast<size_t>(idx),
+    lb,
+    ub
+  );
+
+  return m;
+
+
+
+}

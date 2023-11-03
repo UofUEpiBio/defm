@@ -9,6 +9,7 @@
 \alias{term_defm_transition_formula}
 \alias{term_defm_logit_intercept}
 \alias{rule_not_one_to_zero}
+\alias{rule_constrain_support}
 \alias{+.DEFM}
 \title{Model specification for DEFM}
 \usage{
@@ -23,6 +24,8 @@ term_defm_transition_formula(m, formula, idx = "", vname = "")
 term_defm_logit_intercept(m, coords = as.integer(c()), idx = "", vname = "")
 
 rule_not_one_to_zero(m, idx)
+
+rule_constrain_support(m, idx, lb, ub)
 
 \method{+}{DEFM}(e1, e2)
 }
@@ -41,6 +44,8 @@ rule_not_one_to_zero(m, idx)
 \item{formula}{Character scalar (see details).}
 
 \item{coords}{Integer vector with the coordinates to include in the term.}
+
+\item{lb, ub}{Numeric scalars. Lower and upper bounds.}
 
 \item{e1, e2}{e1 An object of class \link{DEFM} (e1) and a character (e2).}
 }
@@ -103,6 +108,9 @@ function will add one intercept per outcome. These can be weighted by
 a covariate.
 
 The function \code{rule_not_one_to_zero} will avoid the transition one to zero in a Markov process.
+
+The function \code{rule_constrain_support} will constrain the support of the model
+by specifying a lower and upper bound for a given statistic.
 
 The \code{+} method is a shortcut for term_formula
 }

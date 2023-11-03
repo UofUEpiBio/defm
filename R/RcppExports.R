@@ -368,3 +368,11 @@ rule_not_one_to_zero <- function(m, idx) {
     invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
 }
 
+#' @details The function `rule_constrain_support` will constrain the support of the model
+#' by specifying a lower and upper bound for a given statistic.
+#' @param lb,ub Numeric scalars. Lower and upper bounds.
+#' @rdname defm_terms
+rule_constrain_support <- function(m, idx, lb, ub) {
+    invisible(.Call(`_defm_rule_constrain_support`, m, idx, lb, ub))
+}
+
