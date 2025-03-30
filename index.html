@@ -6,19 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Estimation and Simulation of Multi-Binary Response Models • defm</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Estimation and Simulation of Multi-Binary Response Models">
-<meta property="og:description" content="Multi-binary response models are a class of models that allow for the estimation of multiple binary outcomes simultaneously. This package provides functions to estimate and simulate these models using the Discrete Exponential-Family Models [DEFM] framework. In it, we implement the models described in Vega Yon, Valente, and Pugh (2023) &lt;doi:10.48550/arXiv.2211.00627&gt;. DEFMs include Exponential-Family Random Graph Models [ERGMs], which characterize graphs using sufficient statistics, which is also the core of DEFMs. Using sufficient statistics, we can describe the data through meaningful motifs, for example, transitions between different states, joint distribution of the outcomes, etc. ">
+<meta property="og:description" content="Multi-binary response models are a class of models that allow for the estimation of multiple binary outcomes simultaneously. This package provides functions to estimate and simulate these models using the Discrete Exponential-Family Models [DEFM] framework. In it, we implement the models described in Vega Yon, Valente, and Pugh (2023) &lt;doi:10.48550/arXiv.2211.00627&gt;. DEFMs include Exponential-Family Random Graph Models [ERGMs], which characterize graphs using sufficient statistics, which is also the core of DEFMs. Using sufficient statistics, we can describe the data through meaningful motifs, for example, transitions between different states, joint distribution of the outcomes, etc.">
 <meta property="og:image" content="/logo.svg">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -26,7 +20,7 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -57,7 +51,7 @@
 <li>
   <a href="https://github.com/UofUEpiBio/defm/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -68,7 +62,7 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
@@ -231,10 +225,10 @@
 <p>In <code>defm</code>, transition statistics can be represented using matrices. In this case, the transition can be written as:</p>
 <p><img src="https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D" title="\begin{array}{c}t\t+1\end{array}\left[\begin{array}{ccc}1 &amp; \cdot &amp; \cdot \ 1 &amp; 1 &amp; \cdot\end{array}\right]"></p>
 <p>which in <code>R</code> is</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="cn">NA_integer_</span>,<span class="cn">NA_integer_</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="cn">NA_integer_</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#      [,1] [,2] [,3]</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># [1,]    1   NA   NA</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># [2,]    1    1   NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="cn">NA_integer_</span>,<span class="cn">NA_integer_</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="cn">NA_integer_</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#      [,1] [,2] [,3]</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># [1,]    1   NA   NA</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># [2,]    1    1   NA</span></span></code></pre></div>
 <p>The <code>NA</code> entries in the matrix mean that those can be either zero or one. In other words, only values different from <code>NA</code> will be considered for specifying the terms. Here is the factory function:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creating the model and adding a couple of terms</span></span>
@@ -497,8 +491,8 @@ N
 </tbody>
 </table>
 <p>Finally, we can also take a look at the distribution of the log odds. We calculate this by looking at changes in a single entry of the array. For example, the log-odds of having <img src="https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201" title="y_{12}: 0\to 1" alt="y_{12}: 0">, which are equivalent to</p>
-<div class="figure">
-<img src="https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)" alt=""><p class="caption"> = ((.y_{12} = 1\|_{-12}))</p>
+<div class="float">
+<img src="https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)" alt=" = ((.y_{12} = 1\|_{-12}))"><div class="figcaption"> = ((.y_{12} = 1\|_{-12}))</div>
 </div>
 <p>We can use the <code>logodds</code> function for this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -525,14 +519,14 @@ N
 \left[\begin{array}{cccc}
 1 & 0 & NA & \dots \\
 0 & 1 & NA & \dots
-\end{array}\right] \dots 
+\end{array}\right] \dots
 \left[\begin{array}{cccccc}
 \dots & NA & 1 & 0 & NA & \dots  \\
-\dots & NA & 0 & 1 & NA & \dots  
-\end{array}\right] \dots 
+\dots & NA & 0 & 1 & NA & \dots
+\end{array}\right] \dots
 \left[\begin{array}{cccc}
 \dots & NA & 1 & 0 \\
-\dots & NA & 0 & 1 
+\dots & NA & 0 & 1
 \end{array}\right]
 $$ -->
 <div align="center">
@@ -721,16 +715,16 @@ $$ -->
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>
