@@ -59,22 +59,38 @@ as.data.frame.defm_motif_census <- function(
   k      <- length(labels)
   ord    <- order(x[,1], decreasing = TRUE)
 
-  colidx <- list((1:k) + 1, (k + 2):ncol(x))
-
   tmp <- NULL
-  for (i in ord) {
+  if (m == 0) { # In non markov, this is simpler
 
-    from <- paste(x[i, colidx[[1]]], collapse = ", ")
-    to   <- paste(x[i, colidx[[2]]], collapse = ", ")
+    for (i in ord) {
 
-    tmp <- rbind(tmp, data.frame(
-      Motif = sprintf("{%s} > {%s}%s", from, to, ifelse(from == to, " *", "")),
-      Total = x[i, 1L]
-    ))
+      tmp <- rbind(tmp, data.frame(
+        Motif = paste0("{", paste(x[i, 2:(k + 1)], collapse = ", "), "}"),
+        Total = x[i, 1L]
+      ))
+
+    }
+
+
+  } else {
+
+    colidx <- list((1:k) + 1, (k + 2):ncol(x))
+
+    for (i in ord) {
+
+      from <- paste(x[i, colidx[[1]]], collapse = ", ")
+      to   <- paste(x[i, colidx[[2]]], collapse = ", ")
+
+      tmp <- rbind(tmp, data.frame(
+        Motif = sprintf("{%s} > {%s}%s", from, to, ifelse(from == to, " *", "")),
+        Total = x[i, 1L]
+      ))
+
+    }
+
+    rownames(tmp) <- NULL
 
   }
-
-  rownames(tmp) <- NULL
 
   tmp
 
@@ -93,7 +109,9 @@ print.defm_motif_census <- function(x, ...) {
 
   cat(sprintf("Motif census for variable set: %s\n", lab))
   print(as.data.frame(x))
-  cat("(*): No change\n")
+  
+  if (attr(x, "order") > 0) 
+    cat("(*): No change\n")
 
   invisible(x)
 
