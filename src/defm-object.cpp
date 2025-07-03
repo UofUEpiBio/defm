@@ -15,7 +15,25 @@ using namespace Rcpp;
 //' @param Y 0/1 matrix of responses of `n_y` columns and `n` rows.
 //' @param X Numeric matrix of covariates of size `n_x` by `n`.
 //' @param order Integer. Order of the markov process, by default, 1.
+//' @param copy_data Logical scalar. When `TRUE` (default) will copy the data
+//' into the model, otherwise it will use the data as a pointer (see details).
 //'
+//' @details
+//' The `id` vector is used to group the observations. For example, if you have
+//' a dataset with multiple individuals, the `id` vector should contain the
+//' individual ids. The `Y` matrix contains the binary responses, where each
+//' column represents a different response variable. The `X` matrix contains
+//' the covariates, which can be used to model the relationship between the
+//' responses and the covariates. The `order` parameter specifies the order of
+//' the Markov process, which determines how many previous observations are
+//' used to predict the current observation.
+//'
+//' The `copy_data` parameter specifies
+//' whether the data should be copied into the model or used as a pointer. If
+//' `copy_data` is `TRUE`, the data will be copied into the model, which can
+//' be useful if you want to avoid duplicating the data in memory. If 
+//' `copy_data` is `FALSE`, the model will use the data as a pointer, which can 
+//' be more efficient (but dangerous if the data is removed).
 //' @return An external pointer of class `DEFM.`
 //'
 //' @name DEFM
@@ -39,7 +57,7 @@ using namespace Rcpp;
 //' init_defm(mymodel)
 //' 
 //' # Fitting the MLE
-/// defm_mle(mymodel)
+//' defm_mle(mymodel)
 //' 
 // [[Rcpp::export(rng = false, name = 'new_defm_cpp')]]
 SEXP new_defm(
@@ -144,12 +162,21 @@ CharacterVector get_X_names(
 
 //' @rdname DEFM
 //' @param m An object of class `DEFM`.
+//' @param force_new Logical scalar. When `TRUE` (default) no cache is used
+//' to add new arrays (see details).
+//' @details
+//' The `init_defm` function initializes the model, which means it computes
+//' the sufficient statistics and prepares the model for fitting. The 
+//' `force_new` parameter specifies whether to force the model to be 
+//' consider each array added as completely unique, even if it has the
+//' same support set as an existing array. This is an experimental feature
+//' and should be used with caution.  
 //' @export
 // [[Rcpp::export(invisible = true, rng = false)]]
-SEXP init_defm(SEXP m)
+SEXP init_defm(SEXP m, bool force_new = true)
 {
   Rcpp::XPtr< defm::DEFM > ptr(m);
-  ptr->init();
+  ptr->init(force_new);
   return m;
 }
 
@@ -299,6 +326,7 @@ int nterms_defm(SEXP m)
   return ptr->nterms();
 }
 
+//' @export
 // [[Rcpp::export(rng = false, name = "names.DEFM")]]
 CharacterVector names_defm(SEXP x)
 {

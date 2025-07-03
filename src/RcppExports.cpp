@@ -57,12 +57,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // init_defm
-SEXP init_defm(SEXP m);
-RcppExport SEXP _defm_init_defm(SEXP mSEXP) {
+SEXP init_defm(SEXP m, bool force_new);
+RcppExport SEXP _defm_init_defm(SEXP mSEXP, SEXP force_newSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    rcpp_result_gen = Rcpp::wrap(init_defm(m));
+    Rcpp::traits::input_parameter< bool >::type force_new(force_newSEXP);
+    rcpp_result_gen = Rcpp::wrap(init_defm(m, force_new));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -320,7 +321,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_set_names", (DL_FUNC) &_defm_set_names, 3},
     {"_defm_get_Y_names", (DL_FUNC) &_defm_get_Y_names, 1},
     {"_defm_get_X_names", (DL_FUNC) &_defm_get_X_names, 1},
-    {"_defm_init_defm", (DL_FUNC) &_defm_init_defm, 1},
+    {"_defm_init_defm", (DL_FUNC) &_defm_init_defm, 2},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
     {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
     {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 3},
