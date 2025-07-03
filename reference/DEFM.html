@@ -67,7 +67,9 @@ binary Markov processes.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">init_defm</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">new_defm_cpp</span><span class="op">(</span><span class="va">id</span>, <span class="va">Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1L</span>, copy_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">init_defm</span><span class="op">(</span><span class="va">m</span>, force_new <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">print_stats</span><span class="op">(</span><span class="va">m</span>, i <span class="op">=</span> <span class="fl">0L</span><span class="op">)</span></span>
 <span></span>
@@ -90,15 +92,7 @@ binary Markov processes.</p>
     <h2>Arguments</h2>
 
 
-<dl><dt id="arg-m">m<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
-<dd><p>An object of class <code>DEFM</code>.</p></dd>
-
-
-<dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
-<dd><p>An integer scalar indicating which set of statistics to print (see details.)</p></dd>
-
-
-<dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
+<dl><dt id="arg-id">id<a class="anchor" aria-label="anchor" href="#arg-id"></a></dt>
 <dd><p>Integer vector of length <code>n</code>. Observation ids, for example,
 person id.</p></dd>
 
@@ -113,6 +107,24 @@ person id.</p></dd>
 
 <dt id="arg-order">order<a class="anchor" aria-label="anchor" href="#arg-order"></a></dt>
 <dd><p>Integer. Order of the markov process, by default, 1.</p></dd>
+
+
+<dt id="arg-copy-data">copy_data<a class="anchor" aria-label="anchor" href="#arg-copy-data"></a></dt>
+<dd><p>Logical scalar. When <code>TRUE</code> (default) will copy the data
+into the model, otherwise it will use the data as a pointer (see details).</p></dd>
+
+
+<dt id="arg-m">m<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
+<dd><p>An object of class <code>DEFM</code>.</p></dd>
+
+
+<dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>
+<dd><p>Logical scalar. When <code>TRUE</code> (default) no cache is used
+to add new arrays (see details).</p></dd>
+
+
+<dt id="arg-i">i<a class="anchor" aria-label="anchor" href="#arg-i"></a></dt>
+<dd><p>An integer scalar indicating which set of statistics to print (see details.)</p></dd>
 
 </dl></div>
     <div id="value">
@@ -130,7 +142,27 @@ model.</p></li>
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>The <code>print_stats</code> function prints the supportset of the ith type
+    <p>The <code>id</code> vector is used to group the observations. For example, if you have
+a dataset with multiple individuals, the <code>id</code> vector should contain the
+individual ids. The <code>Y</code> matrix contains the binary responses, where each
+column represents a different response variable. The <code>X</code> matrix contains
+the covariates, which can be used to model the relationship between the
+responses and the covariates. The <code>order</code> parameter specifies the order of
+the Markov process, which determines how many previous observations are
+used to predict the current observation.</p>
+<p>The <code>copy_data</code> parameter specifies
+whether the data should be copied into the model or used as a pointer. If
+<code>copy_data</code> is <code>TRUE</code>, the data will be copied into the model, which can
+be useful if you want to avoid duplicating the data in memory. If
+<code>copy_data</code> is <code>FALSE</code>, the model will use the data as a pointer, which can
+be more efficient (but dangerous if the data is removed).</p>
+<p>The <code>init_defm</code> function initializes the model, which means it computes
+the sufficient statistics and prepares the model for fitting. The
+<code>force_new</code> parameter specifies whether to force the model to be
+consider each array added as completely unique, even if it has the
+same support set as an existing array. This is an experimental feature
+and should be used with caution.</p>
+<p>The <code>print_stats</code> function prints the supportset of the ith type
 of array in the model.</p>
     </div>
     <div id="references">
@@ -163,6 +195,19 @@ for the log-likelihood function.</p></div>
 <span class="r-in"><span><span class="fu">init_defm</span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fitting the MLE</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_mle.html">defm_mle</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats4::mle(minuslogl = minuslog, start = start, method = "L-BFGS-B", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nobs = nrow_defm(object) + ifelse(morder_defm(object) &gt; 0, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -nobs_defm(object), 0L), lower = lower, upper = upper)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>               Logit intercept alcohol               Logit intercept tobacco </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            -0.2896936                            -2.1754188 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                    Logit intercept mj Motif {tobacco⁺, mj⁻}⇨{tobacco⁺, mj⁺} </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                            -1.7470941                             3.9131145 </span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -177,7 +222,7 @@ for the log-likelihood function.</p></div>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
