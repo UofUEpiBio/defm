@@ -4,6 +4,7 @@
 \alias{logodds}
 \alias{defm_mle}
 \alias{summary_table}
+\alias{texreg_fancy}
 \title{Maximum Likelihood Estimation of DEFM}
 \usage{
 logodds(m, par, i, j)
@@ -11,6 +12,8 @@ logodds(m, par, i, j)
 defm_mle(object, start, lower, upper, ...)
 
 summary_table(object, as_texreg = FALSE, ...)
+
+texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 }
 \arguments{
 \item{m}{An object of class \link{DEFM}.}
@@ -26,9 +29,15 @@ summary_table(object, as_texreg = FALSE, ...)
 \item{lower, upper}{Lower and upper limits for the optimization (passed to
 \link[stats4:mle]{stats4::mle}.)}
 
-\item{...}{Further arguments passed to \link[stats4:mle]{stats4::mle}.}
+\item{...}{Further arguments passed to \code{summary_table} (with the exception of \code{as_texreg}, which is set to \code{TRUE}).}
 
 \item{as_texreg}{When \code{TRUE}, wraps the result in a texreg object}
+
+\item{fits}{Either a single or a list of \code{defm} fit objects.}
+
+\item{fun}{Function to be called from the \code{texreg} package, e.g., \code{texreg::screenreg}.}
+
+\item{skip_intercept}{Whether or not to skip the intercept (logit) terms when printing the table}
 }
 \value{
 \itemize{
@@ -36,6 +45,9 @@ summary_table(object, as_texreg = FALSE, ...)
 }
 
 An object of class \link[stats4:mle]{stats4::mle}.
+
+An object of class texreg with additional attributes: \code{custom.coef.map},
+\code{reorder.coef}, and \code{groups}.
 }
 \description{
 Fits a Discrete Exponential-Family Model using Maximum Likelihood.
