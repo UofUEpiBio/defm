@@ -68,6 +68,18 @@ SEXP new_defm(
     bool copy_data = true
   ) {
 
+  // Adding typechecks to see if the SEXP objects have
+  // the class attribute equal to the type
+  if (!Rf_inherits(id, "integer")) {
+    stop("id must be an integer vector");
+  }
+  if (!Rf_inherits(Y, "matrix") || !Rf_inherits(Y, "integer")) {
+    stop("Y must be an integer matrix");
+  }
+  if (!Rf_inherits(X, "matrix") || !Rf_inherits(X, "numeric")) {
+    stop("X must be a numeric matrix");
+  }
+
   int n_id = LENGTH(id);
   int n_y  = Rf_ncols(Y);
   int n_x  = Rf_ncols(X);
