@@ -312,7 +312,6 @@ image(as(Y_sim_formula, "dgCMatrix"))
 ```
 
 
-
 # Acknowledgement
 
 This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions, or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.

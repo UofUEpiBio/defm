@@ -70,13 +70,13 @@ SEXP new_defm(
 
   // Adding typechecks to see if the SEXP objects have
   // the class attribute equal to the type
-  if (!Rf_inherits(id, "integer")) {
+  if (!Rf_isInteger(id)) {
     stop("id must be an integer vector");
   }
-  if (!Rf_inherits(Y, "matrix") || !Rf_inherits(Y, "integer")) {
+  if (!Rf_isMatrix(Y) || !Rf_isInteger(Y)) {
     stop("Y must be an integer matrix");
   }
-  if (!Rf_inherits(X, "matrix") || !Rf_inherits(X, "numeric")) {
+  if (!Rf_isMatrix(X) || !Rf_isNumeric(X)) {
     stop("X must be a numeric matrix");
   }
 
