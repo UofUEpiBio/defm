@@ -55,7 +55,7 @@ are a function of the previous point in time. The following lines
 simulate the baseline data:
 
 ```{r data-simulation}
-library(defm)
+# library(defm)
 
 # Simulation parameters
 set.seed(1231)

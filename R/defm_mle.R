@@ -243,7 +243,7 @@ group_terms <- function(
   list(
     custom.coef.map = coefmap,
     reorder.coef = terms_order,
-    groups = terms_groups,
+    groups = terms_groups
   )
 
 }
@@ -266,11 +266,25 @@ texreg_fancy <- function(
 
   extra_info <- group_terms(fits, skip_intercept = skip_intercept)
 
+  if (inherits(fits, "mle")) {
+
+    fits <- list(fits)
+
+  } else if (inherits(fits, "list")) {
+
+    if (!all(sapply(fits, inherits(), what = "mle"))) {
+
+      stop("When `fits` is a list, all its elements should be of class 'mle'.")
+
+    }
+
+  }
+
   do.call(
     fun,
     c(
       list(lapply(fits, summary_table, as_texreg = TRUE, ...)),
-      group_terms(fits)
+      extra_info
       )
   )
 

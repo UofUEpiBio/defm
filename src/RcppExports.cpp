@@ -10,6 +10,79 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// get_counters_cpp
+SEXP get_counters_cpp(SEXP& model);
+RcppExport SEXP _defm_get_counters_cpp(SEXP modelSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type model(modelSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_counters_cpp(model));
+    return rcpp_result_gen;
+END_RCPP
+}
+// print_counters_cpp
+SEXP print_counters_cpp(SEXP& x);
+RcppExport SEXP _defm_print_counters_cpp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(print_counters_cpp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// get_counter_cpp
+SEXP get_counter_cpp(SEXP& x, size_t i);
+RcppExport SEXP _defm_get_counter_cpp(SEXP xSEXP, SEXP iSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< size_t >::type i(iSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_counter_cpp(x, i));
+    return rcpp_result_gen;
+END_RCPP
+}
+// print_counter_cpp
+SEXP print_counter_cpp(SEXP& x);
+RcppExport SEXP _defm_print_counter_cpp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(print_counter_cpp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// set_counter_info_cpp
+SEXP set_counter_info_cpp(SEXP& counter, std::string new_name, std::string new_desc);
+RcppExport SEXP _defm_set_counter_info_cpp(SEXP counterSEXP, SEXP new_nameSEXP, SEXP new_descSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type counter(counterSEXP);
+    Rcpp::traits::input_parameter< std::string >::type new_name(new_nameSEXP);
+    Rcpp::traits::input_parameter< std::string >::type new_desc(new_descSEXP);
+    rcpp_result_gen = Rcpp::wrap(set_counter_info_cpp(counter, new_name, new_desc));
+    return rcpp_result_gen;
+END_RCPP
+}
+// as_list_defm_counter_cpp
+List as_list_defm_counter_cpp(SEXP& x);
+RcppExport SEXP _defm_as_list_defm_counter_cpp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(as_list_defm_counter_cpp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// length_defm_counters
+SEXP length_defm_counters(SEXP& x);
+RcppExport SEXP _defm_length_defm_counters(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(length_defm_counters(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // new_defm
 SEXP new_defm(SEXP& id, SEXP& Y, SEXP& X, int order, bool copy_data);
 RcppExport SEXP _defm_new_defm(SEXP idSEXP, SEXP YSEXP, SEXP XSEXP, SEXP orderSEXP, SEXP copy_dataSEXP) {
@@ -317,6 +390,13 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_defm_get_counters_cpp", (DL_FUNC) &_defm_get_counters_cpp, 1},
+    {"_defm_print_counters_cpp", (DL_FUNC) &_defm_print_counters_cpp, 1},
+    {"_defm_get_counter_cpp", (DL_FUNC) &_defm_get_counter_cpp, 2},
+    {"_defm_print_counter_cpp", (DL_FUNC) &_defm_print_counter_cpp, 1},
+    {"_defm_set_counter_info_cpp", (DL_FUNC) &_defm_set_counter_info_cpp, 3},
+    {"_defm_as_list_defm_counter_cpp", (DL_FUNC) &_defm_as_list_defm_counter_cpp, 1},
+    {"_defm_length_defm_counters", (DL_FUNC) &_defm_length_defm_counters, 1},
     {"_defm_new_defm", (DL_FUNC) &_defm_new_defm, 5},
     {"_defm_set_names", (DL_FUNC) &_defm_set_names, 3},
     {"_defm_get_Y_names", (DL_FUNC) &_defm_get_Y_names, 1},
