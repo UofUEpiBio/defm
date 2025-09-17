@@ -14,7 +14,7 @@
 \usage{
 get_counters(model)
 
-\method{[}{DEFM_counters}(x, i)
+\method{[}{DEFM_counters}(counters, i)
 
 set_counter_info(counter, new_name = "", new_desc = "")
 
@@ -32,6 +32,12 @@ set_counters_names(x, ...)
 }
 \arguments{
 \item{model}{A \link{DEFM} model object.}
+
+\item{counters}{An object of class \code{DEFM_counters}.}
+
+\item{i}{Integer from 0 to nterms - 1. Counter to get.}
+
+\item{counter}{An object of class \code{DEFM_counter}.}
 
 \item{new_name, new_desc}{Strings with the new name and new description,
 respectively. If empty, no side effect.}

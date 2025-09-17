@@ -21,3 +21,4 @@ bibliography\.bib
 ^docker$
 \.gitattributes$
 playground/
+^.devcontainer

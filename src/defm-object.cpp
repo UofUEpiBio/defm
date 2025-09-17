@@ -185,7 +185,7 @@ CharacterVector get_X_names(
 //' and should be used with caution.  
 //' @export
 // [[Rcpp::export(invisible = true, rng = false)]]
-SEXP init_defm(SEXP m, bool force_new = true)
+SEXP init_defm(SEXP m, bool force_new = false)
 {
   Rcpp::XPtr< defm::DEFM > ptr(m);
   ptr->init(force_new);

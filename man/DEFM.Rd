@@ -17,7 +17,7 @@
 \usage{
 new_defm_cpp(id, Y, X, order = 1L, copy_data = TRUE)
 
-init_defm(m, force_new = TRUE)
+init_defm(m, force_new = FALSE)
 
 print_stats(m, i = 0L)
 

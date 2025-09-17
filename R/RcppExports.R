@@ -29,11 +29,13 @@ print_defm_counters <- function(x) {
 
 #' @export
 #' @rdname get_counters
+#' @param counters An object of class `DEFM_counters`.
+#' @param i Integer from 0 to nterms - 1. Counter to get.
 #' @returns
 #' - The method `[.DEFM_counters` returns an individual counter of class
 #' `DEFM_counter`.
-`[.DEFM_counters` <- function(x, i) {
-    .Call(`_defm_get_counter_cpp`, x, i)
+`[.DEFM_counters` <- function(counters, i) {
+    .Call(`_defm_get_counter_cpp`, counters, i)
 }
 
 print_defm_counter <- function(x) {
@@ -42,6 +44,7 @@ print_defm_counter <- function(x) {
 
 #' @export
 #' @rdname get_counters
+#' @param counter An object of class `DEFM_counter`.
 #' @param new_name,new_desc Strings with the new name and new description, 
 #' respectively. If empty, no side effect.
 #' @details
@@ -178,7 +181,7 @@ get_X_names <- function(m) {
 #' same support set as an existing array. This is an experimental feature
 #' and should be used with caution.  
 #' @export
-init_defm <- function(m, force_new = TRUE) {
+init_defm <- function(m, force_new = FALSE) {
     invisible(.Call(`_defm_init_defm`, m, force_new))
 }
 
@@ -407,8 +410,8 @@ term_defm_transition <- function(m, mat, idx = "", vname = "") {
 #' input for defm::counter_transition(). Formulas can be specified in the
 #' following ways:
 #'
-#' - Intercept effect: {...} No transition, only including the current state.
-#' - Transition effect: {...} > {...} Includes current and previous states.
+#' - Intercept effect: `{...}` No transition, only including the current state.
+#' - Transition effect: `{...} > {...}` Includes current and previous states.
 #'
 #' The general notation is `[0]y[column id]_[row id]`. A preceeding zero
 #' means that the value of the cell is considered to be zero. The column
@@ -418,7 +421,7 @@ term_defm_transition <- function(m, mat, idx = "", vname = "") {
 #' ## Intercept effects
 #'
 #' Intercept effects only involve a single set of curly brackets. Using the
-#' 'greater-than' symbol (i.e., '<') is only for transition effects. When
+#' 'greater-than' symbol (i.e., `<`) is only for transition effects. When
 #' specifying intercept effects, users can skip the `row_id`, e.g.,
 #' `y0_0` is equivalent to `y0`. If the passed `row id` is different from
 #' the Markov order, i.e., `row_id != m_order`, then the function returns

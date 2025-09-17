@@ -56,27 +56,29 @@ SEXP print_counters_cpp(SEXP & x)
 
 //' @export
 //' @rdname get_counters
+//' @param counters An object of class `DEFM_counters`.
+//' @param i Integer from 0 to nterms - 1. Counter to get.
 //' @returns
 //' - The method `[.DEFM_counters` returns an individual counter of class
 //' `DEFM_counter`.
 // [[Rcpp::export(rng = false, name = "`[.DEFM_counters`")]]
-SEXP get_counter_cpp(SEXP & x, size_t i)
+SEXP get_counter_cpp(SEXP & counters, size_t i)
 {
 
-    if (!Rf_inherits(x, "DEFM_counters"))
+    if (!Rf_inherits(counters, "DEFM_counters"))
         stop("The passed object is not of class DEFM_counters.");
     
-    Rcpp::XPtr< defm::DEFMCounters > counters(x);
+    Rcpp::XPtr< defm::DEFMCounters > counters_ptr(counters);
 
-    if (counters->size() <= i)
+    if (counters_ptr->size() <= i)
         stop(
             "There are only " +
-            std::to_string(counters->size()) +
+            std::to_string(counters_ptr->size()) +
             " counters. Remember that indexing starts at 0."
         );
 
     Rcpp::XPtr< defm::DEFMCounter > counter(
-        &counters->operator[](i),
+        &counters_ptr->operator[](i),
         false
     );
 
@@ -97,6 +99,7 @@ SEXP print_counter_cpp(SEXP & x) {
 
 //' @export
 //' @rdname get_counters
+//' @param counter An object of class `DEFM_counter`.
 //' @param new_name,new_desc Strings with the new name and new description, 
 //' respectively. If empty, no side effect.
 //' @details

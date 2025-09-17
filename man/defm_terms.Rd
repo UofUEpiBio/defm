@@ -71,8 +71,8 @@ will take the formula and generate the corresponding
 input for defm::counter_transition(). Formulas can be specified in the
 following ways:
 \itemize{
-\item Intercept effect: {...} No transition, only including the current state.
-\item Transition effect: {...} > {...} Includes current and previous states.
+\item Intercept effect: \code{{...}} No transition, only including the current state.
+\item Transition effect: \code{{...} > {...}} Includes current and previous states.
 }
 
 The general notation is \verb{[0]y[column id]_[row id]}. A preceeding zero
@@ -82,7 +82,7 @@ is indexed from 0,) and the row id goes from 0 to m_order.
 \subsection{Intercept effects}{
 
 Intercept effects only involve a single set of curly brackets. Using the
-'greater-than' symbol (i.e., '<') is only for transition effects. When
+'greater-than' symbol (i.e., \code{<}) is only for transition effects. When
 specifying intercept effects, users can skip the \code{row_id}, e.g.,
 \code{y0_0} is equivalent to \code{y0}. If the passed \verb{row id} is different from
 the Markov order, i.e., \code{row_id != m_order}, then the function returns

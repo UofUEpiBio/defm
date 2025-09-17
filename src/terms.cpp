@@ -152,8 +152,8 @@ SEXP term_defm_transition(
 //' input for defm::counter_transition(). Formulas can be specified in the
 //' following ways:
 //'
-//' - Intercept effect: {...} No transition, only including the current state.
-//' - Transition effect: {...} > {...} Includes current and previous states.
+//' - Intercept effect: `{...}` No transition, only including the current state.
+//' - Transition effect: `{...} > {...}` Includes current and previous states.
 //'
 //' The general notation is `[0]y[column id]_[row id]`. A preceeding zero
 //' means that the value of the cell is considered to be zero. The column
@@ -163,7 +163,7 @@ SEXP term_defm_transition(
 //' ## Intercept effects
 //'
 //' Intercept effects only involve a single set of curly brackets. Using the
-//' 'greater-than' symbol (i.e., '<') is only for transition effects. When
+//' 'greater-than' symbol (i.e., `<`) is only for transition effects. When
 //' specifying intercept effects, users can skip the `row_id`, e.g.,
 //' `y0_0` is equivalent to `y0`. If the passed `row id` is different from
 //' the Markov order, i.e., `row_id != m_order`, then the function returns

@@ -31,13 +31,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_counter_cpp
-SEXP get_counter_cpp(SEXP& x, size_t i);
-RcppExport SEXP _defm_get_counter_cpp(SEXP xSEXP, SEXP iSEXP) {
+SEXP get_counter_cpp(SEXP& counters, size_t i);
+RcppExport SEXP _defm_get_counter_cpp(SEXP countersSEXP, SEXP iSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< SEXP& >::type counters(countersSEXP);
     Rcpp::traits::input_parameter< size_t >::type i(iSEXP);
-    rcpp_result_gen = Rcpp::wrap(get_counter_cpp(x, i));
+    rcpp_result_gen = Rcpp::wrap(get_counter_cpp(counters, i));
     return rcpp_result_gen;
 END_RCPP
 }
