@@ -7,6 +7,9 @@
 \alias{length.DEFM_counters}
 \alias{as.list.DEFM_counters}
 \alias{as.list.DEFM_counter}
+\alias{set_counters_names}
+\alias{set_counters_names.DEFM}
+\alias{set_counters_names.DEFM_counters}
 \title{Extract the counters from a DEFM model}
 \usage{
 get_counters(model)
@@ -20,9 +23,15 @@ set_counter_info(counter, new_name = "", new_desc = "")
 \method{as.list}{DEFM_counters}(x, ...)
 
 \method{as.list}{DEFM_counter}(x, ...)
+
+set_counters_names(x, ...)
+
+\method{set_counters_names}{DEFM}(x, ...)
+
+\method{set_counters_names}{DEFM_counters}(x, ...)
 }
 \arguments{
-\item{model}{An object of class \link{DEFM}.}
+\item{model}{A \link{DEFM} model object.}
 
 \item{new_name, new_desc}{Strings with the new name and new description,
 respectively. If empty, no side effect.}
@@ -50,6 +59,10 @@ in the vector. This should match the return from \code{\link[=nterms_defm]{nterm
 \itemize{
 \item The \code{as.list} methods return a list with the name and description
 of the counters.
+}
+
+\itemize{
+\item The function \code{set_counters_names()} returns the counters invisibly.
 }
 }
 \description{
