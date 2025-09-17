@@ -21,6 +21,8 @@ as.list.DEFM_counters <- function(x, ...) {
 
 #' @export
 #' @rdname get_counters
+#' @param x Either a `DEFM_counters` or a `DEFM_counter` object.
+#' @param ... Further arguments passed to the method (not used).
 #' @returns
 #' - The `as.list` methods return a list with the name and description
 #' of the counters.

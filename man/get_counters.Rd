@@ -41,6 +41,10 @@ set_counters_names(x, ...)
 
 \item{new_name, new_desc}{Strings with the new name and new description,
 respectively. If empty, no side effect.}
+
+\item{x}{Either a \code{DEFM_counters} or a \code{DEFM_counter} object.}
+
+\item{...}{Further arguments passed to the method (not used).}
 }
 \value{
 \itemize{
