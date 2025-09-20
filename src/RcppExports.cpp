@@ -300,91 +300,74 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// term_defm_ones
-SEXP term_defm_ones(SEXP m, std::string idx, std::string vname);
-RcppExport SEXP _defm_term_defm_ones(SEXP mSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
+// td_ones
+SEXP td_ones(SEXP m, std::string covar);
+RcppExport SEXP _defm_td_ones(SEXP mSEXP, SEXP covarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_ones(m, idx, vname));
+    Rcpp::traits::input_parameter< std::string >::type covar(covarSEXP);
+    rcpp_result_gen = Rcpp::wrap(td_ones(m, covar));
     return rcpp_result_gen;
 END_RCPP
 }
-// term_defm_fe
-SEXP term_defm_fe(SEXP m, std::string idx, double k, std::string vname);
-RcppExport SEXP _defm_term_defm_fe(SEXP mSEXP, SEXP idxSEXP, SEXP kSEXP, SEXP vnameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< double >::type k(kSEXP);
-    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_fe(m, idx, k, vname));
-    return rcpp_result_gen;
-END_RCPP
-}
-// term_defm_transition
-SEXP term_defm_transition(SEXP m, IntegerMatrix& mat, std::string idx, std::string vname);
-RcppExport SEXP _defm_term_defm_transition(SEXP mSEXP, SEXP matSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
+// td_generic
+SEXP td_generic(SEXP m, IntegerMatrix& mat, std::string covar);
+RcppExport SEXP _defm_td_generic(SEXP mSEXP, SEXP matSEXP, SEXP covarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< IntegerMatrix& >::type mat(matSEXP);
-    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition(m, mat, idx, vname));
+    Rcpp::traits::input_parameter< std::string >::type covar(covarSEXP);
+    rcpp_result_gen = Rcpp::wrap(td_generic(m, mat, covar));
     return rcpp_result_gen;
 END_RCPP
 }
-// term_defm_transition_formula
-SEXP term_defm_transition_formula(SEXP m, std::string formula, std::string idx, std::string vname);
-RcppExport SEXP _defm_term_defm_transition_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
+// td_formula
+SEXP td_formula(SEXP m, std::string formula, std::string new_name);
+RcppExport SEXP _defm_td_formula(SEXP mSEXP, SEXP formulaSEXP, SEXP new_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::string >::type formula(formulaSEXP);
-    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_transition_formula(m, formula, idx, vname));
+    Rcpp::traits::input_parameter< std::string >::type new_name(new_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(td_formula(m, formula, new_name));
     return rcpp_result_gen;
 END_RCPP
 }
-// term_defm_logit_intercept
-SEXP term_defm_logit_intercept(SEXP m, IntegerVector coords, std::string idx, std::string vname);
-RcppExport SEXP _defm_term_defm_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP idxSEXP, SEXP vnameSEXP) {
+// td_logit_intercept
+SEXP td_logit_intercept(SEXP m, IntegerVector coords, std::string covar);
+RcppExport SEXP _defm_td_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP covarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type coords(coordsSEXP);
-    Rcpp::traits::input_parameter< std::string >::type idx(idxSEXP);
-    Rcpp::traits::input_parameter< std::string >::type vname(vnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(term_defm_logit_intercept(m, coords, idx, vname));
+    Rcpp::traits::input_parameter< std::string >::type covar(covarSEXP);
+    rcpp_result_gen = Rcpp::wrap(td_logit_intercept(m, coords, covar));
     return rcpp_result_gen;
 END_RCPP
 }
 // rule_not_one_to_zero
-SEXP rule_not_one_to_zero(SEXP m, std::vector< size_t > idx);
-RcppExport SEXP _defm_rule_not_one_to_zero(SEXP mSEXP, SEXP idxSEXP) {
+SEXP rule_not_one_to_zero(SEXP m, std::vector< size_t > term_indices);
+RcppExport SEXP _defm_rule_not_one_to_zero(SEXP mSEXP, SEXP term_indicesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< std::vector< size_t > >::type idx(idxSEXP);
-    rcpp_result_gen = Rcpp::wrap(rule_not_one_to_zero(m, idx));
+    Rcpp::traits::input_parameter< std::vector< size_t > >::type term_indices(term_indicesSEXP);
+    rcpp_result_gen = Rcpp::wrap(rule_not_one_to_zero(m, term_indices));
     return rcpp_result_gen;
 END_RCPP
 }
 // rule_constrain_support
-SEXP rule_constrain_support(SEXP m, int idx, double lb, double ub);
-RcppExport SEXP _defm_rule_constrain_support(SEXP mSEXP, SEXP idxSEXP, SEXP lbSEXP, SEXP ubSEXP) {
+SEXP rule_constrain_support(SEXP m, int term_index, double lb, double ub);
+RcppExport SEXP _defm_rule_constrain_support(SEXP mSEXP, SEXP term_indexSEXP, SEXP lbSEXP, SEXP ubSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< int >::type idx(idxSEXP);
+    Rcpp::traits::input_parameter< int >::type term_index(term_indexSEXP);
     Rcpp::traits::input_parameter< double >::type lb(lbSEXP);
     Rcpp::traits::input_parameter< double >::type ub(ubSEXP);
-    rcpp_result_gen = Rcpp::wrap(rule_constrain_support(m, idx, lb, ub));
+    rcpp_result_gen = Rcpp::wrap(rule_constrain_support(m, term_index, lb, ub));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -417,11 +400,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_motif_census_cpp", (DL_FUNC) &_defm_motif_census_cpp, 2},
     {"_defm_logodds", (DL_FUNC) &_defm_logodds, 4},
     {"_defm_is_motif", (DL_FUNC) &_defm_is_motif, 1},
-    {"_defm_term_defm_ones", (DL_FUNC) &_defm_term_defm_ones, 3},
-    {"_defm_term_defm_fe", (DL_FUNC) &_defm_term_defm_fe, 4},
-    {"_defm_term_defm_transition", (DL_FUNC) &_defm_term_defm_transition, 4},
-    {"_defm_term_defm_transition_formula", (DL_FUNC) &_defm_term_defm_transition_formula, 4},
-    {"_defm_term_defm_logit_intercept", (DL_FUNC) &_defm_term_defm_logit_intercept, 4},
+    {"_defm_td_ones", (DL_FUNC) &_defm_td_ones, 2},
+    {"_defm_td_generic", (DL_FUNC) &_defm_td_generic, 3},
+    {"_defm_td_formula", (DL_FUNC) &_defm_td_formula, 3},
+    {"_defm_td_logit_intercept", (DL_FUNC) &_defm_td_logit_intercept, 3},
     {"_defm_rule_not_one_to_zero", (DL_FUNC) &_defm_rule_not_one_to_zero, 2},
     {"_defm_rule_constrain_support", (DL_FUNC) &_defm_rule_constrain_support, 4},
     {NULL, NULL, 0}

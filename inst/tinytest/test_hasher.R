@@ -7,7 +7,7 @@ mymodel_0 <- new_defm(
 )
 
 mymodel_0 |>
-  term_defm_logit_intercept(idx = "Hispanic")
+  td_logit_intercept(idx = "Hispanic")
 
 mymodel_1 <- new_defm(
   id = valentesnsList$id,

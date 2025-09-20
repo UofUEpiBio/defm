@@ -80,13 +80,13 @@ logit_0 <- new_defm(
 )
 
 # Building the model
-term_defm_logit_intercept(logit_0)
-term_defm_logit_intercept(logit_0, idx = "Hispanic")
-term_defm_logit_intercept(
+td_logit_intercept(logit_0)
+td_logit_intercept(logit_0, idx = "Hispanic")
+td_logit_intercept(
  logit_0, idx = "exposure_smoke",
  vname = "Smoke Exp"
 )
-term_defm_logit_intercept(logit_0, idx = "Grades")
+td_logit_intercept(logit_0, idx = "Grades")
 init_defm(logit_0) # Needs to be initialized
 
 # Fitting the model

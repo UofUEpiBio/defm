@@ -1,12 +1,6 @@
 ---
-output:
-  github_document:
-    math_method:
-      engine: webtex
-      url: https://latex.codecogs.com/gif.image?
-    pandoc_args: --webtex=https://ibm.codecogs.com/gif.latex?
-editor_options: 
-  chunk_output_type: console
+format: gfm
+html-math-method: webtex
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -38,10 +32,10 @@ provides a computationally efficient implementation of this family of models.
 
 # Installation
 
-You can install `defm` using devtools:
+You can install `defm` using the [`remotes`](https://cran.r-project.org/package=remotes){target="_blank"} R package:
 
 ``` r
-devtools::install_github("UofUEpi/defm")
+remotes::install_github("UofUEpi/defm")
 ```
 
 # Examples
@@ -119,13 +113,13 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
   d_model. <- new_defm(id., Y., X., order = order.)
 
   # Adding the model terms
-  term_defm_ones(d_model.)
-  term_defm_ones(d_model., "x1")
+  td_ones(d_model.)
+  td_ones(d_model., covar = "x1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
   
-  term_defm_transition(d_model., transition)
+  td_generic(d_model., transition)
   
   # Initializing the model
   init_defm(d_model.)
@@ -222,7 +216,7 @@ With the data in hand, we can now simulate the process. First, we need
 to build the model. The key component of the model will be the transition
 matrices:
 
-<!-- $$
+$$
 \left[\begin{array}{cccc}
 1 & 0 & NA & \dots \\
 0 & 1 & NA & \dots
@@ -235,13 +229,13 @@ matrices:
 \dots & NA & 1 & 0 \\
 \dots & NA & 0 & 1 
 \end{array}\right]
-$$ --> 
+$$
 
-<div align="center"><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D"></div>
 
 Let's take a look at the process:
 
 ```{r}
+#| label: example3-sim
 # Creating a new instance of a DEFM object
 d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 
@@ -249,20 +243,21 @@ d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 for (i in (1:(n_y - 1) - 1)) {
   transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
   transition[c(1:4) + 2 * i] <- c(1,0,0,1)
-  term_defm_transition(d_model, transition)
+  td_generic(d_model, transition)
 }
 
 # Here is the last transition term
 transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
 transition[c(n_y * 2 - 1, n_y * 2, 1, 2)] <- c(1,0,0,1)
-term_defm_transition(d_model, transition)
+td_generic(d_model, transition)
 
 # Adding a term of ones
-term_defm_ones(d_model)
+td_ones(d_model)
 
 # Initializing and simulating
 init_defm(d_model)
-Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
+set.seed(33)
+(Y_sim <-sim_defm(d_model, par = c(rep(200, n_y), -5)))
 ```
 
 The simulation should produce a nice-looking figure:
@@ -278,6 +273,7 @@ In this example, we will redo the previous model, but now use formulas for
 specifying the transitions:
 
 ```{r}
+#| label: sim-with-formula
 d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 
 # We can use text formulas to add transition terms
@@ -294,15 +290,16 @@ d_model_formula <- d_model_formula +
   "{0y0, y9} > {y0, 0y9}" 
 
 d_model_formula |>
-  term_defm_ones()
-  
+  td_ones()
+
 init_defm(d_model_formula)
 
 # Inspecting
 d_model_formula
 
 # Simulating
-(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(20, n_y), -10)))
+set.seed(33)
+(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(200, n_y), -5)))
 ```
 
 The new simulation...

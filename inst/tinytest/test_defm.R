@@ -6,8 +6,8 @@ mymodel <- new_defm(
   order = 0
 )
 
-term_defm_logit_intercept(mymodel)
-term_defm_logit_intercept(mymodel, idx = "Hispanic")
+td_logit_intercept(mymodel)
+td_logit_intercept(mymodel, idx = "Hispanic")
 init_defm(mymodel)
 
 ans <- defm_mle(mymodel)
@@ -56,7 +56,7 @@ expect_equivalent(
   tolerance = 1e-4
 )
 
-# term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+# td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 
 # motif_census(mymodel, locs = 0:1)
 

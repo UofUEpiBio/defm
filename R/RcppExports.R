@@ -116,8 +116,8 @@ length.DEFM_counters <- function(x) {
 #' )
 #' 
 #' # Adding the intercept terms and a motif from tobacco to mj
-#' term_defm_logit_intercept(mymodel)
-#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' td_logit_intercept(mymodel)
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #' 
 #' # Initialize the model
 #' init_defm(mymodel)
@@ -210,8 +210,8 @@ print_defm_cpp <- function(x) {
 #' )
 #' 
 #' # Adding the intercept terms and a motif from tobacco to mj
-#' term_defm_logit_intercept(mymodel)
-#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' td_logit_intercept(mymodel)
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #'
 #' # Computing the log-likelihood
 #' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
@@ -317,8 +317,8 @@ morder_defm <- function(m) {
 #' )
 #' 
 #' # Adding the intercept terms and a motif from tobacco to mj
-#' term_defm_logit_intercept(mymodel)
-#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' td_logit_intercept(mymodel)
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 #' 
 #' # Initialize the model
 #' init_defm(mymodel)
@@ -350,7 +350,9 @@ is_motif <- function(m) {
 #' Model specification for DEFM
 #'
 #' @param m An object of class [DEFM].
-#' @param idx Integer. When greater than -1, index (starting from 0) of a covariate
+#' @param cover String. Name of a covariate to use as an interaction
+#' for the effect. If equal to `""`, then no interaction effect.
+#' is used.
 #' used to weight the term.
 #' @export
 #'
@@ -369,27 +371,32 @@ is_motif <- function(m) {
 #'   order = 1
 #' )
 #' 
-#' # Adding the intercept terms and a motif from tobacco to mj
-#' term_defm_logit_intercept(mymodel)
-#' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' # Conventional regression intercept
+#' td_logit_intercept(mymodel)
+#'
+#' # Interaction effect with Hispanic
+#' td_logit_intercept(mymodel, covar = "Hispanic")
+#' 
+#' # Transition effect from only y1 to both equal to 1.
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' 
+#' # Same but interaction with Female
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2} x Female")
 #'
 #' # Inspecting the model
 #' mymodel
-term_defm_ones <- function(m, idx = "", vname = "") {
-    invisible(.Call(`_defm_term_defm_ones`, m, idx, vname))
-}
-
-#' @rdname defm_terms
-#' @export
-#' @param k Numeric scalar. Exponent used in the term.
-term_defm_fe <- function(m, idx = "", k = 1.0, vname = "") {
-    invisible(.Call(`_defm_term_defm_fe`, m, idx, k, vname))
+#' 
+#' # Initializing and fitting
+#' init_defm(mymodel)
+#' defm_mle(mymodel)
+td_ones <- function(m, covar = "") {
+    invisible(.Call(`_defm_td_ones`, m, covar))
 }
 
 #' @param mat Integer matrix. The matrix specifies the type of motif to capture
 #' (see details.)
 #' @details
-#' In `term_defm_transition`, users can specify a particular motif to model. Motifs
+#' In `td_generic`, users can specify a particular motif to model. Motifs
 #' are represented by cells with values equal to 1, for example, the matrix:
 #'
 #' ```  y0 y1 y2
@@ -401,11 +408,11 @@ term_defm_fe <- function(m, idx = "", k = 1.0, vname = "") {
 #' the matrix should include 0 to mark zero values.
 #' @export
 #' @rdname defm_terms
-term_defm_transition <- function(m, mat, idx = "", vname = "") {
-    invisible(.Call(`_defm_term_defm_transition`, m, mat, idx, vname))
+td_generic <- function(m, mat, covar = "") {
+    invisible(.Call(`_defm_td_generic`, m, mat, covar))
 }
 
-#' @details The function `term_defm_transition_formula`,
+#' @details The function `td_formula`,
 #' will take the formula and generate the corresponding
 #' input for defm::counter_transition(). Formulas can be specified in the
 #' following ways:
@@ -417,6 +424,13 @@ term_defm_transition <- function(m, mat, idx = "", vname = "") {
 #' means that the value of the cell is considered to be zero. The column
 #' id goes between 0 and the number of columns in the array - 1 (so it
 #' is indexed from 0,) and the row id goes from 0 to m_order.
+#'
+#' Both Intercepts and Transition can interact with covariates. Using 
+#' either the `covar` argument or, in the case of formulas, `x [Covar name]`,
+#' for example:
+#'
+#' - Intercept effect: `{...} x Hispanic` interacts with the Hispanic covar.
+#' - Transition effect: `{...} > {...} x Hispanic` Same.
 #'
 #' ## Intercept effects
 #'
@@ -438,37 +452,41 @@ term_defm_transition <- function(m, mat, idx = "", vname = "") {
 #' an greater-than symbol, i.e., `{...} > {...}`. The first set of brackets,
 #' which we call LHS, can only hold `row id` that are less than `m_order`.
 #' @param formula Character scalar (see details).
-#' @param idx Character scalar. Name of the variable to include in the term.
-#' @param vname Character scalar. Name to be assigned for the new term.
+#' @param new_name Character scalar. Name to be assigned for the new term.
+#' if empty, then it builds a name based on the formula.
 #' @export
 #' @rdname defm_terms
-term_defm_transition_formula <- function(m, formula, idx = "", vname = "") {
-    invisible(.Call(`_defm_term_defm_transition_formula`, m, formula, idx, vname))
+td_formula <- function(m, formula, new_name = "") {
+    invisible(.Call(`_defm_td_formula`, m, formula, new_name))
 }
 
 #' @export
 #' @rdname defm_terms
-#' @details The term `term_defm_logit_intercept` will add what is equivalent to an
+#' @details The term `td_logit_intercept` will add what is equivalent to an
 #' intercept in a logistic regression. When `coords` is specified, then the
 #' function will add one intercept per outcome. These can be weighted by
 #' a covariate.
 #' @param coords Integer vector with the coordinates to include in the term.
-term_defm_logit_intercept <- function(m, coords = as.integer( c()), idx = "", vname = "") {
-    invisible(.Call(`_defm_term_defm_logit_intercept`, m, coords, idx, vname))
+td_logit_intercept <- function(m, coords = as.integer( c()), covar = "") {
+    invisible(.Call(`_defm_td_logit_intercept`, m, coords, covar))
 }
 
 #' @details The function `rule_not_one_to_zero` will avoid the transition one to zero in a Markov process.
 #' @export
 #' @rdname defm_terms
-rule_not_one_to_zero <- function(m, idx) {
-    invisible(.Call(`_defm_rule_not_one_to_zero`, m, idx))
+#' @param term_indices Non-negative vector of indices. Indicates which
+#' outcomes this rule will apply.
+rule_not_one_to_zero <- function(m, term_indices) {
+    invisible(.Call(`_defm_rule_not_one_to_zero`, m, term_indices))
 }
 
 #' @details The function `rule_constrain_support` will constrain the support of the model
 #' by specifying a lower and upper bound for a given statistic.
 #' @param lb,ub Numeric scalars. Lower and upper bounds.
+#' @param term_index Non-negative scalar. Which term this rule will apply.
 #' @rdname defm_terms
-rule_constrain_support <- function(m, idx, lb, ub) {
-    invisible(.Call(`_defm_rule_constrain_support`, m, idx, lb, ub))
+#' @export
+rule_constrain_support <- function(m, term_index, lb, ub) {
+    invisible(.Call(`_defm_rule_constrain_support`, m, term_index, lb, ub))
 }
 
