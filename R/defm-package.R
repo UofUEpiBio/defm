@@ -37,26 +37,30 @@ print.DEFM <- function(x, ...) {
 #' @references 
 #' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}
 new_defm <- function(
-    id, Y, X, order = 1
+    id, Y, X, order = 1, copy_data = TRUE
 ) {
 
-  m <- new_defm_cpp(id, Y, X, order)
+  m <- new_defm_cpp(id, Y, X, order, copy_data)
 
   cnames_y <- if (is.matrix(Y))
     colnames(Y)
   else
-    NULL
+    stop("Y should be a matrix")
 
   cnames_x <- if (is.matrix(X))
     colnames(X)
   else
-    NULL
+    stop("X should be a matrix")
 
-  if (is.null(cnames_y))
-    cnames_y <- paste0("y", 0:(ncol(Y) - 1))
+  # If the names are empty, then error
+  if (is.null(cnames_y) || any(cnames_y == ""))
+    stop("Y should have column names.")
 
-  if (is.null(cnames_x))
-    cnames_x <- paste0("x", 0:(ncol(X) - 1))
+  # if (is.null(cnames_y))
+  #   cnames_y <- paste0("y", 0:(ncol(Y) - 1))
+
+  # if (is.null(cnames_x))
+  #   cnames_x <- paste0("x", 0:(ncol(X) - 1))
 
   set_names(m, cnames_y, cnames_x)
 

@@ -208,7 +208,7 @@ SEXP td_formula(
   if (new_name != "")
   {
     auto n_counter = ptr->nterms();
-    (*ptr->get_counters())[n_counter].set_name(
+    (*ptr->get_counters())[n_counter - 1].set_name(
       new_name
     );
   }
