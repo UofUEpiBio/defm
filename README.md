@@ -11,6 +11,8 @@ status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/p
 [![Grand
 total](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
+[![defm status
+badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with
@@ -31,6 +33,16 @@ target="_blank"><code>remotes</code></a> R package:
 ``` r
 remotes::install_github("UofUEpi/defm")
 ```
+
+Or from our r-universe repository:
+
+    install.packages(
+      'defm',
+      repos = c(
+        'https://uofuepibio.r-universe.dev',
+        'https://cloud.r-project.org'
+      )
+    )
 
 # Examples
 
@@ -165,6 +177,7 @@ head(cbind(id, simulated_Y))
 Now, let’s see if we can recover the parameters using MLE:
 
 ``` r
+colnames(simulated_Y) <- paste0("y", 1:n_y - 1)
 d_model_sim <- build_model(id, simulated_Y, X, order = 1, par. = sim_par)
 ans <- defm_mle(d_model_sim)
 
@@ -402,6 +415,8 @@ Let’s take a look at the process:
 
 ``` r
 # Creating a new instance of a DEFM object
+colnames(Y) <- paste0("y", 0:(n_y - 1))
+colnames(X) <- "x0"
 d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 
 # Creating the transition terms, these
