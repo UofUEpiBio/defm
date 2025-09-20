@@ -350,7 +350,7 @@ is_motif <- function(m) {
 #' Model specification for DEFM
 #'
 #' @param m An object of class [DEFM].
-#' @param cover String. Name of a covariate to use as an interaction
+#' @param covar String. Name of a covariate to use as an interaction
 #' for the effect. If equal to `""`, then no interaction effect.
 #' is used.
 #' used to weight the term.
@@ -463,12 +463,12 @@ td_formula <- function(m, formula, new_name = "") {
 #' @export
 #' @rdname defm_terms
 #' @details The term `td_logit_intercept` will add what is equivalent to an
-#' intercept in a logistic regression. When `coords` is specified, then the
+#' intercept in a logistic regression. When `y_indices` is specified, then the
 #' function will add one intercept per outcome. These can be weighted by
 #' a covariate.
-#' @param coords Integer vector with the coordinates to include in the term.
-td_logit_intercept <- function(m, coords = as.integer( c()), covar = "") {
-    invisible(.Call(`_defm_td_logit_intercept`, m, coords, covar))
+#' @param y_indices Integer vector with the coordinates to include in the term.
+td_logit_intercept <- function(m, y_indices = as.integer( c()), covar = "") {
+    invisible(.Call(`_defm_td_logit_intercept`, m, y_indices, covar))
 }
 
 #' @details The function `rule_not_one_to_zero` will avoid the transition one to zero in a Markov process.

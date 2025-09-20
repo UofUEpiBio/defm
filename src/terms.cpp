@@ -8,7 +8,7 @@ using namespace Rcpp;
 //' Model specification for DEFM
 //'
 //' @param m An object of class [DEFM].
-//' @param cover String. Name of a covariate to use as an interaction
+//' @param covar String. Name of a covariate to use as an interaction
 //' for the effect. If equal to `""`, then no interaction effect.
 //' is used.
 //' used to weight the term.
@@ -220,14 +220,14 @@ SEXP td_formula(
 //' @export
 //' @rdname defm_terms
 //' @details The term `td_logit_intercept` will add what is equivalent to an
-//' intercept in a logistic regression. When `coords` is specified, then the
+//' intercept in a logistic regression. When `y_indices` is specified, then the
 //' function will add one intercept per outcome. These can be weighted by
 //' a covariate.
-//' @param coords Integer vector with the coordinates to include in the term.
+//' @param y_indices Integer vector with the coordinates to include in the term.
 // [[Rcpp::export(invisible = true, rng = false)]]
 SEXP td_logit_intercept(
   SEXP m,
-  IntegerVector coords = IntegerVector::create(),
+  IntegerVector y_indices = IntegerVector::create(),
   std::string covar = ""
 ) {
 
@@ -238,10 +238,10 @@ SEXP td_logit_intercept(
   check_covar(idx_, covar, ptr);
 
   std::vector< size_t > coords_;
-  for (auto c : coords)
+  for (auto c : y_indices)
   {
     if (c < 0)
-      stop("Element in coords is negative. Only zero or positive are allowed");
+      stop("Element in `y_indices` is negative. Only zero or positive are allowed");
     coords_.push_back(c);
   }
 
@@ -295,7 +295,7 @@ SEXP rule_constrain_support(
 ) {
 
   if (term_index < 0)
-    stop("idx must be greater than or equal to zero");
+    stop("`term_index` must be greater than or equal to zero.");
 
   Rcpp::XPtr< defm::DEFM > ptr(m);
 

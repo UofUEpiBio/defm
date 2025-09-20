@@ -18,7 +18,7 @@ td_generic(m, mat, covar = "")
 
 td_formula(m, formula, new_name = "")
 
-td_logit_intercept(m, coords = as.integer(c()), covar = "")
+td_logit_intercept(m, y_indices = as.integer(c()), covar = "")
 
 rule_not_one_to_zero(m, term_indices)
 
@@ -29,6 +29,11 @@ rule_constrain_support(m, term_index, lb, ub)
 \arguments{
 \item{m}{An object of class \link{DEFM}.}
 
+\item{covar}{String. Name of a covariate to use as an interaction
+for the effect. If equal to \code{""}, then no interaction effect.
+is used.
+used to weight the term.}
+
 \item{mat}{Integer matrix. The matrix specifies the type of motif to capture
 (see details.)}
 
@@ -37,7 +42,7 @@ rule_constrain_support(m, term_index, lb, ub)
 \item{new_name}{Character scalar. Name to be assigned for the new term.
 if empty, then it builds a name based on the formula.}
 
-\item{coords}{Integer vector with the coordinates to include in the term.}
+\item{y_indices}{Integer vector with the coordinates to include in the term.}
 
 \item{term_indices}{Non-negative vector of indices. Indicates which
 outcomes this rule will apply.}
@@ -47,11 +52,6 @@ outcomes this rule will apply.}
 \item{lb, ub}{Numeric scalars. Lower and upper bounds.}
 
 \item{e1, e2}{e1 An object of class \link{DEFM} (e1) and a character (e2).}
-
-\item{cover}{String. Name of a covariate to use as an interaction
-for the effect. If equal to \code{""}, then no interaction effect.
-is used.
-used to weight the term.}
 }
 \value{
 Invisible 0.
@@ -115,7 +115,7 @@ which we call LHS, can only hold \verb{row id} that are less than \code{m_order}
 }
 
 The term \code{td_logit_intercept} will add what is equivalent to an
-intercept in a logistic regression. When \code{coords} is specified, then the
+intercept in a logistic regression. When \code{y_indices} is specified, then the
 function will add one intercept per outcome. These can be weighted by
 a covariate.
 

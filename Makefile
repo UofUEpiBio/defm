@@ -7,7 +7,7 @@ build:
 install: 
 	R CMD INSTALL defm_*.tar.gz
 
-check: build
+check: 
 	R CMD check --as-cran defm_*.tar.gz
 
 update:

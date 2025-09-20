@@ -336,14 +336,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // td_logit_intercept
-SEXP td_logit_intercept(SEXP m, IntegerVector coords, std::string covar);
-RcppExport SEXP _defm_td_logit_intercept(SEXP mSEXP, SEXP coordsSEXP, SEXP covarSEXP) {
+SEXP td_logit_intercept(SEXP m, IntegerVector y_indices, std::string covar);
+RcppExport SEXP _defm_td_logit_intercept(SEXP mSEXP, SEXP y_indicesSEXP, SEXP covarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type coords(coordsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type y_indices(y_indicesSEXP);
     Rcpp::traits::input_parameter< std::string >::type covar(covarSEXP);
-    rcpp_result_gen = Rcpp::wrap(td_logit_intercept(m, coords, covar));
+    rcpp_result_gen = Rcpp::wrap(td_logit_intercept(m, y_indices, covar));
     return rcpp_result_gen;
 END_RCPP
 }

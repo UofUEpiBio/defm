@@ -36,12 +36,12 @@
 #' 
 #' # Building the model
 #' td_logit_intercept(logit_0)
-#' td_logit_intercept(logit_0, idx = "Hispanic")
+#' td_logit_intercept(logit_0, covar = "Hispanic")
 #' td_logit_intercept(
-#'  logit_0, idx = "exposure_smoke",
-#'  vname = "Smoke Exp"
+#'   logit_0,
+#'   covar = "exposure_smoke"
 #' )
-#' td_logit_intercept(logit_0, idx = "Grades")
+#' td_logit_intercept(logit_0, covar = "Grades")
 #' init_defm(logit_0) # Needs to be initialized
 #' 
 #' # Fitting the model

@@ -7,9 +7,9 @@
 <!-- badges: start -->
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/defm.png)](https://CRAN.R-project.org/package=defm)
+status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
 [![Grand
-total](https://cranlogs.r-pkg.org/badges/grand-total/defm.png)](https://CRAN.R-project.org/package=defm)
+total](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
 <!-- badges: end -->
 

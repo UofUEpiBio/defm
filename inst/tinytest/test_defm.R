@@ -7,7 +7,7 @@ mymodel <- new_defm(
 )
 
 td_logit_intercept(mymodel)
-td_logit_intercept(mymodel, idx = "Hispanic")
+td_logit_intercept(mymodel, covar = "Hispanic")
 init_defm(mymodel)
 
 ans <- defm_mle(mymodel)
