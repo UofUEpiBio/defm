@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">defm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
       </span>
     </div>
 
@@ -57,7 +57,9 @@
 <span></span>
 <span><span class="fu">defm_mle</span><span class="op">(</span><span class="va">object</span>, <span class="va">start</span>, <span class="va">lower</span>, <span class="va">upper</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">summary_table</span><span class="op">(</span><span class="va">object</span>, as_texreg <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">summary_table</span><span class="op">(</span><span class="va">object</span>, as_texreg <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">texreg_fancy</span><span class="op">(</span><span class="va">fits</span>, <span class="va">fun</span>, skip_intercept <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -90,11 +92,23 @@
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Further arguments passed to <a href="https://rdrr.io/r/stats4/mle.html" class="external-link">stats4::mle</a>.</p></dd>
+<dd><p>Further arguments passed to <code>summary_table</code> (with the exception of <code>as_texreg</code>, which is set to <code>TRUE</code>).</p></dd>
 
 
 <dt id="arg-as-texreg">as_texreg<a class="anchor" aria-label="anchor" href="#arg-as-texreg"></a></dt>
 <dd><p>When <code>TRUE</code>, wraps the result in a texreg object</p></dd>
+
+
+<dt id="arg-fits">fits<a class="anchor" aria-label="anchor" href="#arg-fits"></a></dt>
+<dd><p>Either a single or a list of <code>defm</code> fit objects.</p></dd>
+
+
+<dt id="arg-fun">fun<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
+<dd><p>Function to be called from the <code>texreg</code> package, e.g., <code><a href="https://rdrr.io/pkg/texreg/man/screenreg.html" class="external-link">texreg::screenreg</a></code>.</p></dd>
+
+
+<dt id="arg-skip-intercept">skip_intercept<a class="anchor" aria-label="anchor" href="#arg-skip-intercept"></a></dt>
+<dd><p>Whether or not to skip the intercept (logit) terms when printing the table</p></dd>
 
 </dl></div>
     <div id="value">
@@ -102,6 +116,8 @@
 
 <ul><li><p><code>logodds</code> returns a numeric vector with the log-odds for each observation in the data.</p></li>
 </ul><p>An object of class <a href="https://rdrr.io/r/stats4/mle.html" class="external-link">stats4::mle</a>.</p>
+<p>An object of class texreg with additional attributes: <code>custom.coef.map</code>,
+<code>reorder.coef</code>, and <code>groups</code>.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
@@ -141,13 +157,13 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Building the model</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span>, idx <span class="op">=</span> <span class="st">"Hispanic"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_logit_intercept</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span> <span class="va">logit_0</span>, idx <span class="op">=</span> <span class="st">"exposure_smoke"</span>,</span></span>
-<span class="r-in"><span> vname <span class="op">=</span> <span class="st">"Smoke Exp"</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span>, covar <span class="op">=</span> <span class="st">"Hispanic"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_logit_intercept</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">logit_0</span>,</span></span>
+<span class="r-in"><span>  covar <span class="op">=</span> <span class="st">"exposure_smoke"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span>, idx <span class="op">=</span> <span class="st">"Grades"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_logit_intercept</a></span><span class="op">(</span><span class="va">logit_0</span>, covar <span class="op">=</span> <span class="st">"Grades"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">logit_0</span><span class="op">)</span> <span class="co"># Needs to be initialized</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Fitting the model</span></span></span>
@@ -161,11 +177,11 @@ log-likelihood function of DEFMs.</p></div>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Comparing results</span></span></span>
 <span class="r-in"><span><span class="fu">summary_table</span><span class="op">(</span><span class="va">res_0</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                           coef         se      pvalues</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol             -0.2734108 0.31600024 3.869162e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic   1.3351257 0.13263011 7.766571e-24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Smoke Exp  0.6812041 0.10420835 6.278874e-11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades    -0.2840092 0.06961876 4.513403e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                coef         se      pvalues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol                  -0.2734108 0.31601060 3.869317e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Hispanic        1.3351257 0.13263089 7.771238e-24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x exposure_smoke  0.6812041 0.10420832 6.278809e-11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Logit intercept alcohol x Grades         -0.2840092 0.06962101 4.515969e-05</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">res_glm</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>

@@ -18,7 +18,7 @@ of the number of times each motif appears in the data."><meta property="og:image
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">defm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
       </span>
     </div>
 
@@ -55,7 +55,7 @@ of the number of times each motif appears in the data.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">motif_census</span><span class="op">(</span><span class="va">m</span>, <span class="va">locs</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">motif_census</span><span class="op">(</span><span class="va">m</span>, <span class="va">y_indices</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -66,9 +66,9 @@ of the number of times each motif appears in the data.</p>
 <dd><p>An object of class <a href="DEFM.html">DEFM</a>.</p></dd>
 
 
-<dt id="arg-locs">locs<a class="anchor" aria-label="anchor" href="#arg-locs"></a></dt>
-<dd><p>Idx (starting from zero) with the variables that will be
-included in the census.</p></dd>
+<dt id="arg-y-indices">y_indices<a class="anchor" aria-label="anchor" href="#arg-y-indices"></a></dt>
+<dd><p>Non-negative integer vector indicating what dependent
+variables will be included.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -93,14 +93,14 @@ included in the census.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Adding the intercept terms and a motif from tobacco to mj</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_logit_intercept</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="defm_terms.html">term_defm_transition_formula</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2}"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_logit_intercept</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_terms.html">td_formula</a></span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2}"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Initialize the model</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Motif counts featuring only the first two variables</span></span></span>
-<span class="r-in"><span><span class="fu">motif_census</span><span class="op">(</span><span class="va">mymodel</span>, locs <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">motif_census</span><span class="op">(</span><span class="va">mymodel</span>, y_indices <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Motif census for variable set: {alcohol, tobacco}</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               Motif Total</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 {0, 0} &gt; {0, 0} *   642</span>

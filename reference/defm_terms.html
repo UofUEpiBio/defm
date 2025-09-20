@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">defm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
       </span>
     </div>
 
@@ -53,19 +53,17 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">term_defm_ones</span><span class="op">(</span><span class="va">m</span>, idx <span class="op">=</span> <span class="st">""</span>, vname <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">td_ones</span><span class="op">(</span><span class="va">m</span>, covar <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">term_defm_fe</span><span class="op">(</span><span class="va">m</span>, idx <span class="op">=</span> <span class="st">""</span>, k <span class="op">=</span> <span class="fl">1</span>, vname <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu">td_generic</span><span class="op">(</span><span class="va">m</span>, <span class="va">mat</span>, covar <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">term_defm_transition</span><span class="op">(</span><span class="va">m</span>, <span class="va">mat</span>, idx <span class="op">=</span> <span class="st">""</span>, vname <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu">td_formula</span><span class="op">(</span><span class="va">m</span>, <span class="va">formula</span>, new_name <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">term_defm_transition_formula</span><span class="op">(</span><span class="va">m</span>, <span class="va">formula</span>, idx <span class="op">=</span> <span class="st">""</span>, vname <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu">td_logit_intercept</span><span class="op">(</span><span class="va">m</span>, y_indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, covar <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">term_defm_logit_intercept</span><span class="op">(</span><span class="va">m</span>, coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>, idx <span class="op">=</span> <span class="st">""</span>, vname <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
+<span><span class="fu">rule_not_one_to_zero</span><span class="op">(</span><span class="va">m</span>, <span class="va">term_indices</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">rule_not_one_to_zero</span><span class="op">(</span><span class="va">m</span>, <span class="va">idx</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">rule_constrain_support</span><span class="op">(</span><span class="va">m</span>, <span class="va">idx</span>, <span class="va">lb</span>, <span class="va">ub</span><span class="op">)</span></span>
+<span><span class="fu">rule_constrain_support</span><span class="op">(</span><span class="va">m</span>, <span class="va">term_index</span>, <span class="va">lb</span>, <span class="va">ub</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'DEFM'</span></span>
 <span><span class="va">e1</span> <span class="op">+</span> <span class="va">e2</span></span></code></pre></div>
@@ -79,16 +77,11 @@
 <dd><p>An object of class <a href="DEFM.html">DEFM</a>.</p></dd>
 
 
-<dt id="arg-idx">idx<a class="anchor" aria-label="anchor" href="#arg-idx"></a></dt>
-<dd><p>Character scalar. Name of the variable to include in the term.</p></dd>
-
-
-<dt id="arg-vname">vname<a class="anchor" aria-label="anchor" href="#arg-vname"></a></dt>
-<dd><p>Character scalar. Name to be assigned for the new term.</p></dd>
-
-
-<dt id="arg-k">k<a class="anchor" aria-label="anchor" href="#arg-k"></a></dt>
-<dd><p>Numeric scalar. Exponent used in the term.</p></dd>
+<dt id="arg-covar">covar<a class="anchor" aria-label="anchor" href="#arg-covar"></a></dt>
+<dd><p>String. Name of a covariate to use as an interaction
+for the effect. If equal to <code>""</code>, then no interaction effect.
+is used.
+used to weight the term.</p></dd>
 
 
 <dt id="arg-mat">mat<a class="anchor" aria-label="anchor" href="#arg-mat"></a></dt>
@@ -100,8 +93,22 @@
 <dd><p>Character scalar (see details).</p></dd>
 
 
-<dt id="arg-coords">coords<a class="anchor" aria-label="anchor" href="#arg-coords"></a></dt>
+<dt id="arg-new-name">new_name<a class="anchor" aria-label="anchor" href="#arg-new-name"></a></dt>
+<dd><p>Character scalar. Name to be assigned for the new term.
+if empty, then it builds a name based on the formula.</p></dd>
+
+
+<dt id="arg-y-indices">y_indices<a class="anchor" aria-label="anchor" href="#arg-y-indices"></a></dt>
 <dd><p>Integer vector with the coordinates to include in the term.</p></dd>
+
+
+<dt id="arg-term-indices">term_indices<a class="anchor" aria-label="anchor" href="#arg-term-indices"></a></dt>
+<dd><p>Non-negative vector of indices. Indicates which
+outcomes this rule will apply.</p></dd>
+
+
+<dt id="arg-term-index">term_index<a class="anchor" aria-label="anchor" href="#arg-term-index"></a></dt>
+<dd><p>Non-negative scalar. Which term this rule will apply.</p></dd>
 
 
 <dt id="arg-lb-ub">lb, ub<a class="anchor" aria-label="anchor" href="#arg-lb-ub"></a></dt>
@@ -118,25 +125,30 @@
     </div>
     <div id="details">
     <h2>Details</h2>
-    <p>In <code>term_defm_transition</code>, users can specify a particular motif to model. Motifs
+    <p>In <code>td_generic</code>, users can specify a particular motif to model. Motifs
 are represented by cells with values equal to 1, for example, the matrix:</p>
 <p></p><div class="sourceCode y0 y1 y2"><pre><code></code></pre><p></p></div>
 <p>represents a transition <code>y0 -&gt; (y1, y2)</code>. If 0 is a motif of interest, then
 the matrix should include 0 to mark zero values.</p>
-<p>The function <code>term_defm_transition_formula</code>,
+<p>The function <code>td_formula</code>,
 will take the formula and generate the corresponding
 input for defm::counter_transition(). Formulas can be specified in the
-following ways:</p><ul><li><p>Intercept effect: ... No transition, only including the current state.</p></li>
-<li><p>Transition effect: ... &gt; ... Includes current and previous states.</p></li>
+following ways:</p><ul><li><p>Intercept effect: <code>{...}</code> No transition, only including the current state.</p></li>
+<li><p>Transition effect: <code>{...} &gt; {...}</code> Includes current and previous states.</p></li>
 </ul><p>The general notation is <code>[0]y[column id]_[row id]</code>. A preceeding zero
 means that the value of the cell is considered to be zero. The column
 id goes between 0 and the number of columns in the array - 1 (so it
-is indexed from 0,) and the row id goes from 0 to m_order.</p><div class="section">
+is indexed from 0,) and the row id goes from 0 to m_order.</p>
+<p>Both Intercepts and Transition can interact with covariates. Using
+either the <code>covar</code> argument or, in the case of formulas, <code>x [Covar name]</code>,
+for example:</p><ul><li><p>Intercept effect: <code>{...} x Hispanic</code> interacts with the Hispanic covar.</p></li>
+<li><p>Transition effect: <code>{...} &gt; {...} x Hispanic</code> Same.</p></li>
+</ul><div class="section">
 <h3 id="intercept-effects">Intercept effects<a class="anchor" aria-label="anchor" href="#intercept-effects"></a></h3>
 
 
 <p>Intercept effects only involve a single set of curly brackets. Using the
-'greater-than' symbol (i.e., '&lt;') is only for transition effects. When
+'greater-than' symbol (i.e., <code>&lt;</code>) is only for transition effects. When
 specifying intercept effects, users can skip the <code>row_id</code>, e.g.,
 <code>y0_0</code> is equivalent to <code>y0</code>. If the passed <code>row id</code> is different from
 the Markov order, i.e., <code>row_id != m_order</code>, then the function returns
@@ -154,8 +166,8 @@ an greater-than symbol, i.e., <code>{...} &gt; {...}</code>. The first set of br
 which we call LHS, can only hold <code>row id</code> that are less than <code>m_order</code>.</p>
 </div>
 
-<p>The term <code>term_defm_logit_intercept</code> will add what is equivalent to an
-intercept in a logistic regression. When <code>coords</code> is specified, then the
+<p>The term <code>td_logit_intercept</code> will add what is equivalent to an
+intercept in a logistic regression. When <code>y_indices</code> is specified, then the
 function will add one intercept per outcome. These can be weighted by
 a covariate.</p>
 <p>The function <code>rule_not_one_to_zero</code> will avoid the transition one to zero in a Markov process.</p>
@@ -176,9 +188,17 @@ by specifying a lower and upper bound for a given statistic.</p>
 <span class="r-in"><span>  order <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Adding the intercept terms and a motif from tobacco to mj</span></span></span>
-<span class="r-in"><span><span class="fu">term_defm_logit_intercept</span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">term_defm_transition_formula</span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2}"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Conventional regression intercept</span></span></span>
+<span class="r-in"><span><span class="fu">td_logit_intercept</span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Interaction effect with Hispanic</span></span></span>
+<span class="r-in"><span><span class="fu">td_logit_intercept</span><span class="op">(</span><span class="va">mymodel</span>, covar <span class="op">=</span> <span class="st">"Hispanic"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Transition effect from only y1 to both equal to 1.</span></span></span>
+<span class="r-in"><span><span class="fu">td_formula</span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2}"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Same but interaction with Female</span></span></span>
+<span class="r-in"><span><span class="fu">td_formula</span><span class="op">(</span><span class="va">mymodel</span>, <span class="st">"{y1, 0y2} &gt; {y1, y2} x Female"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Inspecting the model</span></span></span>
 <span class="r-in"><span><span class="va">mymodel</span></span></span>
@@ -187,15 +207,46 @@ by specifying a lower and upper bound for a given statistic.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Support size range   : -</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Arrays in powerset   : 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Transform. Fun.      : no</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model terms ( 4)    :</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model terms (8)    :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept alcohol</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept tobacco</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept mj</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  - Motif {tobacco⁺, mj⁻}⇨{tobacco⁺, mj⁺}</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept alcohol x Hispanic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept tobacco x Hispanic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Logit intercept mj x Hispanic</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Motif {tobacco+, mj-}⇨{tobacco+, mj+}</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - Motif {tobacco+, mj-}⇨{tobacco+, mj+} x Female</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model Y variables (3):</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   0) alcohol</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   1) tobacco</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   2) mj</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Initializing and fitting</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="defm_mle.html">defm_mle</a></span><span class="op">(</span><span class="va">mymodel</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> stats4::mle(minuslogl = minuslog, start = start, method = "L-BFGS-B", </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     nobs = nrow_defm(object) + ifelse(morder_defm(object) &gt; 0, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         -nobs_defm(object), 0L), lower = lower, upper = upper)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Coefficients:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        Logit intercept alcohol </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     -1.4021661 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                        Logit intercept tobacco </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     -2.8318789 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                             Logit intercept mj </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                     -3.0995487 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Logit intercept alcohol x Hispanic </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      1.5999458 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             Logit intercept tobacco x Hispanic </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      0.9043077 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                  Logit intercept mj x Hispanic </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      1.7451446 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          Motif {tobacco+, mj-}⇨{tobacco+, mj+} </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      3.6516810 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Motif {tobacco+, mj-}⇨{tobacco+, mj+} x Female </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                      0.1025614 </span>
 </code></pre></div>
     </div>
   </div>

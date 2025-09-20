@@ -34,7 +34,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">defm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1-1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.1.0</span>
       </span>
     </div>
 
@@ -78,9 +78,9 @@
 <div class="section level1">
 <h1 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h1>
-<p>You can install <code>defm</code> using devtools:</p>
+<p>You can install <code>defm</code> using the <a href="https://cran.r-project.org/package=remotes" target="_blank" class="external-link"><code>remotes</code></a> R package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"UofUEpi/defm"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"UofUEpi/defm"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -218,12 +218,12 @@
 </table>
 <p>For this example, we will simulate a model with the following features:</p>
 <ul>
-<li><p><strong>Ones</strong>: Baseline density (prevalence of ones), <img src="https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D" title="\sum_{itk}y_{itk}" alt="_{itk}y_{itk}"></p></li>
-<li><p><strong>Ones x Attr 2</strong>: Same as before, but weighted by one of the covariates. (simil to fixed effect) <img src="https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D" title="\sum_{itk}y_{itk}x_{it}" alt="_{itk}y_{itk}x_{it}"></p></li>
-<li><p><strong>Transition</strong> : And a transition structure, in particular <code>y0 -&gt; (y0, y1)</code>, <img src="https://latex.codecogs.com/gif.image?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D" title="y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}" alt="y_{i0}0y_{i0}{t+1} y_{i1}^{t+1}">.</p></li>
+<li><p><strong>Ones</strong>: Baseline density (prevalence of ones), <embed src="https://latex.codecogs.com/svg.latex?%5Csum_%7Bitk%7Dy_%7Bitk%7D" title="\sum_{itk}y_{itk}"></embed></p></li>
+<li><p><strong>Ones x Attr 2</strong>: Same as before, but weighted by one of the covariates. (simil to fixed effect) <embed src="https://latex.codecogs.com/svg.latex?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D" title="\sum_{itk}y_{itk}x_{it}"></embed></p></li>
+<li><p><strong>Transition</strong> : And a transition structure, in particular <code>y0 -&gt; (y0, y1)</code>, <embed src="https://latex.codecogs.com/svg.latex?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D" title="y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}"></embed>.</p></li>
 </ul>
 <p>In <code>defm</code>, transition statistics can be represented using matrices. In this case, the transition can be written as:</p>
-<p><img src="https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D" title="\begin{array}{c}t\t+1\end{array}\left[\begin{array}{ccc}1 &amp; \cdot &amp; \cdot \ 1 &amp; 1 &amp; \cdot\end{array}\right]"></p>
+<p><embed src="https://latex.codecogs.com/svg.latex?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D" title="\begin{array}{c}t\t+1\end{array}\left[\begin{array}{ccc}1 &amp; \cdot &amp; \cdot \ 1 &amp; 1 &amp; \cdot\end{array}\right]"></embed></p>
 <p>which in <code>R</code> is</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="cn">NA_integer_</span>,<span class="cn">NA_integer_</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="cn">NA_integer_</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#      [,1] [,2] [,3]</span></span>
@@ -238,13 +238,13 @@
 <span>  <span class="va">d_model.</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/DEFM.html">new_defm</a></span><span class="op">(</span><span class="va">id.</span>, <span class="va">Y.</span>, <span class="va">X.</span>, order <span class="op">=</span> <span class="va">order.</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Adding the model terms</span></span>
-<span>  <span class="fu"><a href="reference/defm_terms.html">term_defm_ones</a></span><span class="op">(</span><span class="va">d_model.</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="reference/defm_terms.html">term_defm_ones</a></span><span class="op">(</span><span class="va">d_model.</span>, <span class="st">"x1"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/defm_terms.html">td_ones</a></span><span class="op">(</span><span class="va">d_model.</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/defm_terms.html">td_ones</a></span><span class="op">(</span><span class="va">d_model.</span>, covar <span class="op">=</span> <span class="st">"x1"</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">transition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA_integer_</span>, nrow <span class="op">=</span> <span class="va">order.</span> <span class="op">+</span> <span class="fl">1</span>, ncol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">Y.</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="va">transition</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">4</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
 <span>  </span>
-<span>  <span class="fu"><a href="reference/defm_terms.html">term_defm_transition</a></span><span class="op">(</span><span class="va">d_model.</span>, <span class="va">transition</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/defm_terms.html">td_generic</a></span><span class="op">(</span><span class="va">d_model.</span>, <span class="va">transition</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="co"># Initializing the model</span></span>
 <span>  <span class="fu"><a href="reference/DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">d_model.</span><span class="op">)</span></span>
@@ -292,7 +292,7 @@
 <span><span class="co">#&gt;                         Estimate Std. Error</span></span>
 <span><span class="co">#&gt; Num. of ones           -2.009506 0.01435063</span></span>
 <span><span class="co">#&gt; Num. of ones x x1       2.020209 0.01592262</span></span>
-<span><span class="co">#&gt; Motif {y0⁺}⇨{y0⁺, y1⁺}  5.051076 0.04649922</span></span>
+<span><span class="co">#&gt; Motif {y0+}⇨{y0+, y1+}  5.051076 0.04649922</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; -2 log L: 54960.47</span></span></code></pre></div>
 <p>Or better, we can use <code>texreg</code> to generate a pretty output:</p>
@@ -327,7 +327,7 @@ Num. of ones x x1
 </tr>
 <tr>
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif {y0⁺}⇨{y0⁺, y1⁺}
+Motif {y0+}⇨{y0+, y1+}
 </td>
 <td style="padding-left: 5px;padding-right: 5px;">
 5.05 (0.05)<sup>***</sup>
@@ -365,7 +365,18 @@ N
 </tr></tfoot>
 </table>
 <p>We can also see the counts</p>
-<table class="table">
+<table style="width:100%;" class="table">
+<colgroup>
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+<col width="11%">
+</colgroup>
 <thead><tr class="header">
 <th align="right">id</th>
 <th align="right">y0</th>
@@ -373,9 +384,9 @@ N
 <th align="right">y2</th>
 <th align="right">x0</th>
 <th align="right">x1</th>
-<th align="right"></th>
-<th align="right"></th>
-<th align="right"></th>
+<th align="right">Num. of ones</th>
+<th align="right">Num. of ones x x1</th>
+<th align="right">Motif {y0+}⇨{y0+, y1+}</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -490,9 +501,9 @@ N
 </tr>
 </tbody>
 </table>
-<p>Finally, we can also take a look at the distribution of the log odds. We calculate this by looking at changes in a single entry of the array. For example, the log-odds of having <img src="https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201" title="y_{12}: 0\to 1" alt="y_{12}: 0">, which are equivalent to</p>
+<p>Finally, we can also take a look at the distribution of the log odds. We calculate this by looking at changes in a single entry of the array. For example, the log-odds of having <embed src="https://latex.codecogs.com/svg.latex?y_%7B12%7D%3A%200%5Cto%201" title="y_{12}: 0\to 1"></embed>, which are equivalent to</p>
 <div class="float">
-<img src="https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)" alt=" = ((.y_{12} = 1\|_{-12}))"><div class="figcaption"> = ((.y_{12} = 1\|_{-12}))</div>
+<embed src="https://latex.codecogs.com/svg.latex?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)"></embed><div class="figcaption"> = ((.y_{12} = 1\|_{-12}))</div>
 </div>
 <p>We can use the <code>logodds</code> function for this:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -500,7 +511,7 @@ N
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lo</span>, main <span class="op">=</span> <span class="st">"Distribution of Log-odds for term Y(1,2)"</span>,</span>
 <span>     col<span class="op">=</span><span class="st">"tomato"</span>, border <span class="op">=</span> <span class="st">"transparent"</span>, breaks <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html" class="external-link">abline</a></span><span class="op">(</span>v<span class="op">=</span><span class="fl">0</span>, lwd <span class="op">=</span> <span class="fl">2</span>, lty <span class="op">=</span> <span class="fl">2</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-logodds-1.png" width="100%"></p>
+<p><img src="reference/figures/README-logodds-1.png" style="width:100.0%"></p>
 </div>
 <div class="section level2">
 <h2 id="example-2-a-fun-model">Example 2: A fun model<a class="anchor" aria-label="anchor" href="#example-2-a-fun-model"></a>
@@ -515,22 +526,8 @@ N
 <span><span class="va">Y</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fl">1L</span></span>
 <span><span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fl">0.0</span>, nrow <span class="op">=</span> <span class="va">n</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p>With the data in hand, we can now simulate the process. First, we need to build the model. The key component of the model will be the transition matrices:</p>
-<!-- $$
-\left[\begin{array}{cccc}
-1 & 0 & NA & \dots \\
-0 & 1 & NA & \dots
-\end{array}\right] \dots
-\left[\begin{array}{cccccc}
-\dots & NA & 1 & 0 & NA & \dots  \\
-\dots & NA & 0 & 1 & NA & \dots
-\end{array}\right] \dots
-\left[\begin{array}{cccc}
-\dots & NA & 1 & 0 \\
-\dots & NA & 0 & 1
-\end{array}\right]
-$$ -->
-<div align="center">
-<p><img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D"></p>
+<div class="float">
+<embed src="https://latex.codecogs.com/svg.latex?%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D" title="\left[\begin{array}{cccc} 1 &amp; 0 &amp; NA &amp; \dots \ 0 &amp; 1 &amp; NA &amp; \dots \end{array}\right] \dots \left[\begin{array}{cccccc} \dots &amp; NA &amp; 1 &amp; 0 &amp; NA &amp; \dots \ \dots &amp; NA &amp; 0 &amp; 1 &amp; NA &amp; \dots \end{array}\right] \dots \left[\begin{array}{cccc} \dots &amp; NA &amp; 1 &amp; 0 \ \dots &amp; NA &amp; 0 &amp; 1 \end{array}\right]"></embed><div class="figcaption">[</div>
 </div>
 <p>Let’s take a look at the process:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -541,22 +538,44 @@ $$ -->
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n_y</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">transition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA_integer_</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="va">n_y</span><span class="op">)</span></span>
 <span>  <span class="va">transition</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="reference/defm_terms.html">term_defm_transition</a></span><span class="op">(</span><span class="va">d_model</span>, <span class="va">transition</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/defm_terms.html">td_generic</a></span><span class="op">(</span><span class="va">d_model</span>, <span class="va">transition</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Here is the last transition term</span></span>
 <span><span class="va">transition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="cn">NA_integer_</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="va">n_y</span><span class="op">)</span></span>
 <span><span class="va">transition</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">n_y</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="fl">1</span>, <span class="va">n_y</span> <span class="op">*</span> <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">0</span>,<span class="fl">0</span>,<span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/defm_terms.html">term_defm_transition</a></span><span class="op">(</span><span class="va">d_model</span>, <span class="va">transition</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/defm_terms.html">td_generic</a></span><span class="op">(</span><span class="va">d_model</span>, <span class="va">transition</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Adding a term of ones</span></span>
-<span><span class="fu"><a href="reference/defm_terms.html">term_defm_ones</a></span><span class="op">(</span><span class="va">d_model</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/defm_terms.html">td_ones</a></span><span class="op">(</span><span class="va">d_model</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Initializing and simulating</span></span>
 <span><span class="fu"><a href="reference/DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">d_model</span><span class="op">)</span></span>
-<span><span class="va">Y_sim</span> <span class="op">&lt;-</span><span class="fu"><a href="reference/sim_defm.html">sim_defm</a></span><span class="op">(</span><span class="va">d_model</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span>, <span class="va">n_y</span><span class="op">)</span>, <span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">Y_sim</span> <span class="op">&lt;-</span><span class="fu"><a href="reference/sim_defm.html">sim_defm</a></span><span class="op">(</span><span class="va">d_model</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">n_y</span><span class="op">)</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
+<span><span class="co">#&gt;  [1,]    1    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [2,]    0    1    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [3,]    0    0    1    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [4,]    0    0    0    1    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [5,]    0    0    0    0    1    0    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [6,]    0    0    0    0    0    1    0    0    0     0</span></span>
+<span><span class="co">#&gt;  [7,]    0    0    0    0    0    0    1    0    0     0</span></span>
+<span><span class="co">#&gt;  [8,]    0    0    0    0    0    0    0    1    0     0</span></span>
+<span><span class="co">#&gt;  [9,]    0    0    0    0    0    0    0    0    1     0</span></span>
+<span><span class="co">#&gt; [10,]    0    0    0    0    0    0    0    0    0     1</span></span>
+<span><span class="co">#&gt; [11,]    1    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [12,]    0    1    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [13,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [14,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [15,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [16,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [17,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [18,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [19,]    0    0    0    0    0    0    1    0    0     0</span></span>
+<span><span class="co">#&gt; [20,]    0    0    0    0    0    0    0    0    0     0</span></span></code></pre></div>
 <p>The simulation should produce a nice-looking figure:</p>
-<p><img src="reference/figures/README-chain1fig-1.png" width="100%"></p>
+<p><img src="reference/figures/README-chain1fig-1.png" style="width:100.0%"></p>
 </div>
 <div class="section level2">
 <h2 id="example-3-using-formulas-for-transitions">Example 3: Using formulas for transitions<a class="anchor" aria-label="anchor" href="#example-3-using-formulas-for-transitions"></a>
@@ -579,29 +598,31 @@ $$ -->
 <span>  <span class="st">"{0y0, y9} &gt; {y0, 0y9}"</span> </span>
 <span></span>
 <span><span class="va">d_model_formula</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="reference/defm_terms.html">term_defm_ones</a></span><span class="op">(</span><span class="op">)</span></span>
-<span>  </span>
+<span>  <span class="fu"><a href="reference/defm_terms.html">td_ones</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="reference/DEFM.html">init_defm</a></span><span class="op">(</span><span class="va">d_model_formula</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Inspecting</span></span>
 <span><span class="va">d_model_formula</span></span>
 <span><span class="co">#&gt; Num. of Arrays       : 19</span></span>
-<span><span class="co">#&gt; Support size         : 19</span></span>
-<span><span class="co">#&gt; Support size range   : [0, 1]</span></span>
+<span><span class="co">#&gt; Support size         : 2</span></span>
+<span><span class="co">#&gt; Support size range   : [11, 20]</span></span>
+<span><span class="co">#&gt; Arrays in powerset   : 2048</span></span>
 <span><span class="co">#&gt; Transform. Fun.      : no</span></span>
 <span><span class="co">#&gt; Model terms (11)    :</span></span>
-<span><span class="co">#&gt;  - Motif {y0⁺, y1⁻}⇨{y0⁻, y1⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y1⁺, y2⁻}⇨{y1⁻, y2⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y2⁺, y3⁻}⇨{y2⁻, y3⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y3⁺, y4⁻}⇨{y3⁻, y4⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y4⁺, y5⁻}⇨{y4⁻, y5⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y5⁺, y6⁻}⇨{y5⁻, y6⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y6⁺, y7⁻}⇨{y6⁻, y7⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y7⁺, y8⁻}⇨{y7⁻, y8⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y8⁺, y9⁻}⇨{y8⁻, y9⁺}</span></span>
-<span><span class="co">#&gt;  - Motif {y0⁻, y9⁺}⇨{y0⁺, y9⁻}</span></span>
+<span><span class="co">#&gt;  - Motif {y0+, y1-}⇨{y0-, y1+}</span></span>
+<span><span class="co">#&gt;  - Motif {y1+, y2-}⇨{y1-, y2+}</span></span>
+<span><span class="co">#&gt;  - Motif {y2+, y3-}⇨{y2-, y3+}</span></span>
+<span><span class="co">#&gt;  - Motif {y3+, y4-}⇨{y3-, y4+}</span></span>
+<span><span class="co">#&gt;  - Motif {y4+, y5-}⇨{y4-, y5+}</span></span>
+<span><span class="co">#&gt;  - Motif {y5+, y6-}⇨{y5-, y6+}</span></span>
+<span><span class="co">#&gt;  - Motif {y6+, y7-}⇨{y6-, y7+}</span></span>
+<span><span class="co">#&gt;  - Motif {y7+, y8-}⇨{y7-, y8+}</span></span>
+<span><span class="co">#&gt;  - Motif {y8+, y9-}⇨{y8-, y9+}</span></span>
+<span><span class="co">#&gt;  - Motif {y0-, y9+}⇨{y0+, y9-}</span></span>
 <span><span class="co">#&gt;  - Num. of ones</span></span>
 <span><span class="co">#&gt; Model rules (1)     :</span></span>
+<span><span class="co">#&gt;  - Markov model of order 1</span></span>
 <span><span class="co">#&gt; Model Y variables (10):</span></span>
 <span><span class="co">#&gt;   0) y0</span></span>
 <span><span class="co">#&gt;   1) y1</span></span>
@@ -615,7 +636,8 @@ $$ -->
 <span><span class="co">#&gt;   9) y9</span></span>
 <span></span>
 <span><span class="co"># Simulating</span></span>
-<span><span class="op">(</span><span class="va">Y_sim_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim_defm.html">sim_defm</a></span><span class="op">(</span><span class="va">d_model_formula</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">20</span>, <span class="va">n_y</span><span class="op">)</span>, <span class="op">-</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">33</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">Y_sim_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim_defm.html">sim_defm</a></span><span class="op">(</span><span class="va">d_model_formula</span>, par <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">200</span>, <span class="va">n_y</span><span class="op">)</span>, <span class="op">-</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]</span></span>
 <span><span class="co">#&gt;  [1,]    1    0    0    0    0    0    0    0    0     0</span></span>
 <span><span class="co">#&gt;  [2,]    0    1    0    0    0    0    0    0    0     0</span></span>
@@ -629,16 +651,16 @@ $$ -->
 <span><span class="co">#&gt; [10,]    0    0    0    0    0    0    0    0    0     1</span></span>
 <span><span class="co">#&gt; [11,]    1    0    0    0    0    0    0    0    0     0</span></span>
 <span><span class="co">#&gt; [12,]    0    1    0    0    0    0    0    0    0     0</span></span>
-<span><span class="co">#&gt; [13,]    0    0    1    0    0    0    0    0    0     0</span></span>
-<span><span class="co">#&gt; [14,]    0    0    0    1    0    0    0    0    0     0</span></span>
-<span><span class="co">#&gt; [15,]    0    0    0    0    1    0    0    0    0     0</span></span>
-<span><span class="co">#&gt; [16,]    0    0    0    0    0    1    0    0    0     0</span></span>
-<span><span class="co">#&gt; [17,]    0    0    0    0    0    0    1    0    0     0</span></span>
-<span><span class="co">#&gt; [18,]    0    0    0    0    0    0    0    1    0     0</span></span>
-<span><span class="co">#&gt; [19,]    0    0    0    0    0    0    0    0    1     0</span></span>
-<span><span class="co">#&gt; [20,]    0    0    0    0    0    0    0    0    0     1</span></span></code></pre></div>
+<span><span class="co">#&gt; [13,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [14,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [15,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [16,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [17,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [18,]    0    0    0    0    0    0    0    0    0     0</span></span>
+<span><span class="co">#&gt; [19,]    0    0    0    0    0    0    1    0    0     0</span></span>
+<span><span class="co">#&gt; [20,]    0    0    0    0    0    0    0    0    0     0</span></span></code></pre></div>
 <p>The new simulation…</p>
-<p><img src="reference/figures/README-chain2fig-1.png" width="100%"></p>
+<p><img src="reference/figures/README-chain2fig-1.png" style="width:100.0%"></p>
 </div>
 </div>
 <div class="section level1">
