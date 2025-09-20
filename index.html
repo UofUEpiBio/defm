@@ -81,6 +81,14 @@
 <p>You can install <code>defm</code> using the <a href="https://cran.r-project.org/package=remotes" target="_blank" class="external-link"><code>remotes</code></a> R package:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"UofUEpi/defm"</span><span class="op">)</span></span></code></pre></div>
+<p>Or from our r-universe repository:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">install.packages</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>  <span class="st">'defm'</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="at">repos =</span> <span class="fu">c</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>    <span class="st">'https://uofuepibio.r-universe.dev'</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>    <span class="st">'https://cloud.r-project.org'</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>  )</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 <div class="section level1">
 <h1 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -89,7 +97,7 @@
 <h2 id="example-1-four-outcomes">Example 1: Four outcomes<a class="anchor" aria-label="anchor" href="#example-1-four-outcomes"></a>
 </h2>
 <p>In this example, we will simulate a dataset that contains 1,000 individuals with four different outcomes. The outcomes, 0/1 vectors, will be modeled as Markov processes of order one. Future states of this 0/1 vector are a function of the previous point in time. The following lines simulate the baseline data:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/UofUEpiBio/defm" class="external-link">defm</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: stats4</span></span>
 <span></span>
@@ -225,12 +233,12 @@
 <p>In <code>defm</code>, transition statistics can be represented using matrices. In this case, the transition can be written as:</p>
 <p><embed src="https://latex.codecogs.com/svg.latex?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D" title="\begin{array}{c}t\t+1\end{array}\left[\begin{array}{ccc}1 &amp; \cdot &amp; \cdot \ 1 &amp; 1 &amp; \cdot\end{array}\right]"></embed></p>
 <p>which in <code>R</code> is</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="cn">NA_integer_</span>,<span class="cn">NA_integer_</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="cn">NA_integer_</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="co">#      [,1] [,2] [,3]</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># [1,]    1   NA   NA</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># [2,]    1    1   NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="sc">&gt;</span> <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>,<span class="cn">NA_integer_</span>,<span class="cn">NA_integer_</span>,<span class="dv">1</span>,<span class="dv">1</span>,<span class="cn">NA_integer_</span>), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#      [,1] [,2] [,3]</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># [1,]    1   NA   NA</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co"># [2,]    1    1   NA</span></span></code></pre></div>
 <p>The <code>NA</code> entries in the matrix mean that those can be either zero or one. In other words, only values different from <code>NA</code> will be considered for specifying the terms. Here is the factory function:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creating the model and adding a couple of terms</span></span>
 <span><span class="va">build_model</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">id.</span>, <span class="va">Y.</span>, <span class="va">X.</span>, <span class="va">order.</span> <span class="op">=</span> <span class="fl">1</span>, <span class="va">par.</span> <span class="op">=</span> <span class="va">par.</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  </span>
@@ -263,7 +271,7 @@
 <strong>Transition</strong> : 5, And a high chance of observing the transition <code>y0 -&gt; (y0, y1)</code>
 </li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="va">d_model</span> <span class="op">&lt;-</span> <span class="fu">build_model</span><span class="op">(</span><span class="va">id</span>, <span class="va">Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1L</span>, par. <span class="op">=</span> <span class="va">sim_par</span><span class="op">)</span></span>
 <span><span class="va">simulated_Y</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/sim_defm.html">sim_defm</a></span><span class="op">(</span><span class="va">d_model</span>, <span class="va">sim_par</span><span class="op">)</span></span>
@@ -276,8 +284,9 @@
 <span><span class="co">#&gt; [5,]  2 0 1 0</span></span>
 <span><span class="co">#&gt; [6,]  2 1 1 0</span></span></code></pre></div>
 <p>Now, let’s see if we can recover the parameters using MLE:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d_model_sim</span> <span class="op">&lt;-</span> <span class="fu">build_model</span><span class="op">(</span><span class="va">id</span>, <span class="va">simulated_Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span>, par. <span class="op">=</span> <span class="va">sim_par</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">simulated_Y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fl">1</span><span class="op">:</span><span class="va">n_y</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">d_model_sim</span> <span class="op">&lt;-</span> <span class="fu">build_model</span><span class="op">(</span><span class="va">id</span>, <span class="va">simulated_Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span>, par. <span class="op">=</span> <span class="va">sim_par</span><span class="op">)</span></span>
 <span><span class="va">ans</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defm_mle.html">defm_mle</a></span><span class="op">(</span><span class="va">d_model_sim</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span></span>
@@ -506,7 +515,7 @@ N
 <embed src="https://latex.codecogs.com/svg.latex?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29" title="\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}};\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)"></embed><div class="figcaption"> = ((.y_{12} = 1\|_{-12}))</div>
 </div>
 <p>We can use the <code>logodds</code> function for this:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lo</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/defm_mle.html">logodds</a></span><span class="op">(</span><span class="va">d_model_sim</span>, <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">ans</span><span class="op">)</span>, <span class="fl">1</span>,  <span class="fl">2</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">lo</span>, main <span class="op">=</span> <span class="st">"Distribution of Log-odds for term Y(1,2)"</span>,</span>
 <span>     col<span class="op">=</span><span class="st">"tomato"</span>, border <span class="op">=</span> <span class="st">"transparent"</span>, breaks <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
@@ -518,7 +527,7 @@ N
 </h2>
 <p>For fun, imagine that we want to describe a process in which an individual moves sequentially through a set of states. In this example, there are ten different <code>y</code> variables, but the person can only have one of them as active (equal to one.) We can simulate such data using DEFM.</p>
 <p>We first need to generate the baseline data for the simulation. This involves creating a matrix of size 20x10 (so we have 20 time points,) filled with zeros in all but the first entry:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n</span>   <span class="op">&lt;-</span> <span class="fl">20L</span></span>
 <span><span class="va">n_y</span> <span class="op">&lt;-</span> <span class="fl">10L</span></span>
 <span><span class="va">id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="va">n</span><span class="op">)</span></span>
@@ -530,8 +539,10 @@ N
 <embed src="https://latex.codecogs.com/svg.latex?%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D" title="\left[\begin{array}{cccc} 1 &amp; 0 &amp; NA &amp; \dots \ 0 &amp; 1 &amp; NA &amp; \dots \end{array}\right] \dots \left[\begin{array}{cccccc} \dots &amp; NA &amp; 1 &amp; 0 &amp; NA &amp; \dots \ \dots &amp; NA &amp; 0 &amp; 1 &amp; NA &amp; \dots \end{array}\right] \dots \left[\begin{array}{cccc} \dots &amp; NA &amp; 1 &amp; 0 \ \dots &amp; NA &amp; 0 &amp; 1 \end{array}\right]"></embed><div class="figcaption">[</div>
 </div>
 <p>Let’s take a look at the process:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Creating a new instance of a DEFM object</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"y"</span>, <span class="fl">0</span><span class="op">:</span><span class="op">(</span><span class="va">n_y</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"x0"</span></span>
 <span><span class="va">d_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/DEFM.html">new_defm</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Creating the transition terms, these</span></span>
@@ -581,7 +592,7 @@ N
 <h2 id="example-3-using-formulas-for-transitions">Example 3: Using formulas for transitions<a class="anchor" aria-label="anchor" href="#example-3-using-formulas-for-transitions"></a>
 </h2>
 <p>In this example, we will redo the previous model, but now use formulas for specifying the transitions:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d_model_formula</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/DEFM.html">new_defm</a></span><span class="op">(</span>id <span class="op">=</span> <span class="va">id</span>, Y <span class="op">=</span> <span class="va">Y</span>, X <span class="op">=</span> <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># We can use text formulas to add transition terms</span></span>
@@ -723,6 +734,7 @@ N
 <li><a href="https://CRAN.R-project.org/package=defm" class="external-link"><img src="https://www.r-pkg.org/badges/version/defm" alt="CRAN status"></a></li>
 <li><a href="https://CRAN.R-project.org/package=defm" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/defm" alt="Grand total"></a></li>
 <li><a href="https://github.com/UofUEpiBio/defm/actions/workflows/r.yml" class="external-link"><img src="https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://uofuepibio.r-universe.dev/defm" class="external-link"><img src="https://uofuepibio.r-universe.dev/defm/badges/version" alt="defm status badge"></a></li>
 </ul>
 </div>
 
