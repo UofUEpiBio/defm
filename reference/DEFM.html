@@ -85,7 +85,7 @@ binary Markov processes.</p>
 <span></span>
 <span><span class="fu">morder_defm</span><span class="op">(</span><span class="va">m</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">new_defm</span><span class="op">(</span><span class="va">id</span>, <span class="va">Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">new_defm</span><span class="op">(</span><span class="va">id</span>, <span class="va">Y</span>, <span class="va">X</span>, order <span class="op">=</span> <span class="fl">1</span>, copy_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -110,8 +110,9 @@ person id.</p></dd>
 
 
 <dt id="arg-copy-data">copy_data<a class="anchor" aria-label="anchor" href="#arg-copy-data"></a></dt>
-<dd><p>Logical scalar. When <code>TRUE</code> (default) will copy the data
-into the model, otherwise it will use the data as a pointer (see details).</p></dd>
+<dd><p>Logical, if <code>TRUE</code> (default) the data is copied to the
+C++ side. If <code>FALSE</code>, the data is not copied, and the user must ensure
+that the data is not modified in R while the model exists.</p></dd>
 
 
 <dt id="arg-m">m<a class="anchor" aria-label="anchor" href="#arg-m"></a></dt>
