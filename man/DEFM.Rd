@@ -33,7 +33,7 @@ nobs_defm(m)
 
 morder_defm(m)
 
-new_defm(id, Y, X, order = 1)
+new_defm(id, Y, X, order = 1, copy_data = TRUE)
 }
 \arguments{
 \item{id}{Integer vector of length \code{n}. Observation ids, for example,
@@ -45,8 +45,9 @@ person id.}
 
 \item{order}{Integer. Order of the markov process, by default, 1.}
 
-\item{copy_data}{Logical scalar. When \code{TRUE} (default) will copy the data
-into the model, otherwise it will use the data as a pointer (see details).}
+\item{copy_data}{Logical, if \code{TRUE} (default) the data is copied to the
+C++ side. If \code{FALSE}, the data is not copied, and the user must ensure
+that the data is not modified in R while the model exists.}
 
 \item{m}{An object of class \code{DEFM}.}
 
