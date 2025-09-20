@@ -50,8 +50,8 @@ using namespace Rcpp;
 //' )
 //' 
 //' # Adding the intercept terms and a motif from tobacco to mj
-//' term_defm_logit_intercept(mymodel)
-//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' td_logit_intercept(mymodel)
+//' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 //' 
 //' # Initialize the model
 //' init_defm(mymodel)
@@ -67,6 +67,18 @@ SEXP new_defm(
     int order = 1,
     bool copy_data = true
   ) {
+
+  // Adding typechecks to see if the SEXP objects have
+  // the class attribute equal to the type
+  if (!Rf_isInteger(id)) {
+    stop("id must be an integer vector");
+  }
+  if (!Rf_isMatrix(Y) || !Rf_isInteger(Y)) {
+    stop("Y must be an integer matrix");
+  }
+  if (!Rf_isMatrix(X) || !Rf_isNumeric(X)) {
+    stop("X must be a numeric matrix");
+  }
 
   int n_id = LENGTH(id);
   int n_y  = Rf_ncols(Y);
@@ -173,7 +185,7 @@ CharacterVector get_X_names(
 //' and should be used with caution.  
 //' @export
 // [[Rcpp::export(invisible = true, rng = false)]]
-SEXP init_defm(SEXP m, bool force_new = true)
+SEXP init_defm(SEXP m, bool force_new = false)
 {
   Rcpp::XPtr< defm::DEFM > ptr(m);
   ptr->init(force_new);
@@ -215,8 +227,8 @@ SEXP print_defm(SEXP x)
 //' )
 //' 
 //' # Adding the intercept terms and a motif from tobacco to mj
-//' term_defm_logit_intercept(mymodel)
-//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' td_logit_intercept(mymodel)
+//' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 //'
 //' # Computing the log-likelihood
 //' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
@@ -417,8 +429,8 @@ int morder_defm(SEXP m)
 //' )
 //' 
 //' # Adding the intercept terms and a motif from tobacco to mj
-//' term_defm_logit_intercept(mymodel)
-//' term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' td_logit_intercept(mymodel)
+//' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 //' 
 //' # Initialize the model
 //' init_defm(mymodel)

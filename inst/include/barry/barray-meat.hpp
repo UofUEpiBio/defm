@@ -1224,7 +1224,8 @@ inline void  BArray<Cell_Type, Data_Type>:: print_n (
 
     std::va_list args;
     va_start(args, fmt);
-    printf_barry(fmt, args);
+    if (fmt != nullptr)
+        printf_barry(fmt, args);
     va_end(args);
 
     for (size_t i = 0u; i < nrow; ++i)
@@ -1239,9 +1240,11 @@ inline void  BArray<Cell_Type, Data_Type>:: print_n (
         #endif
         for (size_t j = 0u; j < ncol; ++j) {
             if (this->is_empty(i, j, false))
+            {
                 printf_barry("    . ");
-            else 
+            } else {
                 printf_barry(" %.2f ", static_cast<double>(this->get_cell(i, j, false)));
+            }
             
         }
 
@@ -1249,14 +1252,17 @@ inline void  BArray<Cell_Type, Data_Type>:: print_n (
 
     }
 
-    if (nrow < N)
-        printf_barry("Skipping %lu rows. ", N - nrow);
+    if (nrow < N) {
+        printf_barry("Skipping %i rows. ", static_cast< int >(N - nrow));
+    }
+    
+    if (ncol < M) {
+        printf_barry("Skipping %i columns. ", static_cast< int >(M - ncol));
+    }
 
-    if (ncol < M)
-        printf_barry("Skipping %lu columns. ", M - ncol);
-
-    if (nrow < N || ncol < M)
+    if (nrow < N || ncol < M) {
         printf_barry("\n");
+    }
     
     
     return;

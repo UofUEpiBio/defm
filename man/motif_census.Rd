@@ -5,13 +5,13 @@
 \alias{defm_motif_census}
 \title{Motif census}
 \usage{
-motif_census(m, locs)
+motif_census(m, y_indices)
 }
 \arguments{
 \item{m}{An object of class \link{DEFM}.}
 
-\item{locs}{Idx (starting from zero) with the variables that will be
-included in the census.}
+\item{y_indices}{Non-negative integer vector indicating what dependent
+variables will be included.}
 }
 \value{
 A matrix of class \link{defm_motif_census} with the motif counts.
@@ -32,14 +32,14 @@ mymodel <- new_defm(
 )
 
 # Adding the intercept terms and a motif from tobacco to mj
-term_defm_logit_intercept(mymodel)
-term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+td_logit_intercept(mymodel)
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 
 # Initialize the model
 init_defm(mymodel)
 
 # Motif counts featuring only the first two variables
-motif_census(mymodel, locs = 0:1)
+motif_census(mymodel, y_indices = 0:1)
 }
 \references{
 Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}

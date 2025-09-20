@@ -4,7 +4,7 @@
  * @brief Parses a motif formula
  * 
  * @details This function will take the formula and generate the corresponding
- * input for defm::counter_transition(). Formulas can be specified in the
+ * input for defm::counter_generic(). Formulas can be specified in the
  * following ways:
  * 
  * - Intercept effect: {...} No transition, only including the current state.
@@ -36,12 +36,14 @@
  * which we call LHS, can only hold `row id` that are less than `m_order`.
  * 
  * 
- * 
- * @param formula 
- * @param locations 
- * @param signs 
- * @param m_order 
- * @param y_ncol 
+ * @param formula A string specifying the motif formula (see details).
+ * @param locations A vector of locations for the motif variables.
+ * @param signs A vector of signs for the motif variables.
+ * @param covar_name If a covariate name is specified in the formula,
+ * this variable will hold its name. If no covariate is specified, it will
+ * be set to an empty string.
+ * @param m_order The Markov order.
+ * @param y_ncol The number of columns in the response variable.
  */
 inline void defm_motif_parser(
     std::string formula,
@@ -49,13 +51,13 @@ inline void defm_motif_parser(
     std::vector< bool > & signs,
     size_t m_order,
     size_t y_ncol,
-    std::string & covar_name,
-    std::string & vname
+    std::string & covar_name
 )
 {
     // Resetting the results
     locations.clear();
     signs.clear();
+    covar_name = "";
 
     std::regex pattern_intercept(
         std::string("\\{\\s*[01]?y[0-9]+(_[0-9]+)?(\\s*,\\s*[01]?y[0-9]+(_[0-9]+)?)*\\s*\\}") +
@@ -75,6 +77,7 @@ inline void defm_motif_parser(
 
     std::smatch match;
     std::regex_match(formula, match, pattern_transition);
+    std::string vname;
     if (!match.empty())
     {
 
@@ -82,7 +85,10 @@ inline void defm_motif_parser(
             throw std::logic_error("Transition effects are only valid when the data is a markov process.");
 
         // Matching the pattern '| [no spaces]$'
-        std::regex pattern_conditional(".+[}]\\s+x\\s+([^(]+)([(][^)]+[)])?\\s*$");
+        std::regex pattern_conditional(
+            ".+[}]\\s+x\\s+([^(]+)([(][^)]+[)])?\\s*$"
+        );
+
         std::smatch condmatch;
         std::regex_match(formula, condmatch, pattern_conditional);
         // Extracting the [no_spaces] part of the conditional

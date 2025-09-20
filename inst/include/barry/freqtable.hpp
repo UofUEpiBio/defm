@@ -214,14 +214,16 @@ inline void FreqTable<T>::print() const
         printf_barry("%7i | ", static_cast<int>(data[i * (k + 1u)]));
 
         for (size_t j = 1u; j < (k + 1u); ++j)
+        {
             printf_barry(" %.2f", data[i * (k + 1) + j]);
+        }
         printf_barry("\n");
 
         grand_total += static_cast<size_t>(data[i * (k + 1u)]);
 
     }
 
-    printf_barry("Grand total: %li\n", grand_total);
+    printf_barry("Grand total: %i\n", static_cast<int>(grand_total));
 
     return;
 

@@ -1,7 +1,7 @@
 Package: defm
 Type: Package
 Title: Estimation and Simulation of Multi-Binary Response Models
-Version: 0.1-1
+Version: 0.2.1.0
 Authors@R: c(
     person("George", "Vega Yon", role=c("aut", "cre"),
     email="g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")),
@@ -18,13 +18,13 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 LinkingTo: Rcpp
 Imports: 
     Rcpp,
     stats
 Depends: 
-    R (>= 2.10),
+    R (>= 4.1.0),
     stats4
 Suggests: 
     texreg, tinytest

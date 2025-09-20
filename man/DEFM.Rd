@@ -17,7 +17,7 @@
 \usage{
 new_defm_cpp(id, Y, X, order = 1L, copy_data = TRUE)
 
-init_defm(m, force_new = TRUE)
+init_defm(m, force_new = FALSE)
 
 print_stats(m, i = 0L)
 
@@ -136,8 +136,8 @@ mymodel <- new_defm(
 )
 
 # Adding the intercept terms and a motif from tobacco to mj
-term_defm_logit_intercept(mymodel)
-term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+td_logit_intercept(mymodel)
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 
 # Initialize the model
 init_defm(mymodel)

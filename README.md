@@ -1,4 +1,5 @@
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # defm: Fit and simulate discrete binary exponential family models
@@ -23,10 +24,12 @@ computationally efficient implementation of this family of models.
 
 # Installation
 
-You can install `defm` using devtools:
+You can install `defm` using the
+<a href="https://cran.r-project.org/package=remotes"
+target="_blank"><code>remotes</code></a> R package:
 
 ``` r
-devtools::install_github("UofUEpi/defm")
+remotes::install_github("UofUEpi/defm")
 ```
 
 # Examples
@@ -83,20 +86,20 @@ actually simulated data **WITH THE MODEL**.
 For this example, we will simulate a model with the following features:
 
 - **Ones**: Baseline density (prevalence of ones),
-  ![\sum\_{itk}y\_{itk}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
+  ![\sum\_{itk}y\_{itk}](https://latex.codecogs.com/svg.latex?%5Csum_%7Bitk%7Dy_%7Bitk%7D "\sum_{itk}y_{itk}")
 
 - **Ones x Attr 2**: Same as before, but weighted by one of the
   covariates. (simil to fixed effect)
-  ![\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/gif.image?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
+  ![\sum\_{itk}y\_{itk}x\_{it}](https://latex.codecogs.com/svg.latex?%5Csum_%7Bitk%7Dy_%7Bitk%7Dx_%7Bit%7D "\sum_{itk}y_{itk}x_{it}")
 
 - **Transition** : And a transition structure, in particular
   `y0 -> (y0, y1)`,
-  ![y\_{i0}^0y\_{i0}^{t+1} y\_{i1}^{t+1}](https://latex.codecogs.com/gif.image?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D "y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}").
+  ![y\_{i0}^0y\_{i0}^{t+1} y\_{i1}^{t+1}](https://latex.codecogs.com/svg.latex?y_%7Bi0%7D%5E0y_%7Bi0%7D%5E%7Bt%2B1%7D%20y_%7Bi1%7D%5E%7Bt%2B1%7D "y_{i0}^0y_{i0}^{t+1} y_{i1}^{t+1}").
 
 In `defm`, transition statistics can be represented using matrices. In
 this case, the transition can be written as:
 
-![\begin{array}{c}t\\t+1\end{array}\left\[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right\]](https://latex.codecogs.com/gif.image?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D "\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]")
+![\begin{array}{c}t\\t+1\end{array}\left\[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right\]](https://latex.codecogs.com/svg.latex?%5Cbegin%7Barray%7D%7Bc%7Dt%5C%5Ct%2B1%5Cend%7Barray%7D%5Cleft%5B%5Cbegin%7Barray%7D%7Bccc%7D1%20%26%20%5Ccdot%20%26%20%5Ccdot%20%5C%5C%201%20%26%201%20%26%20%5Ccdot%5Cend%7Barray%7D%5Cright%5D "\begin{array}{c}t\\t+1\end{array}\left[\begin{array}{ccc}1 & \cdot & \cdot \\ 1 & 1 & \cdot\end{array}\right]")
 
 which in `R` is
 
@@ -119,13 +122,13 @@ build_model <- function(id., Y., X., order. = 1, par. = par.) {
   d_model. <- new_defm(id., Y., X., order = order.)
 
   # Adding the model terms
-  term_defm_ones(d_model.)
-  term_defm_ones(d_model., "x1")
+  td_ones(d_model.)
+  td_ones(d_model., covar = "x1")
   
   transition <- matrix(NA_integer_, nrow = order. + 1, ncol = ncol(Y.))
   transition[c(1,2,4)] <- 1
   
-  term_defm_transition(d_model., transition)
+  td_generic(d_model., transition)
   
   # Initializing the model
   init_defm(d_model.)
@@ -177,7 +180,7 @@ summary(ans)
 #>                         Estimate Std. Error
 #> Num. of ones           -2.009506 0.01435063
 #> Num. of ones x x1       2.020209 0.01592262
-#> Motif {y0⁺}⇨{y0⁺, y1⁺}  5.051076 0.04649922
+#> Motif {y0+}⇨{y0+, y1+}  5.051076 0.04649922
 #> 
 #> -2 log L: 54960.47
 ```
@@ -185,101 +188,156 @@ summary(ans)
 Or better, we can use `texreg` to generate a pretty output:
 
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
+
 <caption>
+
 Statistical models
 </caption>
+
 <thead>
+
 <tr>
+
 <th style="padding-left: 5px;padding-right: 5px;">
+
  
 </th>
+
 <th style="padding-left: 5px;padding-right: 5px;">
+
 Model 1
 </th>
+
 </tr>
+
 </thead>
+
 <tbody>
+
 <tr style="border-top: 1px solid #000000;">
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 Num. of ones
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 -2.01 (0.01)<sup>\*\*\*</sup>
 </td>
+
 </tr>
+
 <tr>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 Num. of ones x x1
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 2.02 (0.02)<sup>\*\*\*</sup>
 </td>
+
 </tr>
+
 <tr>
+
 <td style="padding-left: 5px;padding-right: 5px;">
-Motif {y0⁺}⇨{y0⁺, y1⁺}
+
+Motif {y0+}⇨{y0+, y1+}
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 5.05 (0.05)<sup>\*\*\*</sup>
 </td>
+
 </tr>
+
 <tr style="border-top: 1px solid #000000;">
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 AIC
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 54966.47
 </td>
+
 </tr>
+
 <tr>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 BIC
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 54991.16
 </td>
+
 </tr>
+
 <tr style="border-bottom: 2px solid #000000;">
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 N
 </td>
+
 <td style="padding-left: 5px;padding-right: 5px;">
+
 27777
 </td>
+
 </tr>
+
 </tbody>
+
 <tfoot>
+
 <tr>
+
 <td style="font-size: 0.8em;" colspan="2">
+
 <sup>\*\*\*</sup>p \< 0.001; <sup>\*\*</sup>p \< 0.01; <sup>\*</sup>p \<
 0.05
 </td>
+
 </tr>
+
 </tfoot>
+
 </table>
 
 We can also see the counts
 
-|  id |  y0 |  y1 |  y2 |    x0 |    x1 |     |      |     |
-|----:|----:|----:|----:|------:|------:|----:|-----:|----:|
-|   1 |   0 |   0 |   0 |  0.51 |  0.95 |  NA |   NA |  NA |
-|   1 |   0 |   0 |   1 |  0.16 |  0.25 |   1 | 0.25 |   0 |
-|   1 |   0 |   0 |   0 |  1.20 | -1.72 |   0 | 0.00 |   0 |
-|   1 |   1 |   1 |   1 | -0.20 |  1.55 |   3 | 4.66 |   0 |
-|   2 |   0 |   1 |   0 | -0.15 | -0.68 |  NA |   NA |  NA |
-|   2 |   1 |   1 |   0 |  1.19 |  0.92 |   2 | 1.84 |   0 |
-|   2 |   1 |   1 |   1 | -0.65 |  1.16 |   3 | 3.48 |   1 |
-|   2 |   1 |   1 |   0 | -0.99 |  0.21 |   2 | 0.43 |   1 |
-|   2 |   1 |   1 |   1 |  0.76 |  1.45 |   3 | 4.35 |   1 |
-|   2 |   0 |   0 |   0 | -0.68 | -1.34 |   0 | 0.00 |   0 |
+| id | y0 | y1 | y2 | x0 | x1 | Num. of ones | Num. of ones x x1 | Motif {y0+}⇨{y0+, y1+} |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 0 | 0 | 0 | 0.51 | 0.95 | NA | NA | NA |
+| 1 | 0 | 0 | 1 | 0.16 | 0.25 | 1 | 0.25 | 0 |
+| 1 | 0 | 0 | 0 | 1.20 | -1.72 | 0 | 0.00 | 0 |
+| 1 | 1 | 1 | 1 | -0.20 | 1.55 | 3 | 4.66 | 0 |
+| 2 | 0 | 1 | 0 | -0.15 | -0.68 | NA | NA | NA |
+| 2 | 1 | 1 | 0 | 1.19 | 0.92 | 2 | 1.84 | 0 |
+| 2 | 1 | 1 | 1 | -0.65 | 1.16 | 3 | 3.48 | 1 |
+| 2 | 1 | 1 | 0 | -0.99 | 0.21 | 2 | 0.43 | 1 |
+| 2 | 1 | 1 | 1 | 0.76 | 1.45 | 3 | 4.35 | 1 |
+| 2 | 0 | 0 | 0 | -0.68 | -1.34 | 0 | 0.00 | 0 |
 
 Finally, we can also take a look at the distribution of the log odds. We
 calculate this by looking at changes in a single entry of the array. For
 example, the log-odds of having
-![y\_{12}: 0\to 1](https://latex.codecogs.com/gif.image?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
+![y\_{12}: 0\to 1](https://latex.codecogs.com/svg.latex?y_%7B12%7D%3A%200%5Cto%201 "y_{12}: 0\to 1"),
 which are equivalent to
 
-![\log{\frac{\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)}{\mbox{Pr}\left(\left.y\_{12} = 0\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)\right)](https://latex.codecogs.com/gif.image?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29 "\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)")
+![\log{\frac{\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)}{\mbox{Pr}\left(\left.y\_{12} = 0\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y\_{12} = 1\vphantom{\mathbf{y}\_{-12}}\\\right\|\mathbf{y}\_{-12}\vphantom{y\_{12} = 1}\right)\right)](https://latex.codecogs.com/svg.latex?%5Clog%7B%5Cfrac%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%7D%7B%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%200%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%200%7D%5Cright%29%7D%7D%20%3D%20%5Cmbox%7Blogit%7D%5Cleft%28%5Cmbox%7BPr%7D%5Cleft%28%5Cleft.y_%7B12%7D%20%3D%201%5Cvphantom%7B%5Cmathbf%7By%7D_%7B-12%7D%7D%5C%3B%5Cright%7C%5Cmathbf%7By%7D_%7B-12%7D%5Cvphantom%7By_%7B12%7D%20%3D%201%7D%5Cright%29%5Cright%29 "\log{\frac{\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)}{\mbox{Pr}\left(\left.y_{12} = 0\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 0}\right)}} = \mbox{logit}\left(\mbox{Pr}\left(\left.y_{12} = 1\vphantom{\mathbf{y}_{-12}}\;\right|\mathbf{y}_{-12}\vphantom{y_{12} = 1}\right)\right)")
 
 We can use the `logodds` function for this:
 
@@ -290,7 +348,7 @@ hist(lo, main = "Distribution of Log-odds for term Y(1,2)",
 abline(v=0, lwd = 2, lty = 2, col = "steelblue")
 ```
 
-<img src="man/figures/README-logodds-1.png" width="100%" />
+<img src="man/figures/README-logodds-1.png" style="width:100.0%" />
 
 ## Example 2: A fun model
 
@@ -316,8 +374,18 @@ With the data in hand, we can now simulate the process. First, we need
 to build the model. The key component of the model will be the
 transition matrices:
 
-<!-- $$
-\left[\begin{array}{cccc}
+![\left\[\begin{array}{cccc}
+1 & 0 & NA & \dots \\
+0 & 1 & NA & \dots
+\end{array}\right\] \dots 
+\left\[\begin{array}{cccccc}
+\dots & NA & 1 & 0 & NA & \dots  \\
+\dots & NA & 0 & 1 & NA & \dots  
+\end{array}\right\] \dots 
+\left\[\begin{array}{cccc}
+\dots & NA & 1 & 0 \\
+\dots & NA & 0 & 1 
+\end{array}\right\]](https://latex.codecogs.com/svg.latex?%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D "\left[\begin{array}{cccc}
 1 & 0 & NA & \dots \\
 0 & 1 & NA & \dots
 \end{array}\right] \dots 
@@ -328,14 +396,7 @@ transition matrices:
 \left[\begin{array}{cccc}
 \dots & NA & 1 & 0 \\
 \dots & NA & 0 & 1 
-\end{array}\right]
-$$ -->
-
-<div align="center">
-
-<img style="background: white;" src="https://render.githubusercontent.com/render/math?math=%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A1%20%26%200%20%26%20NA%20%26%20%5Cdots%20%5C%5C%0A0%20%26%201%20%26%20NA%20%26%20%5Cdots%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%26%20NA%20%26%20%5Cdots%20%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%26%20NA%20%26%20%5Cdots%20%20%0A%5Cend%7Barray%7D%5Cright%5D%20%5Cdots%20%0A%5Cleft%5B%5Cbegin%7Barray%7D%7Bcccc%7D%0A%5Cdots%20%26%20NA%20%26%201%20%26%200%20%5C%5C%0A%5Cdots%20%26%20NA%20%26%200%20%26%201%20%0A%5Cend%7Barray%7D%5Cright%5D">
-
-</div>
+\end{array}\right]")
 
 Let’s take a look at the process:
 
@@ -347,25 +408,47 @@ d_model <- new_defm(id = id, Y = Y, X = X, order = 1)
 for (i in (1:(n_y - 1) - 1)) {
   transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
   transition[c(1:4) + 2 * i] <- c(1,0,0,1)
-  term_defm_transition(d_model, transition)
+  td_generic(d_model, transition)
 }
 
 # Here is the last transition term
 transition <- matrix(NA_integer_, nrow = 2, ncol = n_y)
 transition[c(n_y * 2 - 1, n_y * 2, 1, 2)] <- c(1,0,0,1)
-term_defm_transition(d_model, transition)
+td_generic(d_model, transition)
 
 # Adding a term of ones
-term_defm_ones(d_model)
+td_ones(d_model)
 
 # Initializing and simulating
 init_defm(d_model)
-Y_sim <-sim_defm(d_model, par = c(rep(100, n_y), -10))
+set.seed(33)
+(Y_sim <-sim_defm(d_model, par = c(rep(200, n_y), -5)))
+#>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#>  [1,]    1    0    0    0    0    0    0    0    0     0
+#>  [2,]    0    1    0    0    0    0    0    0    0     0
+#>  [3,]    0    0    1    0    0    0    0    0    0     0
+#>  [4,]    0    0    0    1    0    0    0    0    0     0
+#>  [5,]    0    0    0    0    1    0    0    0    0     0
+#>  [6,]    0    0    0    0    0    1    0    0    0     0
+#>  [7,]    0    0    0    0    0    0    1    0    0     0
+#>  [8,]    0    0    0    0    0    0    0    1    0     0
+#>  [9,]    0    0    0    0    0    0    0    0    1     0
+#> [10,]    0    0    0    0    0    0    0    0    0     1
+#> [11,]    1    0    0    0    0    0    0    0    0     0
+#> [12,]    0    1    0    0    0    0    0    0    0     0
+#> [13,]    0    0    0    0    0    0    0    0    0     0
+#> [14,]    0    0    0    0    0    0    0    0    0     0
+#> [15,]    0    0    0    0    0    0    0    0    0     0
+#> [16,]    0    0    0    0    0    0    0    0    0     0
+#> [17,]    0    0    0    0    0    0    0    0    0     0
+#> [18,]    0    0    0    0    0    0    0    0    0     0
+#> [19,]    0    0    0    0    0    0    1    0    0     0
+#> [20,]    0    0    0    0    0    0    0    0    0     0
 ```
 
 The simulation should produce a nice-looking figure:
 
-<img src="man/figures/README-chain1fig-1.png" width="100%" />
+<img src="man/figures/README-chain1fig-1.png" style="width:100.0%" />
 
 ## Example 3: Using formulas for transitions
 
@@ -389,29 +472,31 @@ d_model_formula <- d_model_formula +
   "{0y0, y9} > {y0, 0y9}" 
 
 d_model_formula |>
-  term_defm_ones()
-  
+  td_ones()
+
 init_defm(d_model_formula)
 
 # Inspecting
 d_model_formula
 #> Num. of Arrays       : 19
-#> Support size         : 19
-#> Support size range   : [0, 1]
+#> Support size         : 2
+#> Support size range   : [11, 20]
+#> Arrays in powerset   : 2048
 #> Transform. Fun.      : no
 #> Model terms (11)    :
-#>  - Motif {y0⁺, y1⁻}⇨{y0⁻, y1⁺}
-#>  - Motif {y1⁺, y2⁻}⇨{y1⁻, y2⁺}
-#>  - Motif {y2⁺, y3⁻}⇨{y2⁻, y3⁺}
-#>  - Motif {y3⁺, y4⁻}⇨{y3⁻, y4⁺}
-#>  - Motif {y4⁺, y5⁻}⇨{y4⁻, y5⁺}
-#>  - Motif {y5⁺, y6⁻}⇨{y5⁻, y6⁺}
-#>  - Motif {y6⁺, y7⁻}⇨{y6⁻, y7⁺}
-#>  - Motif {y7⁺, y8⁻}⇨{y7⁻, y8⁺}
-#>  - Motif {y8⁺, y9⁻}⇨{y8⁻, y9⁺}
-#>  - Motif {y0⁻, y9⁺}⇨{y0⁺, y9⁻}
+#>  - Motif {y0+, y1-}⇨{y0-, y1+}
+#>  - Motif {y1+, y2-}⇨{y1-, y2+}
+#>  - Motif {y2+, y3-}⇨{y2-, y3+}
+#>  - Motif {y3+, y4-}⇨{y3-, y4+}
+#>  - Motif {y4+, y5-}⇨{y4-, y5+}
+#>  - Motif {y5+, y6-}⇨{y5-, y6+}
+#>  - Motif {y6+, y7-}⇨{y6-, y7+}
+#>  - Motif {y7+, y8-}⇨{y7-, y8+}
+#>  - Motif {y8+, y9-}⇨{y8-, y9+}
+#>  - Motif {y0-, y9+}⇨{y0+, y9-}
 #>  - Num. of ones
 #> Model rules (1)     :
+#>  - Markov model of order 1
 #> Model Y variables (10):
 #>   0) y0
 #>   1) y1
@@ -425,7 +510,8 @@ d_model_formula
 #>   9) y9
 
 # Simulating
-(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(20, n_y), -10)))
+set.seed(33)
+(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(200, n_y), -5)))
 #>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
 #>  [1,]    1    0    0    0    0    0    0    0    0     0
 #>  [2,]    0    1    0    0    0    0    0    0    0     0
@@ -439,19 +525,19 @@ d_model_formula
 #> [10,]    0    0    0    0    0    0    0    0    0     1
 #> [11,]    1    0    0    0    0    0    0    0    0     0
 #> [12,]    0    1    0    0    0    0    0    0    0     0
-#> [13,]    0    0    1    0    0    0    0    0    0     0
-#> [14,]    0    0    0    1    0    0    0    0    0     0
-#> [15,]    0    0    0    0    1    0    0    0    0     0
-#> [16,]    0    0    0    0    0    1    0    0    0     0
-#> [17,]    0    0    0    0    0    0    1    0    0     0
-#> [18,]    0    0    0    0    0    0    0    1    0     0
-#> [19,]    0    0    0    0    0    0    0    0    1     0
-#> [20,]    0    0    0    0    0    0    0    0    0     1
+#> [13,]    0    0    0    0    0    0    0    0    0     0
+#> [14,]    0    0    0    0    0    0    0    0    0     0
+#> [15,]    0    0    0    0    0    0    0    0    0     0
+#> [16,]    0    0    0    0    0    0    0    0    0     0
+#> [17,]    0    0    0    0    0    0    0    0    0     0
+#> [18,]    0    0    0    0    0    0    0    0    0     0
+#> [19,]    0    0    0    0    0    0    1    0    0     0
+#> [20,]    0    0    0    0    0    0    0    0    0     0
 ```
 
 The new simulation…
 
-<img src="man/figures/README-chain2fig-1.png" width="100%" />
+<img src="man/figures/README-chain2fig-1.png" style="width:100.0%" />
 
 # Acknowledgement
 

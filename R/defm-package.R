@@ -75,7 +75,7 @@ new_defm <- function(
 
   res <- strsplit(e2, split = "\\s*[+]\\s*")
   for (r in res)
-    invisible(term_defm_transition_formula(e1, r))
+    invisible(td_formula(e1, r))
 
   invisible(e1)
 

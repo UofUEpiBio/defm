@@ -2,48 +2,52 @@
 % Please edit documentation in R/RcppExports.R, R/defm-package.R
 \name{defm_terms}
 \alias{defm_terms}
-\alias{term_defm_ones}
+\alias{td_ones}
 \alias{terms_defm}
-\alias{term_defm_fe}
-\alias{term_defm_transition}
-\alias{term_defm_transition_formula}
-\alias{term_defm_logit_intercept}
+\alias{td_generic}
+\alias{td_formula}
+\alias{td_logit_intercept}
 \alias{rule_not_one_to_zero}
 \alias{rule_constrain_support}
 \alias{+.DEFM}
 \title{Model specification for DEFM}
 \usage{
-term_defm_ones(m, idx = "", vname = "")
+td_ones(m, covar = "")
 
-term_defm_fe(m, idx = "", k = 1, vname = "")
+td_generic(m, mat, covar = "")
 
-term_defm_transition(m, mat, idx = "", vname = "")
+td_formula(m, formula, new_name = "")
 
-term_defm_transition_formula(m, formula, idx = "", vname = "")
+td_logit_intercept(m, y_indices = as.integer(c()), covar = "")
 
-term_defm_logit_intercept(m, coords = as.integer(c()), idx = "", vname = "")
+rule_not_one_to_zero(m, term_indices)
 
-rule_not_one_to_zero(m, idx)
-
-rule_constrain_support(m, idx, lb, ub)
+rule_constrain_support(m, term_index, lb, ub)
 
 \method{+}{DEFM}(e1, e2)
 }
 \arguments{
 \item{m}{An object of class \link{DEFM}.}
 
-\item{idx}{Character scalar. Name of the variable to include in the term.}
-
-\item{vname}{Character scalar. Name to be assigned for the new term.}
-
-\item{k}{Numeric scalar. Exponent used in the term.}
+\item{covar}{String. Name of a covariate to use as an interaction
+for the effect. If equal to \code{""}, then no interaction effect.
+is used.
+used to weight the term.}
 
 \item{mat}{Integer matrix. The matrix specifies the type of motif to capture
 (see details.)}
 
 \item{formula}{Character scalar (see details).}
 
-\item{coords}{Integer vector with the coordinates to include in the term.}
+\item{new_name}{Character scalar. Name to be assigned for the new term.
+if empty, then it builds a name based on the formula.}
+
+\item{y_indices}{Integer vector with the coordinates to include in the term.}
+
+\item{term_indices}{Non-negative vector of indices. Indicates which
+outcomes this rule will apply.}
+
+\item{term_index}{Non-negative scalar. Which term this rule will apply.}
 
 \item{lb, ub}{Numeric scalars. Lower and upper bounds.}
 
@@ -56,7 +60,7 @@ Invisible 0.
 Model specification for DEFM
 }
 \details{
-In \code{term_defm_transition}, users can specify a particular motif to model. Motifs
+In \code{td_generic}, users can specify a particular motif to model. Motifs
 are represented by cells with values equal to 1, for example, the matrix:
 
 \if{html}{\out{<div class="sourceCode y0 y1 y2">}}\preformatted{t0:   1 NA NA
@@ -66,23 +70,31 @@ t1:   1  1 NA
 represents a transition \verb{y0 -> (y1, y2)}. If 0 is a motif of interest, then
 the matrix should include 0 to mark zero values.
 
-The function \code{term_defm_transition_formula},
+The function \code{td_formula},
 will take the formula and generate the corresponding
 input for defm::counter_transition(). Formulas can be specified in the
 following ways:
 \itemize{
-\item Intercept effect: {...} No transition, only including the current state.
-\item Transition effect: {...} > {...} Includes current and previous states.
+\item Intercept effect: \code{{...}} No transition, only including the current state.
+\item Transition effect: \code{{...} > {...}} Includes current and previous states.
 }
 
 The general notation is \verb{[0]y[column id]_[row id]}. A preceeding zero
 means that the value of the cell is considered to be zero. The column
 id goes between 0 and the number of columns in the array - 1 (so it
 is indexed from 0,) and the row id goes from 0 to m_order.
+
+Both Intercepts and Transition can interact with covariates. Using
+either the \code{covar} argument or, in the case of formulas, \verb{x [Covar name]},
+for example:
+\itemize{
+\item Intercept effect: \verb{\{...\} x Hispanic} interacts with the Hispanic covar.
+\item Transition effect: \verb{\{...\} > \{...\} x Hispanic} Same.
+}
 \subsection{Intercept effects}{
 
 Intercept effects only involve a single set of curly brackets. Using the
-'greater-than' symbol (i.e., '<') is only for transition effects. When
+'greater-than' symbol (i.e., \code{<}) is only for transition effects. When
 specifying intercept effects, users can skip the \code{row_id}, e.g.,
 \code{y0_0} is equivalent to \code{y0}. If the passed \verb{row id} is different from
 the Markov order, i.e., \code{row_id != m_order}, then the function returns
@@ -102,8 +114,8 @@ an greater-than symbol, i.e., \code{{...} > {...}}. The first set of brackets,
 which we call LHS, can only hold \verb{row id} that are less than \code{m_order}.
 }
 
-The term \code{term_defm_logit_intercept} will add what is equivalent to an
-intercept in a logistic regression. When \code{coords} is specified, then the
+The term \code{td_logit_intercept} will add what is equivalent to an
+intercept in a logistic regression. When \code{y_indices} is specified, then the
 function will add one intercept per outcome. These can be weighted by
 a covariate.
 
@@ -125,10 +137,22 @@ mymodel <- new_defm(
   order = 1
 )
 
-# Adding the intercept terms and a motif from tobacco to mj
-term_defm_logit_intercept(mymodel)
-term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+# Conventional regression intercept
+td_logit_intercept(mymodel)
+
+# Interaction effect with Hispanic
+td_logit_intercept(mymodel, covar = "Hispanic")
+
+# Transition effect from only y1 to both equal to 1.
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+
+# Same but interaction with Female
+td_formula(mymodel, "{y1, 0y2} > {y1, y2} x Female")
 
 # Inspecting the model
 mymodel
+
+# Initializing and fitting
+init_defm(mymodel)
+defm_mle(mymodel)
 }

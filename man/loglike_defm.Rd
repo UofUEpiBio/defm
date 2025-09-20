@@ -32,8 +32,8 @@ mymodel <- new_defm(
 )
 
 # Adding the intercept terms and a motif from tobacco to mj
-term_defm_logit_intercept(mymodel)
-term_defm_transition_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+td_logit_intercept(mymodel)
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 
 # Computing the log-likelihood
 loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
