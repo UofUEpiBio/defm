@@ -77,7 +77,7 @@ mymodel <- new_defm(
 )
 
 td_logit_intercept(mymodel)
-td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}", new_name = "y1y2")
 init_defm(mymodel)
 
 ans0 <- defm_mle(mymodel)
@@ -94,6 +94,8 @@ td_logit_intercept(mymodel)
 td_generic(mymodel, 
   matrix(c(NA, 1, 0, NA, 1, 1), nrow = 2, byrow = TRUE)
 )
+
+set_counters_names(mymodel, "3" = "y1y2")
 init_defm(mymodel)
 
 ans1 <- defm_mle(mymodel)
