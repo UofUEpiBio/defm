@@ -69,3 +69,33 @@ expect_equivalent(
 
 # motif_census(mymodel_cs, locs = 0:1)
 
+mymodel <- new_defm(
+  id = valentesnsList$id,
+  Y = valentesnsList$Y,
+  X = valentesnsList$X,
+  order = 1
+)
+
+td_logit_intercept(mymodel)
+td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+init_defm(mymodel)
+
+ans0 <- defm_mle(mymodel)
+
+# Now, recreating the model using matrices
+mymodel <- new_defm(
+  id = valentesnsList$id,
+  Y = valentesnsList$Y,
+  X = valentesnsList$X,
+  order = 1
+)
+
+td_logit_intercept(mymodel)
+td_generic(mymodel, 
+  matrix(c(NA, 1, 0, NA, 1, 1), nrow = 2, byrow = TRUE)
+)
+init_defm(mymodel)
+
+ans1 <- defm_mle(mymodel)
+
+expect_equivalent(coef(ans0), coef(ans1))

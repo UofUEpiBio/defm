@@ -199,7 +199,8 @@ SEXP td_formula(
 
   defm::counter_formula(
     ptr->get_counters(), formula,
-    ptr->get_m_order(), ptr->get_n_y(),
+    ptr->get_m_order(),
+    ptr->get_n_y(),
     &ptr->get_X_names(),
     &ptr->get_Y_names()
   );
