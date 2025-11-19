@@ -11,7 +11,7 @@ check:
 	R CMD check --as-cran defm_*.tar.gz
 
 update:
-	rsync -avz ../barry/include/barry inst/include 
+	rsync --delete -avz ../barry/include/barry inst/include 
 
 debug:
 	$(MAKE) clean && \

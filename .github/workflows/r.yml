@@ -16,7 +16,7 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }}) ${{ matrix.config.valgrind != true && 'check' || 'valgrind check' }}
 
     strategy:
       fail-fast: false
@@ -31,6 +31,7 @@ jobs:
           # Use older ubuntu to maximise backward compatibility
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'release', valgrind: true}
           - {os: ubuntu-latest,   r: 'oldrel'}
 
     env:
@@ -54,6 +55,15 @@ jobs:
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
+        if: ${{ matrix.config.valgrind != true }}
         with:
           upload-snapshots: true
+
+      - name: valgrind check
+        if: ${{ matrix.config.valgrind == true }}
+        run: |
+          sudo apt-get update && \
+            sudo apt-get install -y --no-install-recommends valgrind 
+          R CMD build .
+          R CMD check --use-valgrind *.tar.gz
           
