@@ -208,9 +208,9 @@ SEXP td_formula(
   // Renaming the counter on the fly (if the name is too long)
   if (new_name != "")
   {
-    auto n_counter = static_cast<int>(ptr->nterms());
+    auto n_counter = ptr->nterms();
 
-    if (n_counter <= 0)
+    if (n_counter == 0)
       stop("Something went wrong. No terms in the model.");
 
     (*ptr->get_counters())[n_counter - 1].set_name(
