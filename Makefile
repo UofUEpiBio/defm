@@ -1,3 +1,18 @@
+help:
+	@echo "Makefile for defm"
+	@echo ""
+	@echo "  make docs         Generate documentation"
+	@echo "  make build        Build package tarball"
+	@echo "  make install      Install package from tarball"
+	@echo "  make check        Check package from tarball"
+	@echo "  make update       Update barry include files"
+	@echo "  make debug        Install package with debug flags"
+	@echo "  make clean        Clean up generated files"
+	@echo "  make README.md    Generate README.md from README.Rmd"
+	@echo "  make inst/NEWS    Generate inst/NEWS from NEWS.md"
+	@echo "  make docker-run   Run a docker container with R and barry installed"
+	@echo "  make docker-check All checks inside a docker container"
+
 docs: 
 	Rscript -e 'devtools::document()'
 
@@ -5,13 +20,10 @@ build:
 	R CMD build .
 	
 install: 
-	R CMD INSTALL defm_*.tar.gz
+	Rscript --vanilla -e 'devtools::install()'
 
 check: 
-	R CMD check --as-cran defm_*.tar.gz
-
-update:
-	rsync --delete -avz ../barry/include/barry inst/include 
+	Rscript --vanilla -e 'devtools::check()'
 
 debug:
 	$(MAKE) clean && \

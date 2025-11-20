@@ -1,6 +1,6 @@
 #include <Rcpp.h>
-#include "barry/barry.hpp"
-#include "barry/models/defm.hpp"
+#include <barry/barry.hpp>
+#include <barry/models/defm.hpp>
 
 using namespace Rcpp;
 
