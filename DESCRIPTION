@@ -27,6 +27,4 @@ Depends:
     R (>= 4.1.0),
     stats4
 Suggests: 
-    texreg, tinytest, barry
-Remotes:
-    USCBiostats/barryr
+    texreg, tinytest
