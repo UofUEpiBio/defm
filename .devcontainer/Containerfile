@@ -15,6 +15,6 @@ RUN apt-get update && apt-get install --no-install-recommends -y valgrind gdb \
   libglpk-dev
 
 # Installing additional package dependencies
-RUN install2.r --error texreg Rcpp
+RUN install2.r --error texreg Rcpp barry
 
 CMD ["bash"]
