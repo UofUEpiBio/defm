@@ -17,10 +17,15 @@ knitr::opts_chunk$set(
 # defm: Fit and simulate discrete binary exponential family models
 
 <!-- badges: start -->
+```{=markdown}
 [![CRAN status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
-[![Grand total](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
+[![CRANlogs downloads](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://cran.r-project.org/package=defm)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/defm/blob/master/LICENSE.md)
+[![codecov](https://codecov.io/gh/UofUEpiBio/defm/graph/badge.svg?token=N27VLID83M)](https://codecov.io/gh/UofUEpiBio/defm)
+[![status](https://tinyverse.netlify.app/badge/defm)](https://CRAN.R-project.org/package=defm)
 [![defm status badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
+```
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with extensive
@@ -328,6 +333,8 @@ image(as(Y_sim_formula, "dgCMatrix"))
 # Acknowledgement
 
 This work was supported by the Assistant Secretary of Defense for Health Affairs endorsed by the Department of Defense, through the Psychological Health/Traumatic Brain Injury Research Program Long-Term Impact of Military-Relevant Brain Injury Consortium (LIMBIC) Award/W81XWH-18-PH/TBIRP-LIMBIC under Award No. I01 RX003443. The U.S. Army Medical Research Acquisition Activity, 839 Chandler Street, Fort Detrick MD 21702-5014 is the awarding and administering acquisition office. Opinions, interpretations, conclusions and recommendations are those of the author and are not necessarily endorsed by the Department of Defense. Any opinions, findings, conclusions, or recommendations expressed in this publication are those of the author(s) and do not necessarily reflect the views of the U.S. Government, the U.S. Department of Veterans Affairs or the Department of Defense and no official endorsement should be inferred.
+
+The package is part of the ORION project, supported by the U.S. Army Medical Research Acquisition Activity Award, Contact \#W81XWH1910615. This study was   approved by the University of Utah Institutional Review Board (IRB \#137948) and at each of the military treatment facility sites.
 
 # Code of Conduct
   

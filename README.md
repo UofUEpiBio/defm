@@ -6,13 +6,14 @@
 
 <!-- badges: start -->
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
-[![Grand
-total](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://CRAN.R-project.org/package=defm)
+[![CRAN status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
-[![defm status
-badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
+[![CRANlogs downloads](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://cran.r-project.org/package=defm)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/defm/blob/master/LICENSE.md)
+[![codecov](https://codecov.io/gh/UofUEpiBio/defm/graph/badge.svg?token=N27VLID83M)](https://codecov.io/gh/UofUEpiBio/defm)
+[![status](https://tinyverse.netlify.app/badge/defm)](https://CRAN.R-project.org/package=defm)
+[![defm status badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
+
 <!-- badges: end -->
 
 Discrete exponential family models (DEFM) have a long tradition with
@@ -193,7 +194,7 @@ summary(ans)
 #>                         Estimate Std. Error
 #> Num. of ones           -2.009506 0.01435063
 #> Num. of ones x x1       2.020209 0.01592262
-#> Motif {y0+}⇨{y0+, y1+}  5.051076 0.04649922
+#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649922
 #> 
 #> -2 log L: 54960.47
 ```
@@ -259,7 +260,7 @@ Num. of ones x x1
 
 <td style="padding-left: 5px;padding-right: 5px;">
 
-Motif {y0+}⇨{y0+, y1+}
+Motif {y0+}\>{y0+, y1+}
 </td>
 
 <td style="padding-left: 5px;padding-right: 5px;">
@@ -331,7 +332,7 @@ N
 
 We can also see the counts
 
-| id | y0 | y1 | y2 | x0 | x1 | Num. of ones | Num. of ones x x1 | Motif {y0+}⇨{y0+, y1+} |
+| id | y0 | y1 | y2 | x0 | x1 | Num. of ones | Num. of ones x x1 | Motif {y0+}\>{y0+, y1+} |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | 0 | 0 | 0 | 0.51 | 0.95 | NA | NA | NA |
 | 1 | 0 | 0 | 1 | 0.16 | 0.25 | 1 | 0.25 | 0 |
@@ -499,16 +500,16 @@ d_model_formula
 #> Arrays in powerset   : 2048
 #> Transform. Fun.      : no
 #> Model terms (11)    :
-#>  - Motif {y0+, y1-}⇨{y0-, y1+}
-#>  - Motif {y1+, y2-}⇨{y1-, y2+}
-#>  - Motif {y2+, y3-}⇨{y2-, y3+}
-#>  - Motif {y3+, y4-}⇨{y3-, y4+}
-#>  - Motif {y4+, y5-}⇨{y4-, y5+}
-#>  - Motif {y5+, y6-}⇨{y5-, y6+}
-#>  - Motif {y6+, y7-}⇨{y6-, y7+}
-#>  - Motif {y7+, y8-}⇨{y7-, y8+}
-#>  - Motif {y8+, y9-}⇨{y8-, y9+}
-#>  - Motif {y0-, y9+}⇨{y0+, y9-}
+#>  - Motif {y0+, y1-}>{y0-, y1+}
+#>  - Motif {y1+, y2-}>{y1-, y2+}
+#>  - Motif {y2+, y3-}>{y2-, y3+}
+#>  - Motif {y3+, y4-}>{y3-, y4+}
+#>  - Motif {y4+, y5-}>{y4-, y5+}
+#>  - Motif {y5+, y6-}>{y5-, y6+}
+#>  - Motif {y6+, y7-}>{y6-, y7+}
+#>  - Motif {y7+, y8-}>{y7-, y8+}
+#>  - Motif {y8+, y9-}>{y8-, y9+}
+#>  - Motif {y0-, y9+}>{y0+, y9-}
 #>  - Num. of ones
 #> Model rules (1)     :
 #>  - Markov model of order 1
@@ -570,6 +571,12 @@ expressed in this publication are those of the author(s) and do not
 necessarily reflect the views of the U.S. Government, the U.S.
 Department of Veterans Affairs or the Department of Defense and no
 official endorsement should be inferred.
+
+The package is part of the ORION project, supported by the U.S. Army
+Medical Research Acquisition Activity Award, Contact \#W81XWH1910615.
+This study was approved by the University of Utah Institutional Review
+Board (IRB \#137948) and at each of the military treatment facility
+sites.
 
 # Code of Conduct
 
