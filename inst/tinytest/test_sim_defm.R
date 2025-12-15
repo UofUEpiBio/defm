@@ -8,6 +8,10 @@ id <- cbind(rep(1L:n_id, each = n_T))
 Y <- matrix(0L, nrow = n_T * n_id, ncol = n_Y)
 X <- matrix(rnorm(n_K * n_T * n_id), ncol = n_K)
 
+# ------------------------------------------------------------------------------
+# new_defm
+# ------------------------------------------------------------------------------
+
 expect_error({
   d_model_formula <- new_defm(id = id, Y = Y, X = X, order = 1)
 })
@@ -40,6 +44,10 @@ td_logit_intercept(
 
 init_defm(d_model_formula)
 
+# ------------------------------------------------------------------------------
+# Stats
+# ------------------------------------------------------------------------------
+
 expect_silent({
   Y_stats <- get_stats(d_model_formula)
 })
@@ -58,3 +66,49 @@ expect_stdout(
 
 expect_equal(get_Y_names(d_model_formula), colnames(Y_sim))
 expect_equal(get_X_names(d_model_formula), colnames(X))
+
+# ------------------------------------------------------------------------------
+# Motif census
+# ------------------------------------------------------------------------------
+expect_stdout({
+  print(motif_census(d_model_formula, c(0,1)))
+}, "census for variable")
+
+
+# ------------------------------------------------------------------------------
+# Log odds
+# ------------------------------------------------------------------------------
+expect_silent({
+  lo <- logodds(d_model_formula, c(-1, -.5, .5, 1), i=1, j=1)
+})
+
+
+# ------------------------------------------------------------------------------
+# Counters
+# ------------------------------------------------------------------------------
+expect_stdout({
+  print(get_counters(d_model_formula))
+}, "Counters \\(4\\)")
+
+expect_stdout({
+  print(get_counters(d_model_formula)[1])
+}, "Counter[:]")
+
+
+set_counter_info(
+  counter = get_counters(d_model_formula)[1],
+  new_name = "lame", new_desc = "whatever"
+  )
+
+tmp <- get_counters(d_model_formula)[1] |>
+  as.list()
+
+expect_equal(
+  list(name = "lame", description = "whatever"),
+  tmp[[1]]
+)
+
+# ------------------------------------------------------------------------------
+# Misc
+# ------------------------------------------------------------------------------
+expect_inherits(as.list(get_counters(d_model_formula)), "list")
