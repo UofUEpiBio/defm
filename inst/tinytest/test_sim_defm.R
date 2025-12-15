@@ -105,7 +105,7 @@ tmp <- get_counters(d_model_formula)[1] |>
 
 expect_equal(
   list(name = "lame", description = "whatever"),
-  tmp[[1]]
+  tmp
 )
 
 # ------------------------------------------------------------------------------
