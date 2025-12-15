@@ -9,7 +9,6 @@ help:
 	@echo "  make debug        Install package with debug flags"
 	@echo "  make clean        Clean up generated files"
 	@echo "  make README.md    Generate README.md from README.Rmd"
-	@echo "  make inst/NEWS    Generate inst/NEWS from NEWS.md"
 	@echo "  make docker-run   Run a docker container with R and barry installed"
 	@echo "  make docker-check All checks inside a docker container"
 
@@ -33,14 +32,7 @@ clean:
 	Rscript --vanilla -e 'devtools::clean_dll()'; \
 		rm -rf *.Rcmdcheck 
 
-README.md: README.Rmd
-	Rscript --vanilla -e 'rmarkdown::render("README.Rmd")'
-
 .PHONY: build update clean
-
-inst/NEWS: NEWS.md
-	Rscript -e "rmarkdown::pandoc_convert('NEWS.md', 'plain', output='inst/NEWS')" && \
-		head -n 80 inst/NEWS
 
 
 docker-run:
@@ -59,3 +51,6 @@ docker-check-all:
 	RD CMD build . && \
 		DEFM_CONFIG="-DBARRY_DEBUG" _R_CHECK_FORCE_SUGGESTS_=false \
 		RD CMD check defm_*.tar.gz
+
+README.md: README.qmd
+	quarto render README.qmd

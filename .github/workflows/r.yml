@@ -13,6 +13,28 @@ on:
 name: R-CMD-check
 
 jobs:
+  R-binary:
+    runs-on: ubuntu-latest
+
+    name: R binary version
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+
+      - name: Build package
+        run: R CMD build .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: defm-ubuntu-tar-gz
+          path: defm_*.tar.gz
+
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
@@ -39,7 +61,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - uses: r-lib/actions/setup-pandoc@v2
 
