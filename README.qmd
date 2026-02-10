@@ -338,4 +338,4 @@ The package is part of the ORION project, supported by the U.S. Army Medical Res
 
 # Code of Conduct
   
-  Please note that the `defm` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
+  Please note that the `defm` project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/3/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
