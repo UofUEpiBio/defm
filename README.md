@@ -10,7 +10,7 @@
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
 [![CRANlogs downloads](https://cranlogs.r-pkg.org/badges/grand-total/defm)](https://cran.r-project.org/package=defm)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/UofUEpiBio/defm/blob/master/LICENSE.md)
-[![codecov](https://codecov.io/gh/UofUEpiBio/defm/graph/badge.svg?token=N27VLID83M)](https://codecov.io/gh/UofUEpiBio/defm)
+[![codecov](https://codecov.io/gh/UofUEpiBio/defm/graph/badge.svg?token=N27VLID83M)](https://app.codecov.io/gh/UofUEpiBio/defm)
 [![status](https://tinyverse.netlify.app/badge/defm)](https://CRAN.R-project.org/package=defm)
 [![defm status badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
 
@@ -166,13 +166,13 @@ sim_par <- c(-2, 2, 5)
 d_model <- build_model(id, Y, X, order = 1L, par. = sim_par)
 simulated_Y <- sim_defm(d_model, sim_par)
 head(cbind(id, simulated_Y))
-#>      id      
-#> [1,]  1 0 0 0
-#> [2,]  1 0 0 1
-#> [3,]  1 0 0 0
-#> [4,]  1 1 1 1
-#> [5,]  2 0 1 0
-#> [6,]  2 1 1 0
+#>      id y0 y1 y2
+#> [1,]  1  0  0  0
+#> [2,]  1  0  0  1
+#> [3,]  1  0  0  0
+#> [4,]  1  1  1  1
+#> [5,]  2  0  1  0
+#> [6,]  2  1  1  0
 ```
 
 Now, let’s see if we can recover the parameters using MLE:
@@ -439,27 +439,27 @@ td_ones(d_model)
 init_defm(d_model)
 set.seed(33)
 (Y_sim <-sim_defm(d_model, par = c(rep(200, n_y), -5)))
-#>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-#>  [1,]    1    0    0    0    0    0    0    0    0     0
-#>  [2,]    0    1    0    0    0    0    0    0    0     0
-#>  [3,]    0    0    1    0    0    0    0    0    0     0
-#>  [4,]    0    0    0    1    0    0    0    0    0     0
-#>  [5,]    0    0    0    0    1    0    0    0    0     0
-#>  [6,]    0    0    0    0    0    1    0    0    0     0
-#>  [7,]    0    0    0    0    0    0    1    0    0     0
-#>  [8,]    0    0    0    0    0    0    0    1    0     0
-#>  [9,]    0    0    0    0    0    0    0    0    1     0
-#> [10,]    0    0    0    0    0    0    0    0    0     1
-#> [11,]    1    0    0    0    0    0    0    0    0     0
-#> [12,]    0    1    0    0    0    0    0    0    0     0
-#> [13,]    0    0    0    0    0    0    0    0    0     0
-#> [14,]    0    0    0    0    0    0    0    0    0     0
-#> [15,]    0    0    0    0    0    0    0    0    0     0
-#> [16,]    0    0    0    0    0    0    0    0    0     0
-#> [17,]    0    0    0    0    0    0    0    0    0     0
-#> [18,]    0    0    0    0    0    0    0    0    0     0
-#> [19,]    0    0    0    0    0    0    1    0    0     0
-#> [20,]    0    0    0    0    0    0    0    0    0     0
+#>       y0 y1 y2 y3 y4 y5 y6 y7 y8 y9
+#>  [1,]  1  0  0  0  0  0  0  0  0  0
+#>  [2,]  0  1  0  0  0  0  0  0  0  0
+#>  [3,]  0  0  1  0  0  0  0  0  0  0
+#>  [4,]  0  0  0  1  0  0  0  0  0  0
+#>  [5,]  0  0  0  0  1  0  0  0  0  0
+#>  [6,]  0  0  0  0  0  1  0  0  0  0
+#>  [7,]  0  0  0  0  0  0  1  0  0  0
+#>  [8,]  0  0  0  0  0  0  0  1  0  0
+#>  [9,]  0  0  0  0  0  0  0  0  1  0
+#> [10,]  0  0  0  0  0  0  0  0  0  1
+#> [11,]  1  0  0  0  0  0  0  0  0  0
+#> [12,]  0  1  0  0  0  0  0  0  0  0
+#> [13,]  0  0  0  0  0  0  0  0  0  0
+#> [14,]  0  0  0  0  0  0  0  0  0  0
+#> [15,]  0  0  0  0  0  0  0  0  0  0
+#> [16,]  0  0  0  0  0  0  0  0  0  0
+#> [17,]  0  0  0  0  0  0  0  0  0  0
+#> [18,]  0  0  0  0  0  0  0  0  0  0
+#> [19,]  0  0  0  0  0  0  1  0  0  0
+#> [20,]  0  0  0  0  0  0  0  0  0  0
 ```
 
 The simulation should produce a nice-looking figure:
@@ -528,27 +528,27 @@ d_model_formula
 # Simulating
 set.seed(33)
 (Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(200, n_y), -5)))
-#>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
-#>  [1,]    1    0    0    0    0    0    0    0    0     0
-#>  [2,]    0    1    0    0    0    0    0    0    0     0
-#>  [3,]    0    0    1    0    0    0    0    0    0     0
-#>  [4,]    0    0    0    1    0    0    0    0    0     0
-#>  [5,]    0    0    0    0    1    0    0    0    0     0
-#>  [6,]    0    0    0    0    0    1    0    0    0     0
-#>  [7,]    0    0    0    0    0    0    1    0    0     0
-#>  [8,]    0    0    0    0    0    0    0    1    0     0
-#>  [9,]    0    0    0    0    0    0    0    0    1     0
-#> [10,]    0    0    0    0    0    0    0    0    0     1
-#> [11,]    1    0    0    0    0    0    0    0    0     0
-#> [12,]    0    1    0    0    0    0    0    0    0     0
-#> [13,]    0    0    0    0    0    0    0    0    0     0
-#> [14,]    0    0    0    0    0    0    0    0    0     0
-#> [15,]    0    0    0    0    0    0    0    0    0     0
-#> [16,]    0    0    0    0    0    0    0    0    0     0
-#> [17,]    0    0    0    0    0    0    0    0    0     0
-#> [18,]    0    0    0    0    0    0    0    0    0     0
-#> [19,]    0    0    0    0    0    0    1    0    0     0
-#> [20,]    0    0    0    0    0    0    0    0    0     0
+#>       y0 y1 y2 y3 y4 y5 y6 y7 y8 y9
+#>  [1,]  1  0  0  0  0  0  0  0  0  0
+#>  [2,]  0  1  0  0  0  0  0  0  0  0
+#>  [3,]  0  0  1  0  0  0  0  0  0  0
+#>  [4,]  0  0  0  1  0  0  0  0  0  0
+#>  [5,]  0  0  0  0  1  0  0  0  0  0
+#>  [6,]  0  0  0  0  0  1  0  0  0  0
+#>  [7,]  0  0  0  0  0  0  1  0  0  0
+#>  [8,]  0  0  0  0  0  0  0  1  0  0
+#>  [9,]  0  0  0  0  0  0  0  0  1  0
+#> [10,]  0  0  0  0  0  0  0  0  0  1
+#> [11,]  1  0  0  0  0  0  0  0  0  0
+#> [12,]  0  1  0  0  0  0  0  0  0  0
+#> [13,]  0  0  0  0  0  0  0  0  0  0
+#> [14,]  0  0  0  0  0  0  0  0  0  0
+#> [15,]  0  0  0  0  0  0  0  0  0  0
+#> [16,]  0  0  0  0  0  0  0  0  0  0
+#> [17,]  0  0  0  0  0  0  0  0  0  0
+#> [18,]  0  0  0  0  0  0  0  0  0  0
+#> [19,]  0  0  0  0  0  0  1  0  0  0
+#> [20,]  0  0  0  0  0  0  0  0  0  0
 ```
 
 The new simulation…
