@@ -12,6 +12,20 @@ init_defm(mymodel)
 
 ans <- defm_mle(mymodel)
 
+# Checking texreg fancy
+expect_stdout({
+  print(texreg_fancy(
+    ans, texreg::screenreg,
+    skip_intercept = TRUE
+    ))
+}, "Model 1")
+
+expect_stdout({
+  print(summary_table(ans))
+  },
+  "pvalues"
+)
+
 # Fitting individual models for each outcome
 ans_alcohol <- glm(
   alcohol ~ Hispanic, data = valentesns,

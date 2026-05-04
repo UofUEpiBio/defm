@@ -308,6 +308,10 @@ IntegerMatrix sim_defm(
 
   }
 
+  // Adding a name
+  CharacterVector names = wrap(ptr->get_Y_names());
+  Rcpp::colnames(res) = names;
+
   return res;
 }
 
