@@ -25,6 +25,13 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from the
+          # barryr PR branch. Remove once barryr 0.2.2 is released
+          # (USCbiostats/barryr#8). The DESCRIPTION Remotes field is not
+          # honored by pak's `deps::.`, so the source must be listed here.
+          extra-packages: |
+            USCbiostats/barryr@fix/freqtable-hash-collisions
 
       - name: Build package
         run: R CMD build .
@@ -73,8 +80,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from the
+          # barryr PR branch. Remove once barryr 0.2.2 is released
+          # (USCbiostats/barryr#8).
           extra-packages: |
             any::rcmdcheck
+            USCbiostats/barryr@fix/freqtable-hash-collisions
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2

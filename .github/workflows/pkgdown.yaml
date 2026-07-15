@@ -41,9 +41,13 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from the
+          # barryr PR branch. Remove once barryr 0.2.2 is released
+          # (USCbiostats/barryr#8).
           extra-packages: |
             any::pkgdown
             local::.
+            USCbiostats/barryr@fix/freqtable-hash-collisions
           needs: website
 
       - name: Build site
