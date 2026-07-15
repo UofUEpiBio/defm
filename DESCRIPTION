@@ -32,3 +32,5 @@ Depends:
     stats4
 Suggests: 
     texreg, tinytest, barry
+Remotes:
+    USCbiostats/barryr
