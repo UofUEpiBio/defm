@@ -1,4 +1,9 @@
 #include <Rcpp.h>
+
+// Lets barry check for user interrupts (Ctrl-C) during long-running
+// computations such as the support enumeration in init_defm().
+#define BARRY_USER_INTERRUPT Rcpp::checkUserInterrupt();
+
 #include "barry/barry.hpp"
 #include "barry/models/defm.hpp"
 #include "defm-common.h"

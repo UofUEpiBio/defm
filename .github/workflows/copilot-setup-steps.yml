@@ -36,7 +36,10 @@ jobs:
       - name: Install dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from
+          # barryr's main branch. Remove once barry 0.2.2 is on CRAN.
           extra-packages: |
             any::rcmdcheck
             any::tinytest
+            USCbiostats/barryr
           needs: check

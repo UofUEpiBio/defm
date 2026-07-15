@@ -25,6 +25,13 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from
+          # barryr's main branch. Remove once barry 0.2.2 is on CRAN.
+          # (The DESCRIPTION Remotes field is not honored by pak's
+          # `deps::.`, so the source must be listed here.)
+          extra-packages: |
+            USCbiostats/barryr
 
       - name: Build package
         run: R CMD build .
@@ -73,8 +80,11 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from
+          # barryr's main branch. Remove once barry 0.2.2 is on CRAN.
           extra-packages: |
             any::rcmdcheck
+            USCbiostats/barryr
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
