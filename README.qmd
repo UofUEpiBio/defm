@@ -278,7 +278,7 @@ td_ones(d_model)
 # Initializing and simulating
 init_defm(d_model)
 set.seed(33)
-(Y_sim <-sim_defm(d_model, par = c(rep(200, n_y), -5)))
+(Y_sim <-sim_defm(d_model, par = c(rep(200, n_y), -10)))
 ```
 
 The simulation should produce a nice-looking figure:
@@ -320,7 +320,7 @@ d_model_formula
 
 # Simulating
 set.seed(33)
-(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(200, n_y), -5)))
+(Y_sim_formula <- sim_defm(d_model_formula, par = c(rep(200, n_y), -10)))
 ```
 
 The new simulation...
