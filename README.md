@@ -16,6 +16,16 @@
 
 <!-- badges: end -->
 
+
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite defm.** If you use **defm** in published work, please cite it:
+>
+> Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes. *arXiv*:2211.00627. doi:[10.48550/arXiv.2211.00627](https://doi.org/10.48550/arXiv.2211.00627)
+>
+> Run `citation("defm")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+
 Discrete exponential family models (DEFM) have a long tradition with
 extensive development rooted in exponential random graph models (ERGMs.)
 Applicable to any form o data that can be represented as binary arrays,
