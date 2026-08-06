@@ -1,56 +1,46 @@
-year <- sub("-.*", "", meta$Date)
+# Year resolution: CRAN sets Date/Publication on the installed package; fall
+# back to DESCRIPTION's Date, then to the current year, so the package entry
+# never renders as "(????)".
+year <- if (!is.null(meta$`Date/Publication`)) {
+  substr(meta$`Date/Publication`, 1, 4)
+} else if (!is.null(meta$Date)) {
+  substr(meta$Date, 1, 4)
+} else {
+  format(Sys.Date(), "%Y")
+}
 note <- sprintf("R package version %s", meta$Version)
 
 bibentry(
-  bibtype = "misc",
-  title = "{Discrete Exponential-Family Models for Multivariate Binary Outcomes}",
-  author = c(
-   person(
-     given = "George", family = "Vega Yon",
-     email = "george.vegayon@utah.edu", comment = c(ORCID = "0000-0002-3171-0844")
-     ),
-   person(
-     given = "Thomas", family = "Valente",
-     comment = c(ORCID = "0000-0002-8824-5816")
-     ),
-   person(
-     given = "Mary Jo", family = "Pugh",
-     comment = c(ORCID = "0000-0003-4196-7763")
-   )
-   ),
-  Year = "{2022}", 
-  archivePrefix = "{arXiv}",
-  header = "When using defm, always cite this paper",
-  archivePrefix="{arXiv}",
-  primaryClass="{stat.ME}",
-  doi = "10.48550/arXiv.2211.00627",
+  bibtype = "Misc",
+  title   = "Discrete Exponential-Family Models for Multivariate Binary Outcomes",
+  author  = c(
+    person("George", "Vega Yon", comment = c(ORCID = "0000-0002-3171-0844")),
+    person("Thomas", "Valente", comment = c(ORCID = "0000-0002-8824-5816")),
+    person("Mary Jo", "Pugh", comment = c(ORCID = "0000-0003-4196-7763"))
+  ),
+  year         = "2022",
+  publisher    = "arXiv",
+  doi          = "10.48550/arXiv.2211.00627",
+  url          = "https://doi.org/10.48550/arXiv.2211.00627",
+  textVersion  = paste(
+    "Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family",
+    "Models for Multivariate Binary Outcomes. arXiv:2211.00627.",
+    "https://doi.org/10.48550/arXiv.2211.00627"
+  ),
+  header = "When using defm, always cite this paper:"
 )
-
 
 bibentry(
   bibtype = "Manual",
-  title = "{{defm: Estimation and Simulation of Multi-binary Response Models}}",
-  author = person(
-    given = "George", family = "Vega Yon", role = c("cre","aut"),
-    email = "g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")
+  title   = "{{defm: Estimation and Simulation of Multi-Binary Response Models}}",
+  author  = c(
+    person("George", "Vega Yon", comment = c(ORCID = "0000-0002-3171-0844")),
+    person("Thomas", "Valente", comment = c(ORCID = "0000-0002-8824-5816")),
+    person("Mary Jo", "Pugh", comment = c(ORCID = "0000-0003-4196-7763"))
   ),
-  year = year,
-  note = paste(note,"(wip)"),
-  url = "https://github.com/UofUEpiBio/defm",
-  header = "Use this if you are using the GitHub version of defm:"
+  year    = year,
+  note    = note,
+  url     = "https://github.com/UofUEpiBio/defm",
+  doi     = "10.32614/CRAN.package.defm",
+  header  = "And the R package itself:"
 )
-         
-bibentry(
-  bibtype = "Manual",
-  title = "{{defm: Estimation and Simulation of Multi-binary Response Models}}",
-  author = person(
-    given = "George", family = "Vega Yon", role = c("cre","aut"),
-    email = "g.vegayon@gmail.com", comment = c(ORCID = "0000-0002-3171-0844")
-  ),
-  year = year,
-  note = note,
-  publisher="{CRAN}",
-  url = "https://cran.r-project.org/package=defm",
-  header = "Use this if you are using the CRAN version of defm:"
-)
-
