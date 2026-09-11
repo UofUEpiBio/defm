@@ -1,0 +1,64 @@
+cff-version: 1.2.0
+message: 'To cite package "defm" in publications use:'
+type: software
+license: MIT
+title: 'defm: Estimation and Simulation of Multi-Binary Response Models'
+version: 0.2.2.0
+doi: 10.32614/CRAN.package.defm
+abstract: Multi-binary response models are a class of models that allow for the estimation
+  of multiple binary outcomes simultaneously. This package provides functions to estimate
+  and simulate these models using the Discrete Exponential-Family Models [DEFM] framework.
+  In it, we implement the models described in Vega Yon, Valente, and Pugh (2023) <https://doi.org/10.48550/arXiv.2211.00627>.
+  DEFMs include Exponential-Family Random Graph Models [ERGMs], which characterize
+  graphs using sufficient statistics, which is also the core of DEFMs. Using sufficient
+  statistics, we can describe the data through meaningful motifs, for example, transitions
+  between different states, joint distribution of the outcomes, etc.
+authors:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+preferred-citation:
+  type: generic
+  title: Discrete Exponential-Family Models for Multivariate Binary Outcomes
+  authors:
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+    email: g.vegayon@gmail.com
+  - family-names: Valente
+    given-names: Thomas
+    orcid: https://orcid.org/0000-0002-8824-5816
+  - family-names: Pugh
+    given-names: Mary Jo
+    orcid: https://orcid.org/0000-0003-4196-7763
+  year: '2022'
+  publisher:
+    name: arXiv
+  doi: 10.48550/arXiv.2211.00627
+  url: https://doi.org/10.48550/arXiv.2211.00627
+repository: https://CRAN.R-project.org/package=defm
+repository-code: https://github.com/UofUEpiBio/defm
+url: https://uofuepibio.github.io/defm/
+contact:
+- family-names: Vega Yon
+  given-names: George
+  email: g.vegayon@gmail.com
+  orcid: https://orcid.org/0000-0002-3171-0844
+references:
+- type: manual
+  title: 'defm: Estimation and Simulation of Multi-Binary Response Models'
+  authors:
+  - family-names: Vega Yon
+    given-names: George
+    orcid: https://orcid.org/0000-0002-3171-0844
+  - family-names: Valente
+    given-names: Thomas
+    orcid: https://orcid.org/0000-0002-8824-5816
+  - family-names: Pugh
+    given-names: Mary Jo
+    orcid: https://orcid.org/0000-0003-4196-7763
+  year: '2026'
+  notes: R package version 0.2.2.0
+  url: https://github.com/UofUEpiBio/defm
+  doi: 10.32614/CRAN.package.defm
