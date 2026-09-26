@@ -1,6 +1,12 @@
 # Regression tests for the formula parser (USCbiostats/barry#26): covariate
 # names are not motif terms, `}x Covar` keeps the covariate, and the LHS of a
 # transition cannot include the current time.
+#
+# The fix lives in barry's headers (LinkingTo), so these tests only apply when
+# defm was built against barry >= 0.2.2.9000.
+if (utils::packageVersion("barry") < "0.2.2.9000")
+  exit_file("barry < 0.2.2.9000 does not include the formula parser fix.")
+
 set.seed(1)
 n  <- 40
 id <- rep(1:10, each = 4)
