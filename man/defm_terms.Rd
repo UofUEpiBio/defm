@@ -91,6 +91,10 @@ for example:
 \item Intercept effect: \verb{\{...\} x Hispanic} interacts with the Hispanic covar.
 \item Transition effect: \verb{\{...\} > \{...\} x Hispanic} Same.
 }
+
+The \code{x} must be followed by a space. Only the terms inside the curly
+brackets are part of the motif, so covariate names such as \code{Day1} are
+fine.
 \subsection{Intercept effects}{
 
 Intercept effects only involve a single set of curly brackets. Using the
