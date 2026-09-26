@@ -432,6 +432,10 @@ td_generic <- function(m, mat, covar = "") {
 #' - Intercept effect: `{...} x Hispanic` interacts with the Hispanic covar.
 #' - Transition effect: `{...} > {...} x Hispanic` Same.
 #'
+#' The `x` must be followed by a space. Only the terms inside the curly
+#' brackets are part of the motif, so covariate names such as `Day1` are
+#' fine.
+#'
 #' ## Intercept effects
 #'
 #' Intercept effects only involve a single set of curly brackets. Using the
