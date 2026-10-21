@@ -21,7 +21,7 @@ expect_stdout({
 }, "Model 1")
 
 expect_stdout({
-  print(summary_table(ans))
+  print(as.data.frame(summary_table(ans)))
   },
   "pvalues"
 )

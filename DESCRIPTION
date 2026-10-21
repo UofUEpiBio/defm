@@ -24,13 +24,14 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 LinkingTo: Rcpp, barry (>= 0.2.2)
 Imports: 
+    methods,
     Rcpp,
     stats
 Depends: 
     R (>= 4.1.0),
     stats4
 Suggests: 
-    texreg, tinytest, barry
+    texreg, tinytest, barry, knitr
 Remotes:
     USCbiostats/barryr
 Config/roxygen2/version: 8.0.0

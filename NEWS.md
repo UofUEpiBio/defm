@@ -1,5 +1,23 @@
 # defm 0.2.2.9000 (development version)
 
+* `summary_table()` now returns a compact two-section table: outcome-specific
+  (logit) terms as an outcome-by-covariate matrix, and joint/transition
+  (Markov) terms as a motif-by-interaction matrix. It prints to the console
+  and can be formatted as HTML or Markdown (`format(x, type = ...)`); within
+  Quarto and R Markdown it renders automatically. Options include `labels`
+  (rename outcomes, covariates, and terms), `omit`, `digits`, `se`
+  (`"below"` or `"side"`), and `stars`.
+
+* **Breaking**: `summary_table()` no longer returns a `data.frame`. Use
+  `as.data.frame(summary_table(fit))` to get the previous output (columns
+  `coef`, `se`, and `pvalues`). `as_texreg = TRUE` is unchanged.
+
+* `defm_mle()` now returns an object of class `defm_mle`, which extends
+  `stats4::mle` and stores the outcome and covariate names. Printing a fit or
+  its `summary()` now suggests calling `summary_table()`.
+
+* `texreg_fancy()` failed when passed a list of fits; fixed.
+
 * Building against `barry` (>= 0.2.2.9000), currently available from GitHub
   (USCbiostats/barryr), fixes the `td_formula()` parser (USCbiostats/barry#26).
   The CRAN version of `barry` still has these bugs:

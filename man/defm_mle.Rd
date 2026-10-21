@@ -3,15 +3,12 @@
 \name{logodds}
 \alias{logodds}
 \alias{defm_mle}
-\alias{summary_table}
 \alias{texreg_fancy}
 \title{Maximum Likelihood Estimation of DEFM}
 \usage{
 logodds(m, par, i, j)
 
 defm_mle(object, start, lower, upper, ...)
-
-summary_table(object, as_texreg = FALSE, ...)
 
 texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 }
@@ -31,8 +28,6 @@ texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 
 \item{...}{Further arguments passed to \code{summary_table} (with the exception of \code{as_texreg}, which is set to \code{TRUE}).}
 
-\item{as_texreg}{When \code{TRUE}, wraps the result in a texreg object}
-
 \item{fits}{Either a single or a list of \code{defm} fit objects.}
 
 \item{fun}{Function to be called from the \code{texreg} package, e.g., \code{texreg::screenreg}.}
@@ -44,7 +39,11 @@ texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 \item \code{logodds} returns a numeric vector with the log-odds for each observation in the data.
 }
 
-An object of class \link[stats4:mle]{stats4::mle}.
+An object of class \code{defm_mle}, which extends \link[stats4:mle]{stats4::mle}
+(all the methods for \code{mle} objects, e.g., \code{coef()}, \code{vcov()}, and
+\code{summary()}, work with it). It also stores the names of the outcomes and
+covariates, which are used by \code{\link[=summary_table]{summary_table()}} to build a compact table
+of the estimates.
 
 An object of class texreg with additional attributes: \code{custom.coef.map},
 \code{reorder.coef}, and \code{groups}.
@@ -62,10 +61,6 @@ individuals and the events are the binary outputs.
 If the model features no markov terms, i.e., terms that depend on more than
 one output, then the model is equivalent to a logistic regression. The
 example below shows this equivalence.
-
-The function \code{summary_table} computes pvalues and returns a table
-with the estimates, se, and pvalues. If \code{as_texreg = TRUE}, then it will
-return a texreg object.
 }
 \examples{
 #' Using Valente's SNS data
@@ -100,6 +95,7 @@ res_glm <- with(
 
 # Comparing results
 summary_table(res_0)
+summary(res_0)
 summary(res_glm)
 
 # Comparing the logodds
