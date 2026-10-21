@@ -16,7 +16,6 @@
 
 <!-- badges: end -->
 
-
 <!-- how-to-cite -->
 > [!NOTE]
 > **How to cite defm.** If you use **defm** in published work, please cite it:
@@ -68,6 +67,7 @@ lines simulate the baseline data:
 ``` r
 library(defm)
 #> Loading required package: stats4
+#> Using defm in your research? Please cite it: citation("defm")
 
 # Simulation parameters
 set.seed(1231)
@@ -202,11 +202,13 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                         Estimate Std. Error
-#> Num. of ones           -2.009506 0.01435063
-#> Num. of ones x x1       2.020209 0.01592262
-#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649922
+#> Num. of ones           -2.009506 0.01435052
+#> Num. of ones x x1       2.020209 0.01592252
+#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649859
 #> 
-#> -2 log L: 54960.47
+#> -2 log L: 54960.47 
+#> 
+#> Tip: call summary_table() on the fitted model for a compact table by outcome (console, HTML, or Markdown).
 ```
 
 Or better, we can use `texreg` to generate a pretty output:

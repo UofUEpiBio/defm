@@ -18,15 +18,6 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-<!-- how-to-cite -->
-> [!NOTE]
-> **How to cite defm.** If you use **defm** in published work, please cite it:
->
-> Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes. *arXiv*:2211.00627. doi:[10.48550/arXiv.2211.00627](https://doi.org/10.48550/arXiv.2211.00627)
->
-> Run `citation("defm")` in R for the BibTeX entry.
-<!-- how-to-cite -->
-
 ```{=markdown}
 [![CRAN status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
@@ -37,6 +28,17 @@ knitr::opts_chunk$set(
 [![defm status badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
 ```
 <!-- badges: end -->
+
+```{=markdown}
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite defm.** If you use **defm** in published work, please cite it:
+>
+> Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes. *arXiv*:2211.00627. doi:[10.48550/arXiv.2211.00627](https://doi.org/10.48550/arXiv.2211.00627)
+>
+> Run `citation("defm")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+```
 
 Discrete exponential family models (DEFM) have a long tradition with extensive
 development rooted in exponential random graph models (ERGMs.) Applicable to 

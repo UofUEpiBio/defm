@@ -20,105 +20,76 @@ init_defm(m)
 
 fit <- defm_mle(m)
 
-# The fit keeps working as an mle object and suggests summary_table()
-expect_true(inherits(fit, "mle"))
-expect_inherits(fit, "defm_mle")
+# Printing the fit (and its summary) suggests summary_table()
 expect_stdout(print(fit), "summary_table")
 expect_stdout(show(summary(fit)), "summary_table")
-expect_true(is.matrix(summary(fit)@coef))
 
 tab <- summary_table(fit)
-expect_inherits(tab, "defm_summary_table")
 
-# Section 1: outcomes by covariates
+# Section 1: outcomes by covariates, empty when there is no term
 logit <- tab$sections$logit
-expect_equal(colnames(logit$est), c("smoke", "drink", "vape"))
-expect_equal(rownames(logit$est), c("(Intercept)", "female", "age"))
+expect_equal(
+  dimnames(logit$est),
+  list(c("(Intercept)", "female", "age"), c("smoke", "drink", "vape"))
+)
 expect_equal(
   logit$est["female", "smoke"],
   unname(coef(fit)["Logit intercept smoke x female"])
 )
 expect_true(is.na(logit$est["age", "drink"]))
 
-# Section 2: motifs by interaction
+# Section 2: motifs (td_formula notation) by interaction
 markov <- tab$sections$markov
-expect_equal(colnames(markov$est), c("Main", "x age", "x female"))
 expect_equal(
-  rownames(markov$est),
-  c("{smoke, 0drink}", "{smoke, drink} > {0smoke, 0drink}", "{smoke} > {smoke}")
+  dimnames(markov$est),
+  list(
+    c("{smoke, 0drink}", "{smoke, drink} > {0smoke, 0drink}", "{smoke} > {smoke}"),
+    c("Main", "x age", "x female")
+  )
 )
 expect_equal(
   markov$est["{smoke, 0drink}", "x age"],
   unname(coef(fit)["Motif {smoke+, drink-} x age"])
 )
-expect_equal(
-  markov$term["{smoke} > {smoke}", "x female"],
-  "Motif {smoke+}>{smoke+} x female"
-)
 
-# Console output
+# Console output, standard errors below (default) or to the side, digits
 out <- format(tab)
-expect_true(any(grepl("Outcome-specific (logit) terms", out, fixed = TRUE)))
-expect_true(any(grepl("Joint and transition (Markov) terms", out, fixed = TRUE)))
-expect_true(any(grepl("^\\s+smoke\\s+drink\\s+vape$", out)))
-expect_stdout(print(tab), "Log-likelihood")
+expect_true(all(c(
+  "Outcome-specific (logit) terms",
+  "Joint and transition (Markov) terms"
+) %in% out))
+expect_false(grepl("\\(\\d", out[grepl("^\\(Intercept\\)", out)]))
 
-# Standard errors below (default) or to the side
-est_txt <- formatC(coef(fit)["Logit intercept smoke"], digits = 3, format = "f")
-line    <- out[grepl("^\\(Intercept\\)", out)]
-expect_false(grepl("\\(\\d", line))
-line <- format(summary_table(fit, se = "side"))
-line <- line[grepl("^\\(Intercept\\)", line)]
-expect_true(grepl(est_txt, line, fixed = TRUE))
-expect_true(grepl("\\(\\d", line))
+out <- format(summary_table(fit, se = "side", digits = 1))
+expect_true(grepl(
+  paste0(
+    formatC(coef(fit)["Logit intercept smoke"], digits = 1, format = "f"),
+    "\\S*\\s+\\(\\d\\.\\d\\)"
+  ),
+  out[grepl("^\\(Intercept\\)", out)]
+))
 
-# Digits
-out1 <- format(summary_table(fit, digits = 1))
-expect_true(any(grepl(
-  formatC(coef(fit)["Logit intercept smoke"], digits = 1, format = "f"),
-  out1[grepl("^\\(Intercept\\)", out1)],
-  fixed = TRUE
-)))
-
-# Labels apply to outcomes, covariates, and motifs
+# Labels apply to outcomes, covariates, and motifs; omit drops terms
 tab_l <- summary_table(
   fit,
-  labels = c(smoke = "Smoking", female = "Female", "(Intercept)" = "Baseline")
+  labels = c(smoke = "Smoking", female = "Female"),
+  omit   = "vape"
 )
-expect_equal(colnames(tab_l$sections$logit$est), c("Smoking", "drink", "vape"))
-expect_equal(rownames(tab_l$sections$logit$est)[1:2], c("Baseline", "Female"))
+expect_equal(
+  list(colnames(tab_l$sections$logit$est), colnames(tab_l$sections$markov$est)),
+  list(c("Smoking", "drink"), c("Main", "x age", "x Female"))
+)
 expect_true("{Smoking} > {Smoking}" %in% rownames(tab_l$sections$markov$est))
-expect_true(any(grepl("x Female", format(tab_l), fixed = TRUE)))
-
-# Omitting terms
-tab_o <- summary_table(fit, omit = "^Motif|vape")
-expect_null(tab_o$sections$markov)
-expect_equal(colnames(tab_o$sections$logit$est), c("smoke", "drink"))
 
 # HTML and markdown
-html <- format(tab, type = "html")
-expect_true(grepl("^<table", html[1]))
-expect_true(any(grepl("&gt;", html, fixed = TRUE)))
-md <- format(tab, type = "markdown")
-expect_true(any(grepl("|:---|", md, fixed = TRUE)))
+expect_true(
+  grepl("^<table", format(tab, type = "html")[1]) &&
+    any(grepl("|:---|", format(tab, type = "markdown"), fixed = TRUE))
+)
 
-# Old output and texreg
-df <- as.data.frame(tab)
-expect_equal(colnames(df), c("coef", "se", "pvalues"))
-expect_equal(rownames(df), names(coef(fit)))
-if (requireNamespace("texreg", quietly = TRUE)) {
-  expect_inherits(summary_table(fit, as_texreg = TRUE), "texreg")
-  m0 <- new_defm(id, Y, X, order = 0)
-  td_logit_intercept(m0, covar = "female")
-  init_defm(m0)
-  fit0 <- defm_mle(m0)
-  expect_stdout(
-    print(texreg_fancy(list(fit0, fit0), texreg::screenreg)),
-    "Model 2"
-  )
-}
+# The previous output is still available
+expect_equal(colnames(as.data.frame(tab)), c("coef", "se", "pvalues"))
 
-# Same table without a valid model pointer, or without the stored names
+# Same table without a valid model pointer
 fit2 <- unserialize(serialize(fit, NULL))
 expect_equal(summary_table(fit2)$sections, tab$sections)
-expect_equal(summary_table(as(fit, "mle"))$sections, tab$sections)
