@@ -217,8 +217,12 @@ SEXP print_defm(SEXP x)
 //' @param par A vector of parameters of length `nterms_defm(m)`.
 //' @param as_log Logical scalar. When `TRUE` (default) returns the log-likelihood,
 //' otherwise it returns the likelihood.
+//' @param ncores Integer scalar. Number of threads to use (only relevant if
+//' the package was compiled with OpenMP).
 //' @return
 //' Numeric, the computed likelihood or log-likelihood of the model.
+//' @seealso [loglike_defm_grad()] and [loglike_defm_hess()] for its exact
+//' derivatives.
 //' @export
 //' @examples
 //' # Loading Valtente's SNS data
@@ -238,17 +242,100 @@ SEXP print_defm(SEXP x)
 //' # Computing the log-likelihood
 //' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
 // [[Rcpp::export(rng = false)]]
-double loglike_defm(SEXP m, std::vector< double > par, bool as_log = true)
+double loglike_defm(
+    SEXP m,
+    std::vector< double > par,
+    bool as_log = true,
+    int ncores = 2
+)
 {
 
   Rcpp::XPtr< defm::DEFM > ptr(m);
 
-  double res = ptr->likelihood_total(par, as_log);
+  double res = ptr->likelihood_total(par, as_log, ncores);
 
   if (std::isfinite(res))
     return res;
   else
     return R_NegInf;
+
+}
+
+//' Gradient and Hessian of the DEFM log-likelihood
+//'
+//' Exact (analytic) derivatives of [loglike_defm()] with respect to the
+//' model parameters.
+//'
+//' @param m An object of class [DEFM]
+//' @param par A vector of parameters of length `nterms_defm(m)`.
+//' @param ncores Integer scalar. Number of threads to use (only relevant if
+//' the package was compiled with OpenMP).
+//' @details
+//' Let \eqn{s_a} be the observed sufficient statistics of each array
+//' (observation), and \eqn{Z_u} the normalizing constant of each unique
+//' support \eqn{u}, shared by \eqn{m_u} arrays. The gradient is the observed
+//' minus the expected statistics,
+//' \deqn{\nabla\ell(\theta) = \sum_a s_a - \sum_u m_u E_\theta[t | u],}
+//' and the Hessian is minus the (weighted) sum of the covariance of the
+//' statistics within each support,
+//' \deqn{\nabla^2\ell(\theta) = -\sum_u m_u Cov_\theta[t | u].}
+//' The Hessian is negative semi-definite, so the log-likelihood is concave.
+//' @return
+//' - `loglike_defm_grad()` returns a numeric vector of length `nterms_defm(m)`.
+//' - `loglike_defm_hess()` returns a square numeric matrix of size
+//'   `nterms_defm(m)`.
+//' @export
+//' @examples
+//' data(valentesnsList)
+//'
+//' mymodel <- new_defm(
+//'   id    = valentesnsList$id,
+//'   Y     = valentesnsList$Y,
+//'   X     = valentesnsList$X,
+//'   order = 1
+//' )
+//'
+//' td_logit_intercept(mymodel)
+//' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+//' init_defm(mymodel)
+//'
+//' par <- c(-1, -1, -1, 2)
+//' loglike_defm_grad(mymodel, par)
+//' loglike_defm_hess(mymodel, par)
+// [[Rcpp::export(rng = false)]]
+std::vector< double > loglike_defm_grad(
+    SEXP m,
+    std::vector< double > par,
+    int ncores = 1
+)
+{
+
+  Rcpp::XPtr< defm::DEFM > ptr(m);
+
+  return ptr->likelihood_total_grad(par, ncores);
+
+}
+
+//' @export
+//' @rdname loglike_defm_grad
+// [[Rcpp::export(rng = false)]]
+Rcpp::NumericMatrix loglike_defm_hess(
+    SEXP m,
+    std::vector< double > par,
+    int ncores = 1
+)
+{
+
+  Rcpp::XPtr< defm::DEFM > ptr(m);
+
+  std::vector< double > H = ptr->likelihood_total_hess(par, ncores);
+
+  // Symmetric, so the row-major layout can be copied as is
+  size_t K = par.size();
+  Rcpp::NumericMatrix res(K, K);
+  std::copy(H.begin(), H.end(), res.begin());
+
+  return res;
 
 }
 

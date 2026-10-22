@@ -151,14 +151,39 @@ BEGIN_RCPP
 END_RCPP
 }
 // loglike_defm
-double loglike_defm(SEXP m, std::vector< double > par, bool as_log);
-RcppExport SEXP _defm_loglike_defm(SEXP mSEXP, SEXP parSEXP, SEXP as_logSEXP) {
+double loglike_defm(SEXP m, std::vector< double > par, bool as_log, int ncores);
+RcppExport SEXP _defm_loglike_defm(SEXP mSEXP, SEXP parSEXP, SEXP as_logSEXP, SEXP ncoresSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
     Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
     Rcpp::traits::input_parameter< bool >::type as_log(as_logSEXP);
-    rcpp_result_gen = Rcpp::wrap(loglike_defm(m, par, as_log));
+    Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_defm(m, par, as_log, ncores));
+    return rcpp_result_gen;
+END_RCPP
+}
+// loglike_defm_grad
+std::vector< double > loglike_defm_grad(SEXP m, std::vector< double > par, int ncores);
+RcppExport SEXP _defm_loglike_defm_grad(SEXP mSEXP, SEXP parSEXP, SEXP ncoresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
+    Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_defm_grad(m, par, ncores));
+    return rcpp_result_gen;
+END_RCPP
+}
+// loglike_defm_hess
+Rcpp::NumericMatrix loglike_defm_hess(SEXP m, std::vector< double > par, int ncores);
+RcppExport SEXP _defm_loglike_defm_hess(SEXP mSEXP, SEXP parSEXP, SEXP ncoresSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< SEXP >::type m(mSEXP);
+    Rcpp::traits::input_parameter< std::vector< double > >::type par(parSEXP);
+    Rcpp::traits::input_parameter< int >::type ncores(ncoresSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_defm_hess(m, par, ncores));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -386,7 +411,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_defm_get_X_names", (DL_FUNC) &_defm_get_X_names, 1},
     {"_defm_init_defm", (DL_FUNC) &_defm_init_defm, 2},
     {"_defm_print_defm", (DL_FUNC) &_defm_print_defm, 1},
-    {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 3},
+    {"_defm_loglike_defm", (DL_FUNC) &_defm_loglike_defm, 4},
+    {"_defm_loglike_defm_grad", (DL_FUNC) &_defm_loglike_defm_grad, 3},
+    {"_defm_loglike_defm_hess", (DL_FUNC) &_defm_loglike_defm_hess, 3},
     {"_defm_sim_defm", (DL_FUNC) &_defm_sim_defm, 3},
     {"_defm_print_stats", (DL_FUNC) &_defm_print_stats, 2},
     {"_defm_nterms_defm", (DL_FUNC) &_defm_nterms_defm, 1},

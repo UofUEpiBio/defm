@@ -195,8 +195,12 @@ print_defm_cpp <- function(x) {
 #' @param par A vector of parameters of length `nterms_defm(m)`.
 #' @param as_log Logical scalar. When `TRUE` (default) returns the log-likelihood,
 #' otherwise it returns the likelihood.
+#' @param ncores Integer scalar. Number of threads to use (only relevant if
+#' the package was compiled with OpenMP).
 #' @return
 #' Numeric, the computed likelihood or log-likelihood of the model.
+#' @seealso [loglike_defm_grad()] and [loglike_defm_hess()] for its exact
+#' derivatives.
 #' @export
 #' @examples
 #' # Loading Valtente's SNS data
@@ -215,8 +219,59 @@ print_defm_cpp <- function(x) {
 #'
 #' # Computing the log-likelihood
 #' loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
-loglike_defm <- function(m, par, as_log = TRUE) {
-    .Call(`_defm_loglike_defm`, m, par, as_log)
+loglike_defm <- function(m, par, as_log = TRUE, ncores = 2L) {
+    .Call(`_defm_loglike_defm`, m, par, as_log, ncores)
+}
+
+#' Gradient and Hessian of the DEFM log-likelihood
+#'
+#' Exact (analytic) derivatives of [loglike_defm()] with respect to the
+#' model parameters.
+#'
+#' @param m An object of class [DEFM]
+#' @param par A vector of parameters of length `nterms_defm(m)`.
+#' @param ncores Integer scalar. Number of threads to use (only relevant if
+#' the package was compiled with OpenMP).
+#' @details
+#' Let \eqn{s_a} be the observed sufficient statistics of each array
+#' (observation), and \eqn{Z_u} the normalizing constant of each unique
+#' support \eqn{u}, shared by \eqn{m_u} arrays. The gradient is the observed
+#' minus the expected statistics,
+#' \deqn{\nabla\ell(\theta) = \sum_a s_a - \sum_u m_u E_\theta[t | u],}
+#' and the Hessian is minus the (weighted) sum of the covariance of the
+#' statistics within each support,
+#' \deqn{\nabla^2\ell(\theta) = -\sum_u m_u Cov_\theta[t | u].}
+#' The Hessian is negative semi-definite, so the log-likelihood is concave.
+#' @return
+#' - `loglike_defm_grad()` returns a numeric vector of length `nterms_defm(m)`.
+#' - `loglike_defm_hess()` returns a square numeric matrix of size
+#'   `nterms_defm(m)`.
+#' @export
+#' @examples
+#' data(valentesnsList)
+#'
+#' mymodel <- new_defm(
+#'   id    = valentesnsList$id,
+#'   Y     = valentesnsList$Y,
+#'   X     = valentesnsList$X,
+#'   order = 1
+#' )
+#'
+#' td_logit_intercept(mymodel)
+#' td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
+#' init_defm(mymodel)
+#'
+#' par <- c(-1, -1, -1, 2)
+#' loglike_defm_grad(mymodel, par)
+#' loglike_defm_hess(mymodel, par)
+loglike_defm_grad <- function(m, par, ncores = 1L) {
+    .Call(`_defm_loglike_defm_grad`, m, par, ncores)
+}
+
+#' @export
+#' @rdname loglike_defm_grad
+loglike_defm_hess <- function(m, par, ncores = 1L) {
+    .Call(`_defm_loglike_defm_hess`, m, par, ncores)
 }
 
 #' Simulate data using a DEFM
