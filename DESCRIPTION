@@ -22,7 +22,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-LinkingTo: Rcpp, barry (>= 0.2.2)
+LinkingTo: Rcpp, barry (>= 0.2.99)
 Imports: 
     methods,
     Rcpp,
