@@ -32,6 +32,4 @@ Depends:
     stats4
 Suggests: 
     texreg, tinytest, barry, knitr
-Remotes:
-    USCbiostats/barryr
 Config/roxygen2/version: 8.0.0

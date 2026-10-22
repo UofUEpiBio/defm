@@ -27,25 +27,6 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from
-          # barryr's main branch. Remove once barry 0.2.2 is on CRAN.
-          # (The DESCRIPTION Remotes field is not honored by pak's
-          # `deps::.`, so the source must be listed here.)
-          extra-packages: |
-            USCbiostats/barryr
-
-      # `setup-r-dependencies` can restore an older development build from
-      # its package cache.  Force a fresh install so the headers match barryr
-      # main even when its development version has not changed.
-      - name: Refresh development barry
-        run: |
-          install.packages("remotes")
-          remotes::install_github(
-            "USCbiostats/barryr", dependencies = FALSE, upgrade = "never",
-            force = TRUE
-          )
-        shell: Rscript {0}
 
       - name: Build package
         run: R CMD build .
@@ -95,22 +76,9 @@ jobs:
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           # TEMPORARY: barry (>= 0.2.2) is not on CRAN yet; pull it from
-          # barryr's main branch. Remove once barry 0.2.2 is on CRAN.
           extra-packages: |
             any::rcmdcheck
-            USCbiostats/barryr
           needs: check
-
-      # See the corresponding step in the R-binary job.  This must run after
-      # dependency caching and before defm is compiled.
-      - name: Refresh development barry
-        run: |
-          install.packages("remotes")
-          remotes::install_github(
-            "USCbiostats/barryr", dependencies = FALSE, upgrade = "never",
-            force = TRUE
-          )
-        shell: Rscript {0}
 
       - uses: r-lib/actions/check-r-package@v2
         if: ${{ matrix.config.valgrind != true }}

@@ -46,19 +46,7 @@ jobs:
           extra-packages: |
             any::pkgdown
             local::.
-            USCbiostats/barryr
           needs: website
-
-      # Refresh barryr after restoring the dependency cache; the package's
-      # development version can stay constant across C++ header changes.
-      - name: Refresh development barry
-        run: |
-          install.packages("remotes")
-          remotes::install_github(
-            "USCbiostats/barryr", dependencies = FALSE, upgrade = "never",
-            force = TRUE
-          )
-        shell: Rscript {0}
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)

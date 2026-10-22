@@ -1,4 +1,4 @@
-# defm 0.3.0.0 (development version)
+# defm 0.3.0.0
 
 * `defm_mle()` is much faster for models with many terms: it now passes the
   exact gradient to `optim()` and computes the variance-covariance matrix from
