@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
 
     name: R binary version
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v5
 

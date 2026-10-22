@@ -49,8 +49,8 @@ log-likelihood and its derivatives (only relevant if the package was
 compiled with OpenMP).}
 
 \item{control}{List of control parameters. Passed to \code{\link[stats:optim]{stats::optim()}};
-with \code{method = "newton"}, \code{maxit} (default 100) and \code{reltol} (default
-\code{1e-10}) are used.}
+with \code{method = "newton"}, \code{maxit} (default 100), \code{reltol} (default
+\code{1e-10}), and \code{grtol} (default \code{1e-8}, maximum absolute gradient) are used.}
 
 \item{...}{Further arguments passed to \code{summary_table} (with the exception of \code{as_texreg}, which is set to \code{TRUE}).}
 

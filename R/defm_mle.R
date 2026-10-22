@@ -16,8 +16,8 @@
 #' log-likelihood and its derivatives (only relevant if the package was
 #' compiled with OpenMP).
 #' @param control List of control parameters. Passed to [stats::optim()];
-#' with `method = "newton"`, `maxit` (default 100) and `reltol` (default
-#' `1e-10`) are used.
+#' with `method = "newton"`, `maxit` (default 100), `reltol` (default
+#' `1e-10`), and `grtol` (default `1e-8`, maximum absolute gradient) are used.
 #' @param ... Further arguments passed to [stats::optim()].
 #' @export
 #' @import stats4
@@ -257,13 +257,14 @@ defm_mle <- function(
 #' @param par Starting values.
 #' @param fn,gr,hess Objective (minus log-likelihood), its gradient, and its
 #' Hessian.
-#' @param control List with `maxit` and `reltol`.
+#' @param control List with `maxit`, `reltol`, and `grtol`.
 #' @return A list with the same elements as [stats::optim()].
 #' @noRd
 defm_newton <- function(par, fn, gr, hess, control = list()) {
 
   maxit  <- if (is.null(control$maxit)) 100L else control$maxit
   reltol <- if (is.null(control$reltol)) 1e-10 else control$reltol
+  grtol  <- if (is.null(control$grtol)) 1e-8 else control$grtol
 
   value       <- fn(par)
   n_fn        <- 1L
@@ -273,6 +274,12 @@ defm_newton <- function(par, fn, gr, hess, control = list()) {
   for (iter in seq_len(maxit)) {
 
     g <- gr(par)
+    if (max(abs(g), 0) <= grtol) {
+      convergence <- 0L
+      message     <- NULL
+      break
+    }
+
     step <- tryCatch(
       solve(hess(par), g),
       error = function(e) g # Falls back to steepest descent
@@ -286,7 +293,11 @@ defm_newton <- function(par, fn, gr, hess, control = list()) {
       value_new <- fn(candidate)
       n_fn <- n_fn + 1L
 
-      if (is.finite(value_new) && (value_new <= value))
+      # Near the optimum the likelihood can round upward even for a valid
+      # Newton step. Allow roundoff, but still require a small gradient
+      # before reporting convergence.
+      roundoff <- 10 * .Machine$double.eps * max(1, abs(value))
+      if (is.finite(value_new) && (value_new <= value + roundoff))
         break
 
       t <- t / 2
@@ -305,7 +316,8 @@ defm_newton <- function(par, fn, gr, hess, control = list()) {
     par    <- candidate
     value  <- value_new
 
-    if (change <= reltol * (abs(value) + reltol)) {
+    if (change <= reltol * (abs(value) + reltol) &&
+        max(abs(gr(par)), 0) <= grtol) {
       convergence <- 0L
       message     <- NULL
       break

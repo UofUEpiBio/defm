@@ -1,4 +1,16 @@
 # Exact gradient and Hessian of the DEFM log-likelihood ------------------------
+# A small relative objective change must not hide a nonzero gradient. The
+# large constant also makes objective rounding visible near the minimum.
+plateau <- defm:::defm_newton(
+  par = 1,
+  fn = function(p) 1e8 + exp(p) - p,
+  gr = function(p) exp(p) - 1,
+  hess = function(p) matrix(exp(p)),
+  control = list()
+)
+expect_equal(plateau$convergence, 0L)
+expect_true(abs(exp(plateau$par) - 1) <= 1e-8)
+
 data(valentesnsList)
 
 mymodel <- new_defm(
