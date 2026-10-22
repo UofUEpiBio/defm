@@ -1,5 +1,17 @@
 # defm 0.2.2.9000 (development version)
 
+* `defm_mle()` is much faster for models with many terms: it now passes the
+  exact gradient to `optim()` and computes the variance-covariance matrix from
+  the exact Hessian, instead of using finite differences (through
+  `stats4::mle()`). New arguments: `method` (`"L-BFGS-B"`, `"BFGS"`, or
+  `"newton"`), `fixed`, `ncores`, and `control`. Refits through the stored
+  call work, so `profile()` and `confint()` can be used.
+
+* New functions `loglike_defm_grad()` and `loglike_defm_hess()` return the
+  exact gradient and Hessian of the log-likelihood. `loglike_defm()` gains an
+  `ncores` argument. These require barry (>= 0.2.2.9000) with the new
+  derivative methods.
+
 * `summary_table()` now returns a compact two-section table: outcome-specific
   (logit) terms as an outcome-by-covariate matrix, and joint/transition
   (Markov) terms as a motif-by-interaction matrix. It prints to the console
