@@ -9,8 +9,8 @@
 
 * New functions `loglike_defm_grad()` and `loglike_defm_hess()` return the
   exact gradient and Hessian of the log-likelihood. `loglike_defm()` gains an
-  `ncores` argument. These require barry (>= 0.2.2.9000) with the new
-  derivative methods.
+  `ncores` argument. These require a version of the barry headers with the
+  new derivative methods (USCbiostats/barry#27).
 
 * `summary_table()` now returns a compact two-section table: outcome-specific
   (logit) terms as an outcome-by-covariate matrix, and joint/transition
