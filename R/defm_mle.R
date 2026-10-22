@@ -293,11 +293,14 @@ defm_newton <- function(par, fn, gr, hess, control = list()) {
       value_new <- fn(candidate)
       n_fn <- n_fn + 1L
 
-      # Near the optimum the likelihood can round upward even for a valid
-      # Newton step. Allow roundoff, but still require a small gradient
-      # before reporting convergence.
-      roundoff <- 10 * .Machine$double.eps * max(1, abs(value))
-      if (is.finite(value_new) && (value_new <= value + roundoff))
+      # Summing the likelihood can obscure the improvement near the optimum.
+      # In that range accept a step only if the exact gradient improves;
+      # otherwise objective rounding can cause endless step halving.
+      roundoff <- sqrt(.Machine$double.eps) * max(1, abs(value))
+      if (is.finite(value_new) &&
+          (value_new <= value ||
+           (value_new <= value + roundoff &&
+            max(abs(gr(candidate)), 0) < max(abs(g), 0))))
         break
 
       t <- t / 2

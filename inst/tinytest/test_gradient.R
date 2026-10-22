@@ -11,6 +11,18 @@ plateau <- defm:::defm_newton(
 expect_equal(plateau$convergence, 0L)
 expect_true(abs(exp(plateau$par) - 1) <= 1e-8)
 
+# Simulate summation noise that slightly raises the computed objective near
+# its minimum. The exact gradient should allow Newton to finish the step.
+noisy <- defm:::defm_newton(
+  par = 1,
+  fn = function(p) exp(p) - p + ifelse(abs(p) < 1e-7, 1e-10, 0),
+  gr = function(p) exp(p) - 1,
+  hess = function(p) matrix(exp(p)),
+  control = list()
+)
+expect_equal(noisy$convergence, 0L)
+expect_true(abs(exp(noisy$par) - 1) <= 1e-8)
+
 data(valentesnsList)
 
 mymodel <- new_defm(
