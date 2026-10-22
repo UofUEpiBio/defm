@@ -196,15 +196,13 @@ summary(ans)
 #> Maximum likelihood estimation
 #> 
 #> Call:
-#> stats4::mle(minuslogl = minuslog, start = start, method = "L-BFGS-B", 
-#>     nobs = nrow_defm(object) + ifelse(morder_defm(object) > 0, 
-#>         -nobs_defm(object), 0L), lower = lower, upper = upper)
+#> defm_mle(object = d_model_sim)
 #> 
 #> Coefficients:
 #>                         Estimate Std. Error
-#> Num. of ones           -2.009506 0.01435052
-#> Num. of ones x x1       2.020209 0.01592252
-#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649859
+#> Num. of ones           -2.009506 0.01435059
+#> Num. of ones x x1       2.020209 0.01592257
+#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649915
 #> 
 #> -2 log L: 54960.47 
 #> 
