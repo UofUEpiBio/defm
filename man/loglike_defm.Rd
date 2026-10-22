@@ -4,7 +4,7 @@
 \alias{loglike_defm}
 \title{Log-Likelihood of DEFM}
 \usage{
-loglike_defm(m, par, as_log = TRUE)
+loglike_defm(m, par, as_log = TRUE, ncores = 2L)
 }
 \arguments{
 \item{m}{An object of class \link{DEFM}}
@@ -13,6 +13,9 @@ loglike_defm(m, par, as_log = TRUE)
 
 \item{as_log}{Logical scalar. When \code{TRUE} (default) returns the log-likelihood,
 otherwise it returns the likelihood.}
+
+\item{ncores}{Integer scalar. Number of threads to use (only relevant if
+the package was compiled with OpenMP).}
 }
 \value{
 Numeric, the computed likelihood or log-likelihood of the model.
@@ -37,4 +40,8 @@ td_formula(mymodel, "{y1, 0y2} > {y1, y2}")
 
 # Computing the log-likelihood
 loglike_defm(mymodel, par = c(-1, -1, -1, 2), as_log = TRUE)
+}
+\seealso{
+\code{\link[=loglike_defm_grad]{loglike_defm_grad()}} and \code{\link[=loglike_defm_hess]{loglike_defm_hess()}} for its exact
+derivatives.
 }

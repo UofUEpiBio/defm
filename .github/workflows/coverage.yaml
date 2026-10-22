@@ -10,6 +10,8 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     name: Coverage
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - uses: actions/checkout@v5
@@ -26,6 +28,17 @@ jobs:
             any::covr
             USCbiostats/barryr
           needs: check
+
+      # The package cache does not change when barryr advances its dev
+      # version, so refresh it explicitly before compiling defm.
+      - name: Refresh development barry
+        run: |
+          install.packages("remotes")
+          remotes::install_github(
+            "USCbiostats/barryr", dependencies = FALSE, upgrade = "never",
+            force = TRUE
+          )
+        shell: Rscript {0}
 
       - name: Running coverage
         run: |

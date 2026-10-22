@@ -3,10 +3,22 @@
 #' Fits a Discrete Exponential-Family Model using Maximum Likelihood.
 #'
 #' @param object An object of class [DEFM].
-#' @param start Double vector. Starting point for the MLE.
-#' @param lower,upper Lower and upper limits for the optimization (passed to
-#' [stats4::mle].)
-#' @param ... Further arguments passed to [stats4::mle].
+#' @param start Double vector or named list. Starting point for the MLE
+#' (defaults to zero). When named, values are matched to the model terms.
+#' @param lower,upper Lower and upper limits for the optimization (only used
+#' with `method = "L-BFGS-B"`). Default to -20 and 20.
+#' @param method Character scalar. Either `"L-BFGS-B"` (default) or `"BFGS"`,
+#' passed to [stats::optim()], or `"newton"` for Newton-Raphson with step
+#' halving (see details).
+#' @param fixed Named list or named numeric vector. Parameters held fixed at
+#' the given values.
+#' @param ncores Integer scalar. Number of threads used to compute the
+#' log-likelihood and its derivatives (only relevant if the package was
+#' compiled with OpenMP).
+#' @param control List of control parameters. Passed to [stats::optim()];
+#' with `method = "newton"`, `maxit` (default 100), `reltol` (default
+#' `1e-10`), and `grtol` (default `1e-8`, maximum absolute gradient) are used.
+#' @param ... Further arguments passed to [stats::optim()].
 #' @export
 #' @import stats4
 #' @details 
@@ -20,6 +32,13 @@
 #' one output, then the model is equivalent to a logistic regression. The 
 #' example below shows this equivalence.
 #' 
+#' The optimization uses the exact gradient of the log-likelihood
+#' ([loglike_defm_grad()]), and the variance-covariance matrix is the inverse
+#' of minus the exact Hessian ([loglike_defm_hess()]) at the estimates. Since
+#' the log-likelihood is concave, `method = "newton"` usually converges in a
+#' few iterations, but, unlike `"L-BFGS-B"`, it does not bound the
+#' parameters, so it may drift when the MLE does not exist (e.g., under
+#' separation).
 #'  
 #' @return An object of class `defm_mle`, which extends [stats4::mle]
 #' (all the methods for `mle` objects, e.g., `coef()`, `vcov()`, and
@@ -70,53 +89,251 @@
 #' @references 
 #' Vega Yon, G. G., Pugh, M. J., & Valente, T. W. (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes (arXiv:2211.00627). arXiv. \url{https://arxiv.org/abs/2211.00627}
 defm_mle <- function(
-  object,
-  start,
-  lower,
-  upper,
-  ...
-  ) {
-
-  if (missing(start))
-    start <- as.list(structure(rep(0, nterms_defm(object)), names = names(object) ))
-
-  if (missing(lower))
-    lower <- rep(-20, length(nterms_defm(object)))
-
-  if (missing(upper))
-    upper <- rep(20, length(nterms_defm(object)))
+    object,
+    start,
+    lower,
+    upper,
+    method  = c("L-BFGS-B", "BFGS", "newton"),
+    fixed   = list(),
+    ncores  = 1L,
+    control = list(),
+    ...
+) {
 
   if (!inherits(object, "DEFM"))
     stop("-object- must be an object of class \"DEFM\"")
+
+  call   <- match.call()
+  method <- match.arg(method)
+  pnames <- names(object)
+  K      <- length(pnames)
+
+  # stats4::profile() passes -minuslogl- when refitting; it is not needed
+  dots <- list(...)
+  dots$minuslogl <- NULL
+
+  # Parameter vectors (start, fixed, bounds) as full-length named vectors
+  as_full <- function(x, default, what) {
+
+    x <- unlist(x)
+    v <- structure(rep(default, K), names = pnames)
+
+    if (!length(x))
+      return(v)
+
+    if (is.null(names(x))) {
+      v[] <- rep_len(as.numeric(x), K)
+      return(v)
+    }
+
+    idx <- match(names(x), pnames)
+    if (anyNA(idx))
+      stop(
+        "Some names in -", what, "- are not terms in the model: ",
+        paste(names(x)[is.na(idx)], collapse = ", ")
+      )
+
+    v[idx] <- as.numeric(x)
+    v
+
+  }
+
+  start   <- if (missing(start)) as_full(0, 0, "start") else
+    as_full(start, 0, "start")
+  fixed   <- as_full(fixed, NA_real_, "fixed")
+  isfixed <- !is.na(fixed)
+  start[isfixed] <- fixed[isfixed]
+  free    <- which(!isfixed)
+
+  full <- function(p) {
+    v <- start
+    v[free] <- p
+    v
+  }
+
+  fn <- function(p)
+    -loglike_defm(object, full(p), as_log = TRUE, ncores = ncores)
+
+  gr <- function(p)
+    -loglike_defm_grad(object, full(p), ncores = ncores)[free]
+
+  hess <- function(p)
+    -loglike_defm_hess(object, full(p), ncores = ncores)[
+      free, free, drop = FALSE
+    ]
+
+  if (method == "newton") {
+
+    oout <- defm_newton(start[free], fn, gr, hess, control)
+
+  } else {
+
+    args <- c(
+      list(
+        par     = start[free],
+        fn      = fn,
+        gr      = gr,
+        method  = method,
+        control = control
+      ),
+      dots
+    )
+
+    if (method == "L-BFGS-B") {
+
+      lower <- if (missing(lower)) as_full(-20, -20, "lower") else
+        as_full(lower, -Inf, "lower")
+      upper <- if (missing(upper)) as_full(20, 20, "upper") else
+        as_full(upper, Inf, "upper")
+
+      if (any(fixed[isfixed] < lower[isfixed] | fixed[isfixed] > upper[isfixed]))
+        stop("fixed values violate constraints")
+
+      lower <- lower[free]
+      upper <- upper[free]
+
+      if (any(args$par < lower | args$par > upper)) {
+        warning("start values do not satisfy constraints")
+        args$par <- pmin(pmax(args$par, lower), upper)
+      }
+
+      args$lower <- lower
+      args$upper <- upper
+
+    }
+
+    oout <- do.call(stats::optim, args)
+
+  }
+
+  # Exact Hessian of minus the log-likelihood at the estimates
+  oout$hessian <- hess(oout$par)
+  vcov <- tryCatch(
+    solve(oout$hessian),
+    error = function(e) {
+      warning(
+        "The Hessian is singular at the estimates; the variance-covariance ",
+        "matrix is not available (", conditionMessage(e), ")."
+      )
+      matrix(NA_real_, length(free), length(free))
+    }
+  )
+
+  coef <- structure(oout$par, names = pnames[free])
+  dimnames(vcov) <- list(pnames[free], pnames[free])
 
   minuslog <- sprintf(
     "function(%s) {
       par <- c(%1$s)
       -loglike_defm(object, par, as_log = TRUE)
-    }", paste0("`", names(start), "`", collapse = ", ")
+    }", paste0("`", pnames, "`", collapse = ", ")
   )
 
   minuslog <- gsub("\\\\", "\\\\\\", minuslog)
 
   minuslog <- eval(parse(text = minuslog))
 
-  fit <- stats4::mle(
-    minuslogl = minuslog,
-    start     = start,
-    lower     = lower,
-    upper     = upper,
-    method    = "L-BFGS-B",
-    nobs      = nrow_defm(object) + ifelse(
-      morder_defm(object) > 0, -nobs_defm(object), 0L
-      ),
-    ...
-  )
-
   methods::new(
     "defm_mle",
-    fit,
-    y_names = as.character(get_Y_names(object)),
-    x_names = as.character(get_X_names(object))
+    call      = call,
+    coef      = coef,
+    fullcoef  = full(oout$par),
+    fixed     = fixed,
+    vcov      = vcov,
+    min       = oout$value,
+    details   = oout,
+    minuslogl = minuslog,
+    nobs      = as.integer(nrow_defm(object) + ifelse(
+      morder_defm(object) > 0, -nobs_defm(object), 0L
+    )),
+    method    = method,
+    y_names   = as.character(get_Y_names(object)),
+    x_names   = as.character(get_X_names(object))
+  )
+
+}
+
+#' Newton-Raphson with step halving
+#' @param par Starting values.
+#' @param fn,gr,hess Objective (minus log-likelihood), its gradient, and its
+#' Hessian.
+#' @param control List with `maxit`, `reltol`, and `grtol`.
+#' @return A list with the same elements as [stats::optim()].
+#' @noRd
+defm_newton <- function(par, fn, gr, hess, control = list()) {
+
+  maxit  <- if (is.null(control$maxit)) 100L else control$maxit
+  reltol <- if (is.null(control$reltol)) 1e-10 else control$reltol
+  grtol  <- if (is.null(control$grtol)) 1e-8 else control$grtol
+
+  value       <- fn(par)
+  n_fn        <- 1L
+  convergence <- 1L
+  message     <- "iteration limit reached"
+
+  for (iter in seq_len(maxit)) {
+
+    g <- gr(par)
+    if (max(abs(g), 0) <= grtol) {
+      convergence <- 0L
+      message     <- NULL
+      break
+    }
+
+    step <- tryCatch(
+      solve(hess(par), g),
+      error = function(e) g # Falls back to steepest descent
+    )
+
+    # Halving the step until the objective does not increase
+    t <- 1
+    repeat {
+
+      candidate <- par - t * step
+      value_new <- fn(candidate)
+      n_fn <- n_fn + 1L
+
+      # Summing the likelihood can obscure the improvement near the optimum.
+      # In that range accept a step only if the exact gradient improves;
+      # otherwise objective rounding can cause endless step halving.
+      roundoff <- sqrt(.Machine$double.eps) * max(1, abs(value))
+      if (is.finite(value_new) &&
+          (value_new <= value ||
+           (value_new <= value + roundoff &&
+            max(abs(gr(candidate)), 0) < max(abs(g), 0))))
+        break
+
+      t <- t / 2
+      if (t < 1e-10)
+        break
+
+    }
+
+    if (t < 1e-10) {
+      convergence <- 52L
+      message     <- "step halving failed to decrease the objective"
+      break
+    }
+
+    change <- abs(value - value_new)
+    par    <- candidate
+    value  <- value_new
+
+    if (change <= reltol * (abs(value) + reltol) &&
+        max(abs(gr(par)), 0) <= grtol) {
+      convergence <- 0L
+      message     <- NULL
+      break
+    }
+
+  }
+
+  list(
+    par         = par,
+    value       = value,
+    counts      = c("function" = n_fn, gradient = iter),
+    convergence = convergence,
+    message     = message
   )
 
 }

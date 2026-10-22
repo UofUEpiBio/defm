@@ -8,7 +8,17 @@
 \usage{
 logodds(m, par, i, j)
 
-defm_mle(object, start, lower, upper, ...)
+defm_mle(
+  object,
+  start,
+  lower,
+  upper,
+  method = c("L-BFGS-B", "BFGS", "newton"),
+  fixed = list(),
+  ncores = 1L,
+  control = list(),
+  ...
+)
 
 texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 }
@@ -21,10 +31,26 @@ texreg_fancy(fits, fun, skip_intercept = FALSE, ...)
 
 \item{object}{An object of class \link{DEFM}.}
 
-\item{start}{Double vector. Starting point for the MLE.}
+\item{start}{Double vector or named list. Starting point for the MLE
+(defaults to zero). When named, values are matched to the model terms.}
 
-\item{lower, upper}{Lower and upper limits for the optimization (passed to
-\link[stats4:mle]{stats4::mle}.)}
+\item{lower, upper}{Lower and upper limits for the optimization (only used
+with \code{method = "L-BFGS-B"}). Default to -20 and 20.}
+
+\item{method}{Character scalar. Either \code{"L-BFGS-B"} (default) or \code{"BFGS"},
+passed to \code{\link[stats:optim]{stats::optim()}}, or \code{"newton"} for Newton-Raphson with step
+halving (see details).}
+
+\item{fixed}{Named list or named numeric vector. Parameters held fixed at
+the given values.}
+
+\item{ncores}{Integer scalar. Number of threads used to compute the
+log-likelihood and its derivatives (only relevant if the package was
+compiled with OpenMP).}
+
+\item{control}{List of control parameters. Passed to \code{\link[stats:optim]{stats::optim()}};
+with \code{method = "newton"}, \code{maxit} (default 100), \code{reltol} (default
+\code{1e-10}), and \code{grtol} (default \code{1e-8}, maximum absolute gradient) are used.}
 
 \item{...}{Further arguments passed to \code{summary_table} (with the exception of \code{as_texreg}, which is set to \code{TRUE}).}
 
@@ -61,6 +87,14 @@ individuals and the events are the binary outputs.
 If the model features no markov terms, i.e., terms that depend on more than
 one output, then the model is equivalent to a logistic regression. The
 example below shows this equivalence.
+
+The optimization uses the exact gradient of the log-likelihood
+(\code{\link[=loglike_defm_grad]{loglike_defm_grad()}}), and the variance-covariance matrix is the inverse
+of minus the exact Hessian (\code{\link[=loglike_defm_hess]{loglike_defm_hess()}}) at the estimates. Since
+the log-likelihood is concave, \code{method = "newton"} usually converges in a
+few iterations, but, unlike \code{"L-BFGS-B"}, it does not bound the
+parameters, so it may drift when the MLE does not exist (e.g., under
+separation).
 }
 \examples{
 #' Using Valente's SNS data
