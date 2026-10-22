@@ -16,7 +16,6 @@
 
 <!-- badges: end -->
 
-
 <!-- how-to-cite -->
 > [!NOTE]
 > **How to cite defm.** If you use **defm** in published work, please cite it:
@@ -68,6 +67,7 @@ lines simulate the baseline data:
 ``` r
 library(defm)
 #> Loading required package: stats4
+#> Using defm in your research? Please cite it: citation("defm")
 
 # Simulation parameters
 set.seed(1231)
@@ -202,11 +202,13 @@ summary(ans)
 #> 
 #> Coefficients:
 #>                         Estimate Std. Error
-#> Num. of ones           -2.009506 0.01435063
-#> Num. of ones x x1       2.020209 0.01592262
-#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649922
+#> Num. of ones           -2.009506 0.01435052
+#> Num. of ones x x1       2.020209 0.01592252
+#> Motif {y0+}>{y0+, y1+}  5.051076 0.04649859
 #> 
-#> -2 log L: 54960.47
+#> -2 log L: 54960.47 
+#> 
+#> Tip: call summary_table() on the fitted model for a compact table by outcome (console, HTML, or Markdown).
 ```
 
 Or better, we can use `texreg` to generate a pretty output:
@@ -564,6 +566,118 @@ set.seed(33)
 The new simulation…
 
 <img src="man/figures/README-chain2fig-1.png" style="width:100.0%" />
+
+## Example 4: Reporting results with `summary_table()`
+
+Models with several outcomes quickly accumulate terms: each covariate
+interaction adds one coefficient per outcome. `summary_table()`
+organizes the estimates in two sections: (1) outcome-specific (logit)
+terms, with one column per outcome and one row per covariate, and (2)
+joint and transition (Markov) terms, with one row per motif and one
+column per interaction.
+
+Using Valente’s SNS data, we fit a model for alcohol, tobacco, and
+marijuana use, with covariates, co-occurrence terms, and a transition
+term for marijuana initiation among females:
+
+``` r
+data(valentesnsList)
+
+sns_model <- new_defm(
+  id    = valentesnsList$id,
+  Y     = valentesnsList$Y,
+  X     = valentesnsList$X,
+  order = 1
+)
+
+td_logit_intercept(sns_model)
+td_logit_intercept(sns_model, covar = "Hispanic")
+td_logit_intercept(sns_model, y_indices = c(0, 1), covar = "Female")
+
+sns_model <- sns_model +
+  "{y0, y1}" +
+  "{y1, y2} x Female" +
+  "{0y2_0} > {y2} x Female"
+
+init_defm(sns_model)
+
+sns_fit <- defm_mle(sns_model)
+```
+
+Printing the table in the console gives a plain-text version:
+
+``` r
+sns_tab <- summary_table(sns_fit)
+print(sns_tab)
+#> ====================================================================
+#> Outcome-specific (logit) terms
+#> --------------------------------------------------------------------
+#>                       alcohol    tobacco         mj
+#> --------------------------------------------------------------------
+#> (Intercept)         -1.802***  -3.058***  -2.483***
+#>                     (0.154)    (0.271)    (0.247)
+#> Hispanic             1.519***   0.122      1.742***
+#>                     (0.151)    (0.265)    (0.263)
+#> Female               0.414**   -1.581***
+#>                     (0.134)    (0.251)
+#> ====================================================================
+#> Joint and transition (Markov) terms
+#> --------------------------------------------------------------------
+#>                          Main   x Female
+#> --------------------------------------------------------------------
+#> {alcohol, tobacco}   2.144***
+#>                     (0.255)
+#> {tobacco, mj}                   2.966***
+#>                                (0.306)
+#> {0mj} > {mj}                   -2.098***
+#>                                (0.213)
+#> ====================================================================
+#> N = 1161; AIC = 2961.920; BIC = 3017.547; Log-likelihood = -1469.960
+#> *** p < 0.001; ** p < 0.01; * p < 0.05
+```
+
+Within Quarto and R Markdown documents, the table renders automatically
+(HTML for HTML output and Markdown otherwise). We can also rename the
+variables, put the standard errors next to the estimates, change the
+number of decimals, and skip terms:
+
+``` r
+summary_table(
+  sns_fit,
+  labels = c(
+    alcohol  = "Alcohol",
+    tobacco  = "Tobacco",
+    mj       = "Marijuana",
+    Hispanic = "Hispanic (yes)"
+  ),
+  se     = "side",
+  digits = 2,
+  omit   = "x Hispanic"
+)
+```
+
+**Outcome-specific (logit) terms**
+
+|             |            Alcohol |            Tobacco |          Marijuana |
+|:------------|-------------------:|-------------------:|-------------------:|
+| (Intercept) | -1.80\*\*\* (0.15) | -3.06\*\*\* (0.27) | -2.48\*\*\* (0.25) |
+| Female      |    0.41\*\* (0.13) | -1.58\*\*\* (0.25) |                    |
+
+**Joint and transition (Markov) terms**
+
+|                             |              Main |           x Female |
+|:----------------------------|------------------:|-------------------:|
+| {Alcohol, Tobacco}          | 2.14\*\*\* (0.26) |                    |
+| {Tobacco, Marijuana}        |                   |  2.97\*\*\* (0.31) |
+| {0Marijuana} \> {Marijuana} |                   | -2.10\*\*\* (0.21) |
+
+N = 1161; AIC = 2961.92; BIC = 3017.55; Log-likelihood = -1469.96\
+\*\*\* p \< 0.001; \*\* p \< 0.01; \* p \< 0.05
+
+`format(sns_tab, type = "html")` and
+`format(sns_tab, type = "markdown")` return the HTML and Markdown code,
+and `as.data.frame(sns_tab)` returns the estimates as a data frame with
+one row per term.
 
 # Acknowledgement
 

@@ -1,0 +1,26 @@
+# Version-bump check for pull requests (see gvegayon/please-bump).
+# A PR that touches the package needs a version that has not been released
+# yet (GitHub releases, e.g. v0.2.1.0), and DESCRIPTION and NEWS.md must
+# agree on it.
+version: 1
+
+groups:
+  defm:
+    paths: |
+      DESCRIPTION
+      NAMESPACE
+      R/
+      src/
+      inst/
+      man/
+      data/
+      configure
+      configure.ac
+      cleanup
+    consistency: identical
+    rules:
+      - preset: r-package
+        files: [DESCRIPTION]
+      # "# defm 0.2.2.9000 (development version)"
+      - preset: r-news-titled
+        files: [NEWS.md]

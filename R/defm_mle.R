@@ -21,7 +21,11 @@
 #' example below shows this equivalence.
 #' 
 #'  
-#' @return An object of class [stats4::mle].
+#' @return An object of class `defm_mle`, which extends [stats4::mle]
+#' (all the methods for `mle` objects, e.g., `coef()`, `vcov()`, and
+#' `summary()`, work with it). It also stores the names of the outcomes and
+#' covariates, which are used by [summary_table()] to build a compact table
+#' of the estimates.
 #' @examples
 #' #' Using Valente's SNS data
 #' data(valentesnsList)
@@ -55,6 +59,7 @@
 #' 
 #' # Comparing results
 #' summary_table(res_0)
+#' summary(res_0)
 #' summary(res_glm)
 #' 
 #' # Comparing the logodds
@@ -95,7 +100,7 @@ defm_mle <- function(
 
   minuslog <- eval(parse(text = minuslog))
 
-  stats4::mle(
+  fit <- stats4::mle(
     minuslogl = minuslog,
     start     = start,
     lower     = lower,
@@ -107,6 +112,13 @@ defm_mle <- function(
     ...
   )
 
+  methods::new(
+    "defm_mle",
+    fit,
+    y_names = as.character(get_Y_names(object)),
+    x_names = as.character(get_X_names(object))
+  )
+
 }
 
 #' @importFrom stats pnorm
@@ -114,43 +126,6 @@ pval_calc <- function(obj) {
   stats::pnorm(
     -abs(stats4::coef(obj)/sqrt(diag(stats4::vcov(obj))))
     ) * 2
-}
-
-#' @export
-#' @param as_texreg When `TRUE`, wraps the result in a texreg object
-#' @details The function `summary_table` computes pvalues and returns a table
-#' with the estimates, se, and pvalues. If `as_texreg = TRUE`, then it will
-#' return a texreg object.
-#' @rdname defm_mle
-summary_table <- function(object, as_texreg = FALSE, ...) {
-
-  # Generating the output table
-  tab <- list(
-    coef.names  = names(stats4::coef(object)),
-    coef        = stats4::coef(object),
-    se          = sqrt(diag(stats4::vcov(object))),
-    gof.names   = c("AIC", "BIC", "N"),
-    gof         = c(stats4::AIC(object), stats4::BIC(object), stats4::nobs(object)),
-    gof.decimal = c(T, T, F),
-    pvalues     = pval_calc(object)
-  )
-
-  if (as_texreg) {
-
-    if (!length(find.package("texreg", quiet = TRUE)))
-      stop("To use texreg you need to have the package installed in your system. Currently it seems to be not available.")
-
-    do.call(texreg::createTexreg, tab)
-
-  } else {
-
-    do.call(
-      data.frame,
-      tab[c("coef", "se", "pvalues")]
-      )
-
-  }
-
 }
 
 #' Takes a list of a single fitted model and groups the terms into
@@ -272,7 +247,7 @@ texreg_fancy <- function(
 
   } else if (inherits(fits, "list")) {
 
-    if (!all(sapply(fits, inherits(), what = "mle"))) {
+    if (!all(sapply(fits, inherits, what = "mle"))) {
 
       stop("When `fits` is a list, all its elements should be of class 'mle'.")
 
@@ -289,3 +264,50 @@ texreg_fancy <- function(
   )
 
 }
+#' Fitted DEFM
+#'
+#' Objects of class `defm_mle` are returned by [defm_mle()]. The class
+#' extends [stats4::mle-class], so all its methods work. Printing the object
+#' or its summary also suggests calling [summary_table()].
+#'
+#' @slot y_names,x_names Character vectors with the names of the outcomes
+#' and covariates of the fitted model.
+#' @param object An object of class `defm_mle` or `summary.defm_mle`.
+#' @param ... Further arguments passed to the `summary` method of `mle`.
+#' @importFrom methods setClass setMethod new callNextMethod show
+#' @exportClass defm_mle summary.defm_mle
+#' @aliases summary.defm_mle-class
+#' @name defm_mle-class
+setClass(
+  "defm_mle",
+  contains = "mle",
+  slots    = c(y_names = "character", x_names = "character")
+)
+
+setClass("summary.defm_mle", contains = "summary.mle")
+
+summary_table_hint <- function() {
+  cat(
+    "\nTip: call summary_table() on the fitted model for a compact table",
+    "by outcome (console, HTML, or Markdown).\n"
+  )
+}
+
+#' @rdname defm_mle-class
+#' @exportMethod show
+setMethod("show", "defm_mle", function(object) {
+  methods::callNextMethod()
+  summary_table_hint()
+})
+
+#' @rdname defm_mle-class
+#' @exportMethod summary
+setMethod("summary", "defm_mle", function(object, ...) {
+  methods::new("summary.defm_mle", methods::callNextMethod())
+})
+
+#' @rdname defm_mle-class
+setMethod("show", "summary.defm_mle", function(object) {
+  methods::callNextMethod()
+  summary_table_hint()
+})

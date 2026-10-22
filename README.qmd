@@ -18,15 +18,6 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 
-<!-- how-to-cite -->
-> [!NOTE]
-> **How to cite defm.** If you use **defm** in published work, please cite it:
->
-> Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes. *arXiv*:2211.00627. doi:[10.48550/arXiv.2211.00627](https://doi.org/10.48550/arXiv.2211.00627)
->
-> Run `citation("defm")` in R for the BibTeX entry.
-<!-- how-to-cite -->
-
 ```{=markdown}
 [![CRAN status](https://www.r-pkg.org/badges/version/defm)](https://CRAN.R-project.org/package=defm)
 [![R-CMD-check](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml/badge.svg)](https://github.com/UofUEpiBio/defm/actions/workflows/r.yml)
@@ -37,6 +28,17 @@ knitr::opts_chunk$set(
 [![defm status badge](https://uofuepibio.r-universe.dev/defm/badges/version)](https://uofuepibio.r-universe.dev/defm)
 ```
 <!-- badges: end -->
+
+```{=markdown}
+<!-- how-to-cite -->
+> [!NOTE]
+> **How to cite defm.** If you use **defm** in published work, please cite it:
+>
+> Vega Yon GG, Valente TW, Pugh MJ (2022). Discrete Exponential-Family Models for Multivariate Binary Outcomes. *arXiv*:2211.00627. doi:[10.48550/arXiv.2211.00627](https://doi.org/10.48550/arXiv.2211.00627)
+>
+> Run `citation("defm")` in R for the BibTeX entry.
+<!-- how-to-cite -->
+```
 
 Discrete exponential family models (DEFM) have a long tradition with extensive
 development rooted in exponential random graph models (ERGMs.) Applicable to 
@@ -338,6 +340,76 @@ The new simulation...
 ```{r chain2fig, echo = FALSE}
 image(as(Y_sim_formula, "dgCMatrix"))
 ```
+
+## Example 4: Reporting results with `summary_table()`
+
+Models with several outcomes quickly accumulate terms: each covariate
+interaction adds one coefficient per outcome. `summary_table()` organizes
+the estimates in two sections: (1) outcome-specific (logit) terms, with one
+column per outcome and one row per covariate, and (2) joint and transition
+(Markov) terms, with one row per motif and one column per interaction.
+
+Using Valente's SNS data, we fit a model for alcohol, tobacco, and
+marijuana use, with covariates, co-occurrence terms, and a transition term
+for marijuana initiation among females:
+
+```{r}
+#| label: summary-table-fit
+data(valentesnsList)
+
+sns_model <- new_defm(
+  id    = valentesnsList$id,
+  Y     = valentesnsList$Y,
+  X     = valentesnsList$X,
+  order = 1
+)
+
+td_logit_intercept(sns_model)
+td_logit_intercept(sns_model, covar = "Hispanic")
+td_logit_intercept(sns_model, y_indices = c(0, 1), covar = "Female")
+
+sns_model <- sns_model +
+  "{y0, y1}" +
+  "{y1, y2} x Female" +
+  "{0y2_0} > {y2} x Female"
+
+init_defm(sns_model)
+
+sns_fit <- defm_mle(sns_model)
+```
+
+Printing the table in the console gives a plain-text version:
+
+```{r}
+#| label: summary-table-print
+sns_tab <- summary_table(sns_fit)
+print(sns_tab)
+```
+
+Within Quarto and R Markdown documents, the table renders automatically
+(HTML for HTML output and Markdown otherwise). We can also rename the
+variables, put the standard errors next to the estimates, change the number
+of decimals, and skip terms:
+
+```{r}
+#| label: summary-table-knit
+summary_table(
+  sns_fit,
+  labels = c(
+    alcohol  = "Alcohol",
+    tobacco  = "Tobacco",
+    mj       = "Marijuana",
+    Hispanic = "Hispanic (yes)"
+  ),
+  se     = "side",
+  digits = 2,
+  omit   = "x Hispanic"
+)
+```
+
+`format(sns_tab, type = "html")` and `format(sns_tab, type = "markdown")`
+return the HTML and Markdown code, and `as.data.frame(sns_tab)` returns the
+estimates as a data frame with one row per term.
 
 
 # Acknowledgement
