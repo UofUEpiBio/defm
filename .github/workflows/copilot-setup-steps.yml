@@ -41,5 +41,4 @@ jobs:
           extra-packages: |
             any::rcmdcheck
             any::tinytest
-            USCbiostats/barryr
           needs: check
